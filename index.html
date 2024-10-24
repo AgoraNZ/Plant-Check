@@ -26,6 +26,13 @@
         .center {
             text-align: center;
         }
+        label {
+            font-weight: bold;
+        }
+        select, input[type="text"], textarea {
+            width: 100%;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -39,12 +46,14 @@
             <label>Dairy Number: </label><input type="text" name="dairy_number" value="78091"><br>
             <label>Farm Name: </label><input type="text" name="farm_name" value="Walter Dickie"><br>
 
+            <!-- Customer Information -->
             <h2>Customer Information</h2>
             <label>Customer Name: </label><input type="text" name="customer_name" value="Trinity Lands"><br>
             <label>Region: </label><input type="text" name="region" value="Waikato"><br>
             <label>Address: </label><input type="text" name="address" value="158 Kauri Rd Tokorua"><br>
             <label>Island: </label><input type="text" name="island" value="North Island"><br>
 
+            <!-- Visit Details -->
             <h2>Visit Details</h2>
             <label>Visit Date: </label><input type="text" name="visit_date" value="24/10/2024"><br>
             <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
@@ -52,6 +61,7 @@
             <label>Time Inspection Ended: </label><input type="text" name="inspection_end" value="12:45"><br>
             <label>Inspection Completed by: </label><input type="text" name="completed_by" value="Milk Quality Specialist North Island"><br>
 
+            <!-- Call Type -->
             <h2>Call Type</h2>
             <label>Call Type: </label>
             <select name="call_type">
@@ -59,12 +69,11 @@
                 <option value="Follow-up Visit">Follow-up Visit</option>
                 <option value="Emergency Visit">Emergency Visit</option>
             </select><br>
-
             <label>General Visit Notes: </label><textarea name="visit_notes">Checked plant and found issues with receiver can, sanitary trap, main milk line, flushing pulsator, clusters</textarea><br>
 
             <!-- MILKING PLANT CHECKLIST -->
             <h2>Milking Plant Checklist</h2>
-
+            <!-- Pulsator Airline -->
             <div class="checklist-item">
                 <label>Pulsator Airline Status:</label>
                 <select name="pulsator_airline_status" onchange="togglePhotoUpload(this)">
@@ -80,32 +89,25 @@
                 <input type="file" name="pulsator_airline_photo" class="photo-upload">
             </div>
 
+            <!-- Add more milking plant options similarly -->
+            <h2>Milk Vat Checklist</h2>
+            <!-- Inlet Valve -->
             <div class="checklist-item">
-                <label>Receiving Can Status:</label>
-                <select name="receiving_can_status" onchange="togglePhotoUpload(this)">
+                <label>Inlet Valve Status:</label>
+                <select name="inlet_valve_status" onchange="togglePhotoUpload(this)">
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
                     <option value="na">N/A</option>
                 </select>
                 <br>
                 <label>Comments:</label>
-                <input type="text" name="receiving_can_comments" value="Heavy deposits of protein found">
+                <input type="text" name="inlet_valve_comments" value="Milk in silo">
                 <br>
                 <label>Upload Photo:</label>
-                <input type="file" name="receiving_can_photo" class="photo-upload">
+                <input type="file" name="inlet_valve_photo" class="photo-upload">
             </div>
 
-            <!-- Additional Milking Plant Checklist Items -->
-            <!-- You would repeat for each item needing review -->
-
-            <!-- MILK VAT CHECKLIST -->
-            <h2>Milk Vat Checklist</h2>
-            <label>Inlet Valve: </label><input type="text" name="inlet_valve" value="Not Checked"><br>
-            <label>Comments: </label><input type="text" name="inlet_valve_comments" value="Milk in silo"><br>
-
-            <!-- Repeat for other Milk Vat items -->
-
-            <br>
+            <!-- Complete this structure for all other items -->
             <input type="button" value="Generate PDF" onclick="generatePDF()">
         </form>
     </div>
