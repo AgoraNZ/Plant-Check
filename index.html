@@ -49,7 +49,7 @@
             <h2>Farm Details</h2>
             <label>Dairy Company:</label><input type="text" name="dairy_company"><br>
             <label>Dairy Number:</label><input type="text" name="dairy_number" onchange="autoPopulate()"><br>
-            <label>Address:</label><input type="text" name="address"><br>
+            <label>Farm Name:</label><input type="text" name="farm_name"><br>
             <label>Customer Name:</label><input type="text" name="customer_name"><br>
             <label>Region:</label>
             <select name="region">
@@ -58,9 +58,8 @@
                 <option value="Waikato">Waikato</option>
                 <option value="Wellington">Wellington</option>
                 <option value="Otago">Otago</option>
-                <!-- Add other regions as needed -->
             </select><br>
-            <label>Farm Name:</label><input type="text" name="farm_name"><br>
+            <label>Address:</label><input type="text" name="address"><br>
             <label>Island:</label>
             <select name="island">
                 <option value="North Island">North Island</option>
@@ -71,6 +70,9 @@
             <label>Time Inspection Started:</label><input type="time" name="inspection_start" id="inspection_start"><br>
             <label>Time Inspection Ended:</label><input type="time" name="inspection_end" id="inspection_end"><br>
             <label>Inspection Completed by:</label><input type="text" name="completed_by"><br>
+
+            <!-- Call Type -->
+            <h2>Call Type</h2>
             <label>Call Type:</label>
             <select name="call_type">
                 <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
@@ -94,38 +96,73 @@
 
             <!-- Milking Plant Section -->
             <h2>Milking Plant</h2>
+
+            <!-- Function to generate each component -->
+            <script>
+                const milkingPlantComponents = [
+                    "Pulsator Airline", "Long Bend Elbows", "Automatic Cup",
+                    "Remover", "Diaphram", "Receiving Can",
+                    "Sanitary Trap", "Main Milk Line", "Milk Line Seals in good condition",
+                    "Stainless Droppers", "Long Milk Rubber"
+                ];
+
+                milkingPlantComponents.forEach(component => {
+                    document.write(`
+                        <div class="component">
+                            <label>${component} Status:</label><br>
+                            <select name="${component.toLowerCase().replace(/\s+/g, '_')}_status" onchange="togglePhoto(this)">
+                                <option value="ok">OK</option>
+                                <option value="attention_required">Attention Required</option>
+                                <option value="na">N/A</option>
+                            </select><br>
+                            <label>Comments:</label><input type="text" name="${component.toLowerCase().replace(/\s+/g, '_')}_comments"><br>
+                            <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+                        </div>
+                    `);
+                });
+            </script>
+
+            <!-- Milk Vat Section -->
+            <h2>Milk Vat</h2>
             <div class="component">
-                <label>Pulsator Airline Status:</label><br>
-                <select name="pulsator_airline_status" onchange="togglePhoto(this)">
+                <label>Liner Status:</label><br>
+                <select name="liner_status" onchange="togglePhoto(this)">
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
                     <option value="na">N/A</option>
                 </select><br>
-                <label>Comments:</label><input type="text" name="pulsator_airline_comments"><br>
+                <label>Comments:</label><input type="text" name="liner_comments"><br>
                 <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
-            <div class="component">
-                <label>Long Bend Elbows:</label><br>
-                <select name="long_bend_elbows_status" onchange="togglePhoto(this)">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments:</label><input type="text" name="long_bend_elbows_comments"><br>
-                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
-            </div>
-            <div class="component">
-                <label>Automatic Cup Remover:</label><br>
-                <select name="automatic_cup_remover_status" onchange="togglePhoto(this)">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments:</label><input type="text" name="automatic_cup_remover_comments"><br>
-                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
-            </div>
-            <!-- Repeat for the remaining components -->
-            
+            <!-- Repeat similar blocks for remaining Milk Vat components -->
+            <script>
+                const milkVatComponents = [
+                    "Cluster", "Cluster Seal", "Cluster Button", "Non Return Valve at Milk Pump",
+                    "Milk Pump", "Filter Housing", "Plate Cooler", "Interceptor",
+                    "Receiver Airline", "Flushing Pulsator", "Air Purge Valve", "Vacuum Level",
+                    "Main Airline", "Plant Drainage - Milk Pump", "Plant Drainage - Filter/s",
+                    "Plant Drainage - Plate Cooler", "Plant Drainage - Vat Entry", "Plant Wash Tap",
+                    "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
+                    "Non-Return Valve", "Spray Ball", "Agitator", "Silo door",
+                    "Manhole Seal", "Vat Outlet", "Walls in silo"
+                ];
+
+                milkVatComponents.forEach(component => {
+                    document.write(`
+                        <div class="component">
+                            <label>${component} Status:</label><br>
+                            <select name="${component.toLowerCase().replace(/\s+/g, '_')}_status" onchange="togglePhoto(this)">
+                                <option value="ok">OK</option>
+                                <option value="attention_required">Attention Required</option>
+                                <option value="na">N/A</option>
+                            </select><br>
+                            <label>Comments:</label><input type="text" name="${component.toLowerCase().replace(/\s+/g, '_')}_comments"><br>
+                            <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+                        </div>
+                    `);
+                });
+            </script>
+
             <!-- Alert Details Section (Positioned at the end) -->
             <h2>Alert Details - Milk</h2>
             <label>Alert/Grade Type One:</label><input type="text" name="alert_grade_one"><br>
@@ -146,49 +183,23 @@
             <label>Signed At:</label><input type="text" name="signed_at"><br>
             <label>Comment:</label><textarea name="comment"></textarea><br>
 
-            <input type="button" value="Generate PDF" onclick="generatePDF()">
+            <button type="submit">Submit</button>
         </form>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        // Store previously entered data
-        const previousEntries = {
-            '78091': { customer: 'Trinity Lands', supplier: 'Fonterra Co-Operative Group Ltd' }
-        };
+        // Default date to today
+        document.getElementById('visit_date').value = new Date().toISOString().split('T')[0];
 
-        // Function to auto-populate based on Dairy Number
-        function autoPopulate() {
-            const dairyNumber = document.querySelector('input[name="dairy_number"]').value;
-            if (previousEntries[dairyNumber]) {
-                document.querySelector('input[name="customer_name"]').value = previousEntries[dairyNumber].customer;
-                document.querySelector('input[name="address"]').value = previousEntries[dairyNumber].supplier;
-            }
-        }
-
-        // Toggle photo upload based on "Attention Required"
+        // Function to toggle photo upload visibility based on selection
         function togglePhoto(select) {
-            const fileInput = select.parentElement.querySelector('.photo-upload');
+            const photoUpload = select.parentElement.querySelector('.photo-upload');
             if (select.value === 'attention_required') {
-                fileInput.style.display = 'block';
+                photoUpload.style.display = 'block';
             } else {
-                fileInput.style.display = 'none';
+                photoUpload.style.display = 'none';
             }
         }
-
-        // Generate PDF function (placeholder)
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Dairy Shed Hygiene Checklist', 20, 20);
-            doc.save('checklist.pdf');
-        }
-
-        // Set default date to today
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('visit_date').value = today;
-        });
     </script>
 </body>
 </html>
