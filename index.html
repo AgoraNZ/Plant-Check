@@ -19,6 +19,8 @@
             border-radius: 8px;
             width: 50%;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-height: 100vh;
+            overflow-y: auto; /* Scrollable if the content is too long */
         }
         .photo-upload {
             display: none;
@@ -33,27 +35,130 @@
             width: 100%;
             margin-bottom: 15px;
         }
-        #dairy_number {
-            width: 100%;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="center">Dairy Shed Hygiene Checklist</h1>
         <form id="checklist-form">
-            
-            <!-- Farm Details with Auto-Populate -->
+
+            <!-- Farm Details -->
             <h2>Farm Details</h2>
-            <label>Dairy Number: </label><input type="text" id="dairy_number" name="dairy_number" placeholder="Enter Dairy Number" onchange="autoPopulate()"><br>
-            <label>Customer Name: </label><input type="text" id="customer_name" name="customer_name"><br>
-            <label>Supplier Info: </label><input type="text" id="supplier_info" name="supplier_info"><br>
+            <label>Dairy Company: </label><input type="text" name="dairy_company"><br>
+            <label>Dairy Number: </label><input type="text" name="dairy_number" onchange="autoPopulate()"><br>
+            <label>Farm Name: </label><input type="text" name="farm_name"><br>
+            <label>Customer Name: </label><input type="text" name="customer_name"><br>
+            <label>Region: </label><input type="text" name="region"><br>
+            <label>Address: </label><input type="text" name="address"><br>
+            <label>Island: </label><input type="text" name="island"><br>
             <label>Visit Date: </label><input type="date" name="visit_date" id="visit_date"><br>
+            <label>Visit Type: </label><input type="text" name="visit_type"><br>
+            <label>Time Inspection Started: </label><input type="time" name="inspection_start"><br>
+            <label>Time Inspection Ended: </label><input type="time" name="inspection_end"><br>
+            <label>Inspection Completed by: </label><input type="text" name="completed_by"><br>
 
-            <!-- Health & Safety and Milking Plant sections ... -->
-            <!-- Include the rest of the form fields you listed here -->
+            <!-- Call Type -->
+            <h2>Call Type</h2>
+            <label>Call Type: </label>
+            <select name="call_type">
+                <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
+                <option value="Follow-up Visit">Follow-up Visit</option>
+                <option value="Emergency Visit">Emergency Visit</option>
+            </select><br>
+            <label>General Visit Notes: </label><textarea name="visit_notes"></textarea><br>
 
-            <!-- Photo Capture or Upload -->
+            <!-- Alert Details - Milk -->
+            <h2>Alert Details - Milk</h2>
+            <label>Alert/Grade Type One: </label><input type="text" name="alert_grade_one"><br>
+            <label>Level One: </label><input type="text" name="level_one"><br>
+            <label>Milk Temperature One: </label><input type="text" name="milk_temperature_one"><br>
+            <label>Milk Temperature Time One: </label><input type="time" name="milk_temperature_time_one"><br>
+            <label>Alert/Grade Type Two: </label><input type="text" name="alert_grade_two"><br>
+            <label>Level Two: </label><input type="text" name="level_two"><br>
+            <label>Milk Temperature Two: </label><input type="text" name="milk_temperature_two"><br>
+            <label>Milk Temperature Time Two: </label><input type="time" name="milk_temperature_time_two"><br>
+            <label>Alert/Grade Type Three: </label><input type="text" name="alert_grade_three"><br>
+            <label>Level Three: </label><input type="text" name="level_three"><br>
+            <label>Milk Temperature Three: </label><input type="text" name="milk_temperature_three"><br>
+            <label>Milk Temperature Time Three: </label><input type="time" name="milk_temperature_time_three"><br>
+
+            <!-- Alert Details - Water -->
+            <h2>Alert Details - Water</h2>
+            <label>Alert/Grade Type One: </label><input type="text" name="alert_grade_water_one"><br>
+            <label>Level One: </label><input type="text" name="level_water_one"><br>
+            <label>Water Temperature One: </label><input type="text" name="water_temperature_one"><br>
+            <label>Water Temperature Time One: </label><input type="time" name="water_temperature_time_one"><br>
+            <label>Alert/Grade Type Two: </label><input type="text" name="alert_grade_water_two"><br>
+            <label>Level Two: </label><input type="text" name="level_water_two"><br>
+            <label>Water Temperature Two: </label><input type="text" name="water_temperature_two"><br>
+            <label>Water Temperature Time Two: </label><input type="time" name="water_temperature_time_two"><br>
+            <label>Alert/Grade Type Three: </label><input type="text" name="alert_grade_water_three"><br>
+            <label>Level Three: </label><input type="text" name="level_water_three"><br>
+            <label>Water Temperature Three: </label><input type="text" name="water_temperature_three"><br>
+            <label>Water Temperature Time Three: </label><input type="time" name="water_temperature_time_three"><br>
+
+            <!-- Health & Safety -->
+            <h2>Health & Safety</h2>
+            <label>Health & Safety - General: </label>
+            <select name="health_safety_general">
+                <option value="ok">OK</option>
+                <option value="attention_required">Attention Required</option>
+            </select><br>
+            <label>Comments: </label><input type="text" name="health_safety_comments"><br>
+
+            <!-- Milking Plant Checklist -->
+            <h2>Milking Plant Checklist</h2>
+            <label>Pulsator Airline: </label><input type="text" name="pulsator_airline"><br>
+            <label>Long Bend Elbows: </label><input type="text" name="long_bend_elbows"><br>
+            <label>Automatic Cup Remover Diaphragm: </label><input type="text" name="cup_remover_diaphragm"><br>
+            <label>Receiving Can: </label><input type="text" name="receiving_can"><br>
+            <label>Sanitary Trap: </label><input type="text" name="sanitary_trap"><br>
+            <label>Main Milk Line: </label><input type="text" name="main_milk_line"><br>
+            <label>Milk Line Seals: </label><input type="text" name="milk_line_seals"><br>
+            <label>Stainless Droppers: </label><input type="text" name="stainless_droppers"><br>
+            <label>Long Milk Rubber: </label><input type="text" name="long_milk_rubber"><br>
+            <label>Liner: </label><input type="text" name="liner"><br>
+            <label>Cluster: </label><input type="text" name="cluster"><br>
+            <label>Cluster Seal: </label><input type="text" name="cluster_seal"><br>
+            <label>Cluster Button: </label><input type="text" name="cluster_button"><br>
+            <label>Non-Return Valve at Milk Pump: </label><input type="text" name="non_return_valve"><br>
+            <label>Milk Pump: </label><input type="text" name="milk_pump"><br>
+            <label>Filter Housing: </label><input type="text" name="filter_housing"><br>
+            <label>Plate Cooler: </label><input type="text" name="plate_cooler"><br>
+            <label>Interceptor: </label><input type="text" name="interceptor"><br>
+            <label>Receiver Airline: </label><input type="text" name="receiver_airline"><br>
+            <label>Flushing Pulsator: </label><input type="text" name="flushing_pulsator"><br>
+            <label>Air Purge Valve: </label><input type="text" name="air_purge_valve"><br>
+            <label>Vacuum Level: </label><input type="text" name="vacuum_level"><br>
+            <label>Main Airline: </label><input type="text" name="main_airline"><br>
+            <label>Plant Drainage - Milk Pump: </label><input type="text" name="plant_drainage_milk_pump"><br>
+            <label>Plant Drainage - Filters: </label><input type="text" name="plant_drainage_filters"><br>
+            <label>Plant Drainage - Plate Cooler: </label><input type="text" name="plant_drainage_plate_cooler"><br>
+            <label>Plant Drainage - Vat Entry: </label><input type="text" name="plant_drainage_vat_entry"><br>
+            <label>Plant Wash Tap: </label><input type="text" name="plant_wash_tap"><br>
+            <label>Wash Jetters: </label><input type="text" name="wash_jetters"><br>
+            <label>Centre Gland: </label><input type="text" name="centre_gland"><br>
+            <label>Test Bucket: </label><input type="text" name="test_bucket"><br>
+
+            <!-- Milk Vat Checklist -->
+            <h2>Milk Vat Checklist</h2>
+            <label>Inlet Valve: </label><input type="text" name="inlet_valve"><br>
+            <label>Non-Return Valve: </label><input type="text" name="non_return_valve_vat"><br>
+            <label>Spray Ball: </label><input type="text" name="spray_ball"><br>
+            <label>Agitator: </label><input type="text" name="agitator"><br>
+            <label>Silo Door: </label><input type="text" name="silo_door"><br>
+            <label>Manhole Seal: </label><input type="text" name="manhole_seal"><br>
+            <label>Vat Outlet: </label><input type="text" name="vat_outlet"><br>
+            <label>Walls in Silo: </label><input type="text" name="walls_in_silo"><br>
+
+            <!-- Signature Section -->
+            <h2>Signature Details</h2>
+            <label>Role: </label><input type="text" name="role"><br>
+            <label>User: </label><input type="text" name="user"><br>
+            <label>Signed At: </label><input type="text" name="signed_at"><br>
+            <label>Comment: </label><textarea name="comment"></textarea><br>
+
+            <!-- Upload or Capture Photo -->
             <h2>Upload or Capture Photo</h2>
             <label>Upload/Take Photo: </label>
             <input type="file" accept="image/*" capture="camera"><br>
@@ -66,16 +171,15 @@
     <script>
         // Store previously entered data
         const previousEntries = {
-            '78091': { customer: 'Trinity Lands', supplier: 'Fonterra Co-Operative Group Ltd' },
-            // Add more pre-entered dairy numbers here for demo
+            '78091': { customer: 'Trinity Lands', supplier: 'Fonterra Co-Operative Group Ltd' }
         };
 
         // Function to auto-populate based on Dairy Number
         function autoPopulate() {
-            const dairyNumber = document.getElementById('dairy_number').value;
+            const dairyNumber = document.querySelector('input[name="dairy_number"]').value;
             if (previousEntries[dairyNumber]) {
-                document.getElementById('customer_name').value = previousEntries[dairyNumber].customer;
-                document.getElementById('supplier_info').value = previousEntries[dairyNumber].supplier;
+                document.querySelector('input[name="customer_name"]').value = previousEntries[dairyNumber].customer;
+                document.querySelector('input[name="supplier_info"]').value = previousEntries[dairyNumber].supplier;
             }
         }
 
@@ -85,13 +189,13 @@
             document.getElementById('visit_date').value = today;
         };
 
-        // Function to generate PDF (similar to earlier, just expanded)
+        // Function to generate PDF
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             doc.text("Dairy Shed Hygiene Checklist", 10, 10);
 
-            // Collect form data and add to PDF...
+            // Collect form data and add to PDF
             doc.save('dairy-shed-checklist.pdf');
         }
     </script>
