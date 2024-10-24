@@ -5,64 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
     <style>
+        body {
+            background-color: #007bff; /* Blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 50%;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
         .photo-upload {
             display: none;
+        }
+        .center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Dairy Shed Hygiene Checklist</h1>
-    <form id="checklist-form">
-        <!-- Farm Details -->
-        <h2>Farm Details</h2>
-        <label>Dairy Company: </label><input type="text" name="dairy_company" value="Fonterra Co-Operative Group Ltd"><br>
-        <label>Dairy Number: </label><input type="text" name="dairy_number" value="78091"><br>
-        <label>Farm Name: </label><input type="text" name="farm_name" value="Walter Dickie"><br>
+    <div class="container">
+        <h1 class="center">Dairy Shed Hygiene Checklist</h1>
+        <form id="checklist-form">
 
-        <h2>Customer Information</h2>
-        <label>Customer Name: </label><input type="text" name="customer_name" value="Trinity Lands"><br>
-        <label>Region: </label><input type="text" name="region" value="Waikato"><br>
-        <label>Address: </label><input type="text" name="address" value="158 Kauri Rd Tokorua"><br>
-        <label>Island: </label><input type="text" name="island" value="North Island"><br>
+            <!-- Farm Details -->
+            <h2>Farm Details</h2>
+            <label>Dairy Company: </label><input type="text" name="dairy_company" value="Fonterra Co-Operative Group Ltd"><br>
+            <label>Dairy Number: </label><input type="text" name="dairy_number" value="78091"><br>
+            <label>Farm Name: </label><input type="text" name="farm_name" value="Walter Dickie"><br>
 
-        <h2>Visit Details</h2>
-        <label>Visit Date: </label><input type="text" name="visit_date" value="24/10/2024"><br>
-        <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
-        <label>Time Inspection Started: </label><input type="text" name="inspection_start" value="11:30"><br>
-        <label>Time Inspection Ended: </label><input type="text" name="inspection_end" value="12:45"><br>
-        <label>Inspection Completed by: </label><input type="text" name="completed_by" value="Milk Quality Specialist North Island"><br>
+            <h2>Customer Information</h2>
+            <label>Customer Name: </label><input type="text" name="customer_name" value="Trinity Lands"><br>
+            <label>Region: </label><input type="text" name="region" value="Waikato"><br>
+            <label>Address: </label><input type="text" name="address" value="158 Kauri Rd Tokorua"><br>
+            <label>Island: </label><input type="text" name="island" value="North Island"><br>
 
-        <h2>Call Type</h2>
-        <label>Call Type: </label><input type="text" name="call_type" value="Regular Scheduled Visit"><br>
-        <label>General Visit Notes: </label><textarea name="visit_notes">Checked plant and found issues with receiver can, sanitary trap, main milk line, flushing pulsator, clusters</textarea><br>
+            <h2>Visit Details</h2>
+            <label>Visit Date: </label><input type="text" name="visit_date" value="24/10/2024"><br>
+            <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
+            <label>Time Inspection Started: </label><input type="text" name="inspection_start" value="11:30"><br>
+            <label>Time Inspection Ended: </label><input type="text" name="inspection_end" value="12:45"><br>
+            <label>Inspection Completed by: </label><input type="text" name="completed_by" value="Milk Quality Specialist North Island"><br>
 
-        <!-- MILKING PLANT CHECKLIST -->
-        <h2>Milking Plant Checklist</h2>
-        <div class="checklist-item">
-            <label>Pulsator Airline Status:</label>
-            <select name="pulsator_airline_status" onchange="togglePhotoUpload(this)">
-                <option value="ok">OK</option>
-                <option value="attention_required">Attention Required</option>
-                <option value="na">N/A</option>
-            </select>
+            <h2>Call Type</h2>
+            <label>Call Type: </label>
+            <select name="call_type">
+                <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
+                <option value="Follow-up Visit">Follow-up Visit</option>
+                <option value="Emergency Visit">Emergency Visit</option>
+            </select><br>
+
+            <label>General Visit Notes: </label><textarea name="visit_notes">Checked plant and found issues with receiver can, sanitary trap, main milk line, flushing pulsator, clusters</textarea><br>
+
+            <!-- MILKING PLANT CHECKLIST -->
+            <h2>Milking Plant Checklist</h2>
+
+            <div class="checklist-item">
+                <label>Pulsator Airline Status:</label>
+                <select name="pulsator_airline_status" onchange="togglePhotoUpload(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select>
+                <br>
+                <label>Comments:</label>
+                <input type="text" name="pulsator_airline_comments" value="No issues">
+                <br>
+                <label>Upload Photo:</label>
+                <input type="file" name="pulsator_airline_photo" class="photo-upload">
+            </div>
+
+            <div class="checklist-item">
+                <label>Receiving Can Status:</label>
+                <select name="receiving_can_status" onchange="togglePhotoUpload(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select>
+                <br>
+                <label>Comments:</label>
+                <input type="text" name="receiving_can_comments" value="Heavy deposits of protein found">
+                <br>
+                <label>Upload Photo:</label>
+                <input type="file" name="receiving_can_photo" class="photo-upload">
+            </div>
+
+            <!-- Additional Milking Plant Checklist Items -->
+            <!-- You would repeat for each item needing review -->
+
+            <!-- MILK VAT CHECKLIST -->
+            <h2>Milk Vat Checklist</h2>
+            <label>Inlet Valve: </label><input type="text" name="inlet_valve" value="Not Checked"><br>
+            <label>Comments: </label><input type="text" name="inlet_valve_comments" value="Milk in silo"><br>
+
+            <!-- Repeat for other Milk Vat items -->
+
             <br>
-            <label>Comments:</label>
-            <input type="text" name="pulsator_airline_comments" value="No issues">
-            <br>
-            <label>Upload Photo:</label>
-            <input type="file" name="pulsator_airline_photo" class="photo-upload">
-        </div>
-        <!-- Repeat similar blocks for the other items -->
-
-        <h2>Milk Vat Checklist</h2>
-        <label>Inlet Valve: </label><input type="text" name="inlet_valve" value="Not Checked"><br>
-        <label>Comments: </label><input type="text" name="inlet_valve_comments" value="Milk in silo"><br>
-
-        <!-- Repeat for other Milk Vat items -->
-
-        <br>
-        <input type="button" value="Generate PDF" onclick="generatePDF()">
-    </form>
+            <input type="button" value="Generate PDF" onclick="generatePDF()">
+        </form>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
@@ -84,7 +130,6 @@
             const form = document.getElementById('checklist-form');
             const formData = new FormData(form);
 
-            // Example of adding form data to PDF
             doc.text(`Dairy Company: ${formData.get('dairy_company')}`, 10, 20);
             doc.text(`Dairy Number: ${formData.get('dairy_number')}`, 10, 30);
             doc.text(`Farm Name: ${formData.get('farm_name')}`, 10, 40);
