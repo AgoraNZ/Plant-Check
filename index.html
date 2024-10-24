@@ -1,244 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dairy Shed Hygiene Checklist</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #001F3F; /* Navy blue background */
-            color: white;
-        }
+from fpdf import FPDF
+from datetime import datetime
 
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
+# Checklist items data
+checklist_items = {
+    "Health & Safety": [
+        {"name": "Safety Signage", "status": "ok", "comments": "All signs are visible.", "photo_path": None},
+        {"name": "Emergency Exits", "status": "attention required", "comments": "One exit is blocked.", "photo_path": None},
+        # Add more items as needed...
+    ],
+    "Milking Plant": [
+        {"name": "Pulsator Airline", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Long Bend Elbows", "status": "ok", "comments": "No leaks.", "photo_path": None},
+        {"name": "Automatic Cup Remover", "status": "ok", "comments": "Functional.", "photo_path": None},
+        {"name": "Diaphragm", "status": "attention required", "comments": "Needs replacement.", "photo_path": None},
+        {"name": "Receiving Can", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Sanitary Trap", "status": "ok", "comments": "No issues.", "photo_path": None},
+        {"name": "Main Milk Line", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Milk Line Seals", "status": "ok", "comments": "Seals intact.", "photo_path": None},
+        {"name": "Stainless Droppers", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Long Milk Rubber", "status": "ok", "comments": "No damage.", "photo_path": None},
+        {"name": "Liner", "status": "attention required", "comments": "Signs of wear.", "photo_path": None},
+        {"name": "Cluster", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Cluster Seal", "status": "ok", "comments": "No leaks.", "photo_path": None},
+        {"name": "Cluster Button", "status": "ok", "comments": "Functional.", "photo_path": None},
+        {"name": "Non Return Valve at Milk Pump", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Milk Pump", "status": "ok", "comments": "Operational.", "photo_path": None},
+        {"name": "Filter Housing", "status": "ok", "comments": "No leaks.", "photo_path": None},
+        {"name": "Plate Cooler", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Interceptor", "status": "ok", "comments": "No issues.", "photo_path": None},
+        {"name": "Receiver Airline", "status": "ok", "comments": "No leaks.", "photo_path": None},
+        {"name": "Flushing Pulsator", "status": "ok", "comments": "Operational.", "photo_path": None},
+        {"name": "Air Purge Valve", "status": "ok", "comments": "Functional.", "photo_path": None},
+        {"name": "Vacuum Level", "status": "ok", "comments": "Within range.", "photo_path": None},
+        {"name": "Main Airline", "status": "ok", "comments": "No issues.", "photo_path": None},
+        {"name": "Plant Drainage - Milk Pump", "status": "ok", "comments": "Clear.", "photo_path": None},
+        {"name": "Plant Drainage - Filter/s", "status": "ok", "comments": "Clear.", "photo_path": None},
+        {"name": "Plant Drainage - Plate Cooler", "status": "ok", "comments": "Clear.", "photo_path": None},
+        {"name": "Plant Drainage - Vat Entry", "status": "ok", "comments": "Clear.", "photo_path": None},
+        {"name": "Plant Wash Tap", "status": "ok", "comments": "Functional.", "photo_path": None},
+        {"name": "Wash Jetters", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Centre Gland", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Test Bucket", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Inlet Valve", "status": "ok", "comments": "No leaks.", "photo_path": None},
+        {"name": "Non-Return Valve", "status": "ok", "comments": "Functional.", "photo_path": None},
+        {"name": "Spray Ball", "status": "ok", "comments": "Clean.", "photo_path": None},
+        {"name": "Agitator", "status": "ok", "comments": "Operational.", "photo_path": None},
+        {"name": "Silo Door", "status": "ok", "comments": "In good condition.", "photo_path": None},
+        {"name": "Manhole Seal", "status": "ok", "comments": "Seals intact.", "photo_path": None},
+        {"name": "Vat Outlet", "status": "ok", "comments": "Clear.", "photo_path": None},
+        {"name": "Walls in Silo", "status": "ok", "comments": "Clean.", "photo_path": None},
+    ],
+    "Milk Vat": [
+        {"name": "Temperature Monitoring", "status": "ok", "comments": "Within range.", "photo_path": None},
+        {"name": "Milk Quality Check", "status": "ok", "comments": "Passed.", "photo_path": None},
+    ],
+    # Add more sections if needed...
+}
 
-        h1, h2 {
-            color: #FF851B; /* Accent color */
-        }
+# Summary and recommendations (example)
+summary_text = """
+Summary of Issues:
+- Emergency Exit: One exit is blocked; please clear it immediately.
+- Diaphragm: Needs replacement.
+- Liner: Signs of wear; monitor closely.
+"""
 
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
+class PDF(FPDF):
+    def header(self):
+        self.set_font('Arial', 'B', 14)
+        self.cell(0, 10, 'Dairy Shed Hygiene Checklist', 0, 1, 'C')
+        self.cell(0, 10, f'Date: {datetime.now().strftime("%Y-%m-%d")}', 0, 1, 'C')
+        self.ln(5)
 
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: none;
-        }
+    def chapter_title(self, title):
+        self.set_font('Arial', 'B', 12)
+        self.cell(0, 10, title, 0, 1, 'L')
+        self.ln(2)
 
-        button {
-            background-color: #FF851B; /* Button color */
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    def chapter_body(self, items):
+        self.set_font('Arial', '', 11)
+        for item in items:
+            self.cell(60, 10, item['name'], 1)
+            self.cell(30, 10, item['status'], 1)
+            self.cell(80, 10, item['comments'], 1)
 
-        button:hover {
-            background-color: #FF4136; /* Hover color */
-        }
+            # Include the image if it exists
+            if item['photo_path']:
+                try:
+                    self.image(item['photo_path'], x=self.get_x() + 110, y=self.get_y() - 10, w=20)  # Adjust size and position as needed
+                except Exception as e:
+                    print(f"Error loading image: {e}")  # Handle image loading errors
+            self.ln(10)
 
-        .photo-container {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
+    def add_summary(self, summary):
+        self.set_font('Arial', 'B', 12)
+        self.cell(0, 10, 'Summary of Issues and Recommendations', 0, 1, 'L')
+        self.set_font('Arial', '', 11)
+        self.multi_cell(0, 10, summary)
+        self.ln(5)
 
-        .photo-container img {
-            max-width: 100%;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <h1>Dairy Shed Hygiene Checklist</h1>
-        <form id="dairyCheckForm">
-            <!-- Farm Details -->
-            <h2>Farm Details</h2>
-            <label for="dairy_company">Dairy Company:</label>
-            <input type="text" name="dairy_company" required>
-            <label for="dairy_number">Dairy Number:</label>
-            <input type="text" name="dairy_number" required>
-            <label for="address">Address:</label>
-            <input type="text" name="address" required>
-            <label for="customer_name">Customer Name:</label>
-            <input type="text" name="customer_name" required>
-            <label for="region">Region:</label>
-            <select name="region" required>
-                <option value="">Select Region</option>
-                <option value="Northland">Northland</option>
-                <option value="Auckland">Auckland</option>
-                <!-- Add more regions as needed -->
-            </select>
-            <label for="farm_name">Farm Name:</label>
-            <input type="text" name="farm_name" required>
-            <label for="island">Island:</label>
-            <select name="island" required>
-                <option value="North Island">North Island</option>
-                <option value="South Island">South Island</option>
-            </select>
-            <label for="visit_date">Visit Date:</label>
-            <input type="date" name="visit_date" required>
-            <label for="visit_type">Visit Type:</label>
-            <input type="text" name="visit_type" required>
-            <label for="inspection_start">Time Inspection Started:</label>
-            <input type="time" name="inspection_start" required>
-            <label for="inspection_end">Time Inspection Ended:</label>
-            <input type="time" name="inspection_end" required>
-            <label for="completed_by">Inspection Completed by:</label>
-            <input type="text" name="completed_by" required>
-            <label for="call_type">Call Type:</label>
-            <select name="call_type" required>
-                <option value="General">General</option>
-                <option value="Follow-Up">Follow-Up</option>
-            </select>
-            <label for="visit_notes">General Visit Notes:</label>
-            <textarea name="visit_notes"></textarea>
+# Create PDF
+pdf = PDF()
+pdf.add_page()
 
-            <!-- Health & Safety Section -->
-            <h2>Health & Safety</h2>
-            <label for="health_safety_status">Status:</label>
-            <select name="health_safety_status" required>
-                <option value="ok">OK</option>
-                <option value="attention_required">Attention Required</option>
-            </select>
-            <label for="health_safety_comments">Comments:</label>
-            <input type="text" name="health_safety_comments">
-            <div class="photo-container">
-                <label for="health_safety_photo">Photo:</label>
-                <input type="file" accept="image/*" name="health_safety_photo">
-            </div>
+# Add sections and items
+for section_title, items in checklist_items.items():
+    pdf.chapter_title(section_title)
+    pdf.chapter_body(items)
 
-            <!-- Milking Plant Section -->
-            <h2>Milking Plant</h2>
-            <div id="milkingPlantComponents">
-                <label>Pulsator Airline:</label>
-                <select name="pulsator_airline_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="pulsator_airline_comments" placeholder="Comments">
-                <div class="photo-container">
-                    <label for="pulsator_airline_photo">Photo:</label>
-                    <input type="file" accept="image/*" name="pulsator_airline_photo">
-                </div>
+# Add summary
+pdf.add_summary(summary_text)
 
-                <!-- Repeat for each component in the Milking Plant -->
-                <label>Long Bend Elbows:</label>
-                <select name="long_bend_elbows_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="long_bend_elbows_comments" placeholder="Comments">
-                <div class="photo-container">
-                    <label for="long_bend_elbows_photo">Photo:</label>
-                    <input type="file" accept="image/*" name="long_bend_elbows_photo">
-                </div>
+# Save the PDF
+pdf_file_name = 'Dairy_Shed_Hygiene_Checklist.pdf'
+pdf.output(pdf_file_name)
 
-                <!-- Additional components go here -->
-            </div>
-
-            <!-- Milk Vat Section -->
-            <h2>Milk Vat</h2>
-            <div id="milkVatComponents">
-                <label>Liner:</label>
-                <select name="liner_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="liner_comments" placeholder="Comments">
-                <div class="photo-container">
-                    <label for="liner_photo">Photo:</label>
-                    <input type="file" accept="image/*" name="liner_photo">
-                </div>
-
-                <!-- Repeat for each component in the Milk Vat -->
-                <label>Cluster:</label>
-                <select name="cluster_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="cluster_comments" placeholder="Comments">
-                <div class="photo-container">
-                    <label for="cluster_photo">Photo:</label>
-                    <input type="file" accept="image/*" name="cluster_photo">
-                </div>
-
-                <!-- Additional components go here -->
-            </div>
-
-            <button type="button" onclick="generatePDF()">Generate PDF</button>
-        </form>
-    </div>
-
-    <script>
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Gather form data
-            const formData = new FormData(document.getElementById('dairyCheckForm'));
-            const data = Object.fromEntries(formData.entries());
-
-            // Header
-            doc.setFontSize(20);
-            doc.text('Dairy Shed Hygiene Checklist', 10, 10);
-            doc.setFontSize(12);
-            doc.text(`Date: ${data.visit_date}`, 10, 20);
-            doc.text(`Farm: ${data.farm_name}`, 10, 30);
-            doc.text(`Customer: ${data.customer_name}`, 10, 40);
-            doc.text(`Inspected By: ${data.completed_by}`, 10, 50);
-            doc.text(`Visit Type: ${data.visit_type}`, 10, 60);
-            doc.text(`General Visit Notes: ${data.visit_notes}`, 10, 70);
-
-            // Health & Safety Section
-            doc.text('Health & Safety', 10, 90);
-            doc.text(`Status: ${data.health_safety_status}`, 10, 100);
-            doc.text(`Comments: ${data.health_safety_comments}`, 10, 110);
-
-            // Milking Plant Section
-            doc.text('Milking Plant', 10, 130);
-            const milkingPlantComponents = [
-                { name: 'Pulsator Airline', status: data.pulsator_airline_status, comments: data.pulsator_airline_comments },
-                { name: 'Long Bend Elbows', status: data.long_bend_elbows_status, comments: data.long_bend_elbows_comments }
-                // Add additional components as necessary
-            ];
-            milkingPlantComponents.forEach((component, index) => {
-                const yPosition = 140 + (index * 10);
-                doc.text(`${component.name}: ${component.status}`, 10, yPosition);
-                doc.text(`Comments: ${component.comments}`, 10, yPosition + 10);
-            });
-
-            // Milk Vat Section
-            doc.text('Milk Vat', 10, 200);
-            const milkVatComponents = [
-                { name: 'Liner', status: data.liner_status, comments: data.liner_comments },
-                { name: 'Cluster', status: data.cluster_status, comments: data.cluster_comments }
-                // Add additional components as necessary
-            ];
-            milkVatComponents.forEach((component, index) => {
-                const yPosition = 210 + (index * 10);
-                doc.text(`${component.name}: ${component.status}`, 10, yPosition);
-                doc.text(`Comments: ${component.comments}`, 10, yPosition + 10);
-            });
-
-            // Save PDF
-            doc.save('dairy_shed_hygiene_checklist.pdf');
-        }
-    </script>
-</body>
-</html>
+print(f'PDF generated successfully: {pdf_file_name}')
