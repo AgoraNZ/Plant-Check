@@ -264,7 +264,6 @@
 
             <div class="form-actions">
                 <button type="button" id="generate-pdf">Generate PDF</button>
-                <button type="submit">Submit Checklist</button>
             </div>
         </form>
     </div>
@@ -334,7 +333,6 @@
 
             plantCheckItems.forEach(item => {
                 const photoInput = form.querySelector(`input[name="${item.replace(/ /g, "_").toLowerCase()}_photo"]`);
-                const photoPreview = form.querySelector(`#${item.replace(/ /g, "_").toLowerCase()}_preview`);
                 
                 // Add rating and comments to PDF
                 const rating = formData.get(`${item.replace(/ /g, "_").toLowerCase()}_rating`);
@@ -348,6 +346,10 @@
                         const imgData = e.target.result;
                         doc.addImage(imgData, 'JPEG', 10, y, 50, 50);
                         y += 60; // Adjust Y position for next item
+                        if (y > 280) { // Check for page overflow
+                            doc.addPage(); // Add new page if needed
+                            y = 10; // Reset y position
+                        }
                     };
                     reader.readAsDataURL(photoInput.files[0]);
                 }
@@ -355,12 +357,6 @@
 
             // Save PDF
             doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        });
-
-        document.getElementById('checklist-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Checklist submitted successfully!');
-            this.reset();
         });
     </script>
 </body>
