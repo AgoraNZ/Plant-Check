@@ -47,39 +47,37 @@
 
             <!-- Farm Details -->
             <h2>Farm Details</h2>
-            <label>Dairy Company: </label><input type="text" name="dairy_company"><br>
-            <label>Dairy Number: </label><input type="text" name="dairy_number" onchange="autoPopulate()"><br>
-            <label>Address: </label><input type="text" name="address"><br>
-            <label>Customer Name: </label><input type="text" name="customer_name"><br>
-            <label>Region: </label>
+            <label>Dairy Company:</label><input type="text" name="dairy_company"><br>
+            <label>Dairy Number:</label><input type="text" name="dairy_number" onchange="autoPopulate()"><br>
+            <label>Address:</label><input type="text" name="address"><br>
+            <label>Customer Name:</label><input type="text" name="customer_name"><br>
+            <label>Region:</label>
             <select name="region">
                 <option value="Auckland">Auckland</option>
                 <option value="Canterbury">Canterbury</option>
                 <option value="Waikato">Waikato</option>
                 <option value="Wellington">Wellington</option>
                 <option value="Otago">Otago</option>
+                <!-- Add other regions as needed -->
             </select><br>
-            <label>Farm Name: </label><input type="text" name="farm_name"><br>
-            <label>Island: </label>
+            <label>Farm Name:</label><input type="text" name="farm_name"><br>
+            <label>Island:</label>
             <select name="island">
                 <option value="North Island">North Island</option>
                 <option value="South Island">South Island</option>
             </select><br>
-            <label>Visit Date: </label><input type="date" name="visit_date" id="visit_date"><br>
-            <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
-            <label>Time Inspection Started: </label><input type="time" name="inspection_start" id="inspection_start"><br>
-            <label>Time Inspection Ended: </label><input type="time" name="inspection_end" id="inspection_end"><br>
-            <label>Inspection Completed by: </label><input type="text" name="completed_by"><br>
-
-            <!-- Call Type -->
-            <h2>Call Type</h2>
-            <label>Call Type: </label>
+            <label>Visit Date:</label><input type="date" name="visit_date" id="visit_date"><br>
+            <label>Visit Type:</label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
+            <label>Time Inspection Started:</label><input type="time" name="inspection_start" id="inspection_start"><br>
+            <label>Time Inspection Ended:</label><input type="time" name="inspection_end" id="inspection_end"><br>
+            <label>Inspection Completed by:</label><input type="text" name="completed_by"><br>
+            <label>Call Type:</label>
             <select name="call_type">
                 <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
                 <option value="Follow-up Visit">Follow-up Visit</option>
                 <option value="Emergency Visit">Emergency Visit</option>
             </select><br>
-            <label>General Visit Notes: </label><textarea name="visit_notes"></textarea><br>
+            <label>General Visit Notes:</label><textarea name="visit_notes"></textarea><br>
 
             <!-- Health & Safety Section -->
             <h2>Health & Safety</h2>
@@ -90,8 +88,8 @@
                     <option value="attention_required">Attention Required</option>
                     <option value="na">N/A</option>
                 </select><br>
-                <label>Comments: </label><input type="text" name="health_safety_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+                <label>Comments:</label><input type="text" name="health_safety_comments"><br>
+                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
 
             <!-- Milking Plant Section -->
@@ -103,41 +101,50 @@
                     <option value="attention_required">Attention Required</option>
                     <option value="na">N/A</option>
                 </select><br>
-                <label>Comments: </label><input type="text" name="pulsator_airline_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+                <label>Comments:</label><input type="text" name="pulsator_airline_comments"><br>
+                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
-
-            <!-- Add similar blocks for the rest of the Milking Plant components -->
             <div class="component">
-                <label>Long Bend Elbows Status:</label><br>
+                <label>Long Bend Elbows:</label><br>
                 <select name="long_bend_elbows_status" onchange="togglePhoto(this)">
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
                     <option value="na">N/A</option>
                 </select><br>
-                <label>Comments: </label><input type="text" name="long_bend_elbows_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+                <label>Comments:</label><input type="text" name="long_bend_elbows_comments"><br>
+                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
-
+            <div class="component">
+                <label>Automatic Cup Remover:</label><br>
+                <select name="automatic_cup_remover_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments:</label><input type="text" name="automatic_cup_remover_comments"><br>
+                <label>Upload/Take Photo:</label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <!-- Repeat for the remaining components -->
+            
             <!-- Alert Details Section (Positioned at the end) -->
             <h2>Alert Details - Milk</h2>
-            <label>Alert/Grade Type One: </label><input type="text" name="alert_grade_one"><br>
-            <label>Level One: </label><input type="text" name="level_one"><br>
-            <label>Milk Temperature One: </label><input type="text" name="milk_temperature_one"><br>
-            <label>Milk Temperature Time One: </label><input type="time" name="milk_temperature_time_one"><br>
+            <label>Alert/Grade Type One:</label><input type="text" name="alert_grade_one"><br>
+            <label>Level One:</label><input type="text" name="level_one"><br>
+            <label>Milk Temperature One:</label><input type="text" name="milk_temperature_one"><br>
+            <label>Milk Temperature Time One:</label><input type="time" name="milk_temperature_time_one"><br>
 
             <h2>Alert Details - Water</h2>
-            <label>Alert/Grade Type One: </label><input type="text" name="alert_grade_water_one"><br>
-            <label>Level One: </label><input type="text" name="level_water_one"><br>
-            <label>Water Temperature One: </label><input type="text" name="water_temperature_one"><br>
-            <label>Water Temperature Time One: </label><input type="time" name="water_temperature_time_one"><br>
+            <label>Alert/Grade Type One:</label><input type="text" name="alert_grade_water_one"><br>
+            <label>Level One:</label><input type="text" name="level_water_one"><br>
+            <label>Water Temperature One:</label><input type="text" name="water_temperature_one"><br>
+            <label>Water Temperature Time One:</label><input type="time" name="water_temperature_time_one"><br>
 
             <!-- Signature Section -->
             <h2>Signature Details</h2>
-            <label>Role: </label><input type="text" name="role"><br>
-            <label>User: </label><input type="text" name="user"><br>
-            <label>Signed At: </label><input type="text" name="signed_at"><br>
-            <label>Comment: </label><textarea name="comment"></textarea><br>
+            <label>Role:</label><input type="text" name="role"><br>
+            <label>User:</label><input type="text" name="user"><br>
+            <label>Signed At:</label><input type="text" name="signed_at"><br>
+            <label>Comment:</label><textarea name="comment"></textarea><br>
 
             <input type="button" value="Generate PDF" onclick="generatePDF()">
         </form>
@@ -162,4 +169,26 @@
         // Toggle photo upload based on "Attention Required"
         function togglePhoto(select) {
             const fileInput = select.parentElement.querySelector('.photo-upload');
-            if (select.value === '
+            if (select.value === 'attention_required') {
+                fileInput.style.display = 'block';
+            } else {
+                fileInput.style.display = 'none';
+            }
+        }
+
+        // Generate PDF function (placeholder)
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Dairy Shed Hygiene Checklist', 20, 20);
+            doc.save('checklist.pdf');
+        }
+
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('visit_date').value = today;
+        });
+    </script>
+</body>
+</html>
