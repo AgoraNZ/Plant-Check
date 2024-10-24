@@ -58,7 +58,6 @@
                 <option value="Waikato">Waikato</option>
                 <option value="Wellington">Wellington</option>
                 <option value="Otago">Otago</option>
-                <!-- Add other regions as needed -->
             </select><br>
             <label>Farm Name: </label><input type="text" name="farm_name"><br>
             <label>Island: </label>
@@ -97,7 +96,6 @@
 
             <!-- Milking Plant Section -->
             <h2>Milking Plant</h2>
-            <!-- Repeat for all Milking Plant Components -->
             <div class="component">
                 <label>Pulsator Airline Status:</label><br>
                 <select name="pulsator_airline_status" onchange="togglePhoto(this)">
@@ -110,7 +108,16 @@
             </div>
 
             <!-- Add similar blocks for the rest of the Milking Plant components -->
-            <!-- Example: Long Bend Elbows, Automatic Cup Remover Diaphragm, etc. -->
+            <div class="component">
+                <label>Long Bend Elbows Status:</label><br>
+                <select name="long_bend_elbows_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="long_bend_elbows_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
 
             <!-- Alert Details Section (Positioned at the end) -->
             <h2>Alert Details - Milk</h2>
@@ -155,23 +162,4 @@
         // Toggle photo upload based on "Attention Required"
         function togglePhoto(select) {
             const fileInput = select.parentElement.querySelector('.photo-upload');
-            if (select.value === 'attention_required') {
-                fileInput.style.display = 'block';
-            } else {
-                fileInput.style.display = 'none';
-            }
-        }
-
-        // Set date and time fields to New Zealand (Auckland) time
-        window.onload = function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('visit_date').value = today;
-
-            const now = new Date().toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit', hour12: false });
-            document.getElementById('inspection_start').value = now;
-            document.getElementById('inspection_end').value = now;
-        };
-
-        // Function to generate PDF
-        function generatePDF() {
-            const
+            if (select.value === '
