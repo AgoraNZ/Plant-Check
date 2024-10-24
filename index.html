@@ -1,132 +1,452 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-    async function generatePDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Farm Details
-        doc.setFontSize(12);
-        doc.text("Farm Details", 10, 10);
-        doc.text(`Dairy Company: ${document.querySelector('input[name="dairy_company"]').value}`, 10, 20);
-        doc.text(`Dairy Number: ${document.querySelector('input[name="dairy_number"]').value}`, 10, 30);
-        doc.text(`Address: ${document.querySelector('input[name="address"]').value}`, 10, 40);
-        doc.text(`Customer Name: ${document.querySelector('input[name="customer_name"]').value}`, 10, 50);
-        doc.text(`Region: ${document.querySelector('select[name="region"]').value}`, 10, 60);
-        doc.text(`Farm Name: ${document.querySelector('input[name="farm_name"]').value}`, 10, 70);
-        doc.text(`Island: ${document.querySelector('select[name="island"]').value}`, 10, 80);
-        doc.text(`Visit Date: ${document.querySelector('input[name="visit_date"]').value}`, 10, 90);
-        doc.text(`Visit Type: ${document.querySelector('input[name="visit_type"]').value}`, 10, 100);
-        doc.text(`Time Inspection Started: ${document.querySelector('input[name="inspection_start"]').value}`, 10, 110);
-        doc.text(`Time Inspection Ended: ${document.querySelector('input[name="inspection_end"]').value}`, 10, 120);
-        doc.text(`Inspection Completed by: ${document.querySelector('input[name="completed_by"]').value}`, 10, 130);
-        doc.text(`Call Type: ${document.querySelector('select[name="call_type"]').value}`, 10, 140);
-        doc.text(`General Visit Notes: ${document.querySelector('textarea[name="visit_notes"]').value}`, 10, 150);
-        
-        // Health & Safety Section
-        doc.addPage();
-        doc.text("Health & Safety", 10, 10);
-        const healthSafetyStatus = document.querySelector('select[name="health_safety_status"]').value;
-        const healthSafetyComments = document.querySelector('input[name="health_safety_comments"]').value;
-        doc.text(`Health & Safety Status: ${healthSafetyStatus}`, 10, 20);
-        doc.text(`Comments: ${healthSafetyComments}`, 10, 30);
-
-        // Milking Plant Section
-        doc.addPage();
-        doc.text("Milking Plant", 10, 10);
-        const components = [
-            'Pulsator Airline',
-            'Long Bend Elbows',
-            'Automatic Cup',
-            'Remover',
-            'Diaphram',
-            'Receiving Can',
-            'Sanitary Trap',
-            'Main Milk Line',
-            'Milk Line Seals in good condition',
-            'Stainless Droppers',
-            'Long Milk Rubber'
-        ];
-
-        components.forEach((component, index) => {
-            const status = document.querySelector(`select[name="${component.toLowerCase().replace(/ /g, "_")}_status"]`).value;
-            const comments = document.querySelector(`input[name="${component.toLowerCase().replace(/ /g, "_")}_comments"]`).value;
-            doc.text(`${component} Status: ${status}`, 10, 20 + (index * 10));
-            doc.text(`Comments: ${comments}`, 10, 25 + (index * 10));
-        });
-
-        // Milk Vat Section (same structure as Milking Plant)
-        const milkVatComponents = [
-            'Liner',
-            'Cluster',
-            'Cluster Seal',
-            'Cluster Button',
-            'Non Return Valve at Milk Pump',
-            'Milk Pump',
-            'Filter Housing',
-            'Plate Cooler',
-            'Interceptor',
-            'Receiver Airline',
-            'Flushing Pulsator',
-            'Air Purge Valve',
-            'Vacuum Level',
-            'Main Airline',
-            'Plant Drainage - Milk Pump',
-            'Plant Drainage - Filter/s',
-            'Plant Drainage - Plate Cooler',
-            'Plant Drainage - Vat Entry',
-            'Plant Wash Tap',
-            'Wash Jetters',
-            'Centre Gland',
-            'Test Bucket',
-            'Inlet Valve',
-            'Non-Return Valve',
-            'Spray Ball',
-            'Agitator',
-            'Silo door',
-            'Manhole Seal',
-            'Vat Outlet',
-            'Walls in silo'
-        ];
-
-        milkVatComponents.forEach((component, index) => {
-            const status = document.querySelector(`select[name="${component.toLowerCase().replace(/ /g, "_")}_status"]`).value;
-            const comments = document.querySelector(`input[name="${component.toLowerCase().replace(/ /g, "_")}_comments"]`).value;
-            doc.text(`${component} Status: ${status}`, 10, 20 + (index * 10));
-            doc.text(`Comments: ${comments}`, 10, 25 + (index * 10));
-        });
-
-        // Signature Details
-        doc.addPage();
-        doc.text("Signature Details", 10, 10);
-        doc.text(`Role: ${document.querySelector('input[name="role"]').value}`, 10, 20);
-        doc.text(`User: ${document.querySelector('input[name="user"]').value}`, 10, 30);
-        doc.text(`Signed At: ${document.querySelector('input[name="signed_at"]').value}`, 10, 40);
-        doc.text(`Comment: ${document.querySelector('textarea[name="comment"]').value}`, 10, 50);
-
-        // Problems Summary (dummy example; modify with your logic)
-        const problems = [];
-        if (healthSafetyStatus === 'attention_required') {
-            problems.push("Health & Safety requires attention.");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dairy Shed Hygiene Checklist</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #001F3F; /* Navy blue background */
+            color: white;
         }
-        components.forEach(component => {
-            const status = document.querySelector(`select[name="${component.toLowerCase().replace(/ /g, "_")}_status"]`).value;
-            if (status === 'attention_required') {
-                problems.push(`${component} requires attention.`);
-            }
-        });
 
-        if (problems.length > 0) {
-            doc.addPage();
-            doc.text("Problems Summary & Recommendations", 10, 10);
-            problems.forEach((problem, index) => {
-                doc.text(`${index + 1}. ${problem}`, 10, 20 + (index * 10));
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            color: #FF851B; /* Accent color */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background-color: #FF851B; /* Button color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF4136; /* Hover color */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        <form id="dairyCheckForm">
+            <!-- Farm Details -->
+            <h2>Farm Details</h2>
+            <label for="dairy_company">Dairy Company:</label>
+            <input type="text" name="dairy_company" required>
+            <label for="dairy_number">Dairy Number:</label>
+            <input type="text" name="dairy_number" required>
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" required>
+            <label for="region">Region:</label>
+            <select name="region" required>
+                <option value="">Select Region</option>
+                <option value="Northland">Northland</option>
+                <option value="Auckland">Auckland</option>
+                <!-- Add more regions as needed -->
+            </select>
+            <label for="farm_name">Farm Name:</label>
+            <input type="text" name="farm_name" required>
+            <label for="island">Island:</label>
+            <select name="island" required>
+                <option value="North Island">North Island</option>
+                <option value="South Island">South Island</option>
+            </select>
+            <label for="visit_date">Visit Date:</label>
+            <input type="date" name="visit_date" value="" required>
+            <label for="visit_type">Visit Type:</label>
+            <input type="text" name="visit_type" required>
+            <label for="inspection_start">Time Inspection Started:</label>
+            <input type="time" name="inspection_start" required>
+            <label for="inspection_end">Time Inspection Ended:</label>
+            <input type="time" name="inspection_end" required>
+            <label for="completed_by">Inspection Completed by:</label>
+            <input type="text" name="completed_by" required>
+            <label for="call_type">Call Type:</label>
+            <select name="call_type" required>
+                <option value="General">General</option>
+                <option value="Follow-Up">Follow-Up</option>
+            </select>
+            <label for="visit_notes">General Visit Notes:</label>
+            <textarea name="visit_notes"></textarea>
+
+            <!-- Health & Safety Section -->
+            <h2>Health & Safety</h2>
+            <label for="health_safety_status">Status:</label>
+            <select name="health_safety_status" required>
+                <option value="ok">OK</option>
+                <option value="attention_required">Attention Required</option>
+            </select>
+            <label for="health_safety_comments">Comments:</label>
+            <input type="text" name="health_safety_comments">
+
+            <!-- Milking Plant Section -->
+            <h2>Milking Plant</h2>
+            <div id="milkingPlantComponents">
+                <label>Pulsator Airline:</label>
+                <select name="pulsator_airline_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="pulsator_airline_comments" placeholder="Comments">
+                
+                <label>Long Bend Elbows:</label>
+                <select name="long_bend_elbows_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="long_bend_elbows_comments" placeholder="Comments">
+                
+                <label>Automatic Cup:</label>
+                <select name="automatic_cup_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="automatic_cup_comments" placeholder="Comments">
+
+                <label>Remover:</label>
+                <select name="remover_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="remover_comments" placeholder="Comments">
+
+                <label>Diaphragm:</label>
+                <select name="diaphragm_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="diaphragm_comments" placeholder="Comments">
+
+                <label>Receiving Can:</label>
+                <select name="receiving_can_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="receiving_can_comments" placeholder="Comments">
+
+                <label>Sanitary Trap:</label>
+                <select name="sanitary_trap_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="sanitary_trap_comments" placeholder="Comments">
+
+                <label>Main Milk Line:</label>
+                <select name="main_milk_line_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="main_milk_line_comments" placeholder="Comments">
+
+                <label>Milk Line Seals in Good Condition:</label>
+                <select name="milk_line_seals_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="milk_line_seals_comments" placeholder="Comments">
+
+                <label>Stainless Droppers:</label>
+                <select name="stainless_droppers_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="stainless_droppers_comments" placeholder="Comments">
+
+                <label>Long Milk Rubber:</label>
+                <select name="long_milk_rubber_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="long_milk_rubber_comments" placeholder="Comments">
+            </div>
+
+            <!-- Milk Vat Section -->
+            <h2>Milk Vat</h2>
+            <div id="milkVatComponents">
+                <label>Liner:</label>
+                <select name="liner_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="liner_comments" placeholder="Comments">
+
+                <label>Cluster:</label>
+                <select name="cluster_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="cluster_comments" placeholder="Comments">
+
+                <label>Cluster Seal:</label>
+                <select name="cluster_seal_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="cluster_seal_comments" placeholder="Comments">
+
+                <label>Cluster Button:</label>
+                <select name="cluster_button_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="cluster_button_comments" placeholder="Comments">
+
+                <label>Non Return Valve at Milk Pump:</label>
+                <select name="non_return_valve_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="non_return_valve_comments" placeholder="Comments">
+
+                <label>Milk Pump:</label>
+                <select name="milk_pump_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="milk_pump_comments" placeholder="Comments">
+
+                <label>Filter Housing:</label>
+                <select name="filter_housing_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="filter_housing_comments" placeholder="Comments">
+
+                <label>Plate Cooler:</label>
+                <select name="plate_cooler_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plate_cooler_comments" placeholder="Comments">
+
+                <label>Interceptor:</label>
+                <select name="interceptor_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="interceptor_comments" placeholder="Comments">
+
+                <label>Receiver Airline:</label>
+                <select name="receiver_airline_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="receiver_airline_comments" placeholder="Comments">
+
+                <label>Flushing Pulsator:</label>
+                <select name="flushing_pulsator_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="flushing_pulsator_comments" placeholder="Comments">
+
+                <label>Air Purge Valve:</label>
+                <select name="air_purge_valve_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="air_purge_valve_comments" placeholder="Comments">
+
+                <label>Vacuum Level:</label>
+                <select name="vacuum_level_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="vacuum_level_comments" placeholder="Comments">
+
+                <label>Main Airline:</label>
+                <select name="main_airline_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="main_airline_comments" placeholder="Comments">
+
+                <label>Plant Drainage - Milk Pump:</label>
+                <select name="plant_drainage_milk_pump_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plant_drainage_milk_pump_comments" placeholder="Comments">
+
+                <label>Plant Drainage - Filter/s:</label>
+                <select name="plant_drainage_filter_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plant_drainage_filter_comments" placeholder="Comments">
+
+                <label>Plant Drainage - Plate Cooler:</label>
+                <select name="plant_drainage_plate_cooler_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plant_drainage_plate_cooler_comments" placeholder="Comments">
+
+                <label>Plant Drainage - Vat Entry:</label>
+                <select name="plant_drainage_vat_entry_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plant_drainage_vat_entry_comments" placeholder="Comments">
+
+                <label>Plant Wash Tap:</label>
+                <select name="plant_wash_tap_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="plant_wash_tap_comments" placeholder="Comments">
+
+                <label>Wash Jetters:</label>
+                <select name="wash_jetters_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="wash_jetters_comments" placeholder="Comments">
+
+                <label>Centre Gland:</label>
+                <select name="centre_gland_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="centre_gland_comments" placeholder="Comments">
+
+                <label>Test Bucket:</label>
+                <select name="test_bucket_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="test_bucket_comments" placeholder="Comments">
+
+                <label>Inlet Valve:</label>
+                <select name="inlet_valve_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="inlet_valve_comments" placeholder="Comments">
+
+                <label>Non-Return Valve:</label>
+                <select name="non_return_valve_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="non_return_valve_comments" placeholder="Comments">
+
+                <label>Spray Ball:</label>
+                <select name="spray_ball_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="spray_ball_comments" placeholder="Comments">
+
+                <label>Agitator:</label>
+                <select name="agitator_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="agitator_comments" placeholder="Comments">
+
+                <label>Silo Door:</label>
+                <select name="silo_door_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="silo_door_comments" placeholder="Comments">
+
+                <label>Manhole Seal:</label>
+                <select name="manhole_seal_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="manhole_seal_comments" placeholder="Comments">
+
+                <label>Vat Outlet:</label>
+                <select name="vat_outlet_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="vat_outlet_comments" placeholder="Comments">
+
+                <label>Walls in Silo:</label>
+                <select name="walls_in_silo_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="walls_in_silo_comments" placeholder="Comments">
+            </div>
+
+            <!-- Signature Details Section -->
+            <h2>Signature Details</h2>
+            <label for="role">Role:</label>
+            <input type="text" name="role" required>
+            <label for="user">User:</label>
+            <input type="text" name="user" required>
+            <label for="signed_at">Signed At:</label>
+            <input type="text" name="signed_at" required>
+            <label for="comment">Comment:</label>
+            <textarea name="comment"></textarea>
+
+            <!-- Generate PDF Button -->
+            <button type="button" onclick="generatePDF()">Generate PDF</button>
+        </form>
+    </div>
+
+    <script>
+        async function generatePDF() {
+            // Gather form data
+            const formData = new FormData(document.getElementById('dairyShedForm'));
+            const data = Object.fromEntries(formData.entries());
+
+            // Send data to server for PDF generation
+            const response = await fetch('/generate-pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             });
-        } else {
-            doc.addPage();
-            doc.text("No issues reported.", 10, 10);
-        }
 
-        // Save the PDF
-        doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
-    }
-</script>
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'dairy_shed_hygiene_checklist.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                alert('Failed to generate PDF.');
+            }
+        }
+    </script>
+</body>
+</html>
