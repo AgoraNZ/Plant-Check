@@ -4,273 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
-            background-color: #001f3f; /* Navy blue background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #001F3F; /* Navy blue background */
+            color: white;
         }
-        .container {
-            background-color: white;
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            width: 50%;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            max-height: 100vh;
-            overflow-y: auto; /* Scrollable if the content is too long */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
-        .photo-upload {
-            display: none;
+
+        h1, h2 {
+            color: #FF851B; /* Accent color */
         }
-        .center {
-            text-align: center;
-        }
+
         label {
-            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
         }
-        select, input[type="text"], textarea, input[type="date"], input[type="time"] {
+
+        input, select, textarea {
             width: 100%;
-            margin-bottom: 15px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
         }
-        .component {
+
+        button {
+            background-color: #FF851B; /* Button color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF4136; /* Hover color */
+        }
+
+        .photo-container {
+            display: flex;
+            flex-direction: column;
             margin-bottom: 20px;
         }
-        button {
-            background-color: #007bff; /* Blue button */
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+
+        .photo-container img {
+            max-width: 100%;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="center">Dairy Shed Hygiene Checklist</h1>
-        <form id="checklist-form">
+    <div class="form-container">
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        <form id="dairyCheckForm">
             <!-- Farm Details -->
             <h2>Farm Details</h2>
-            <label>Dairy Company: </label><input type="text" name="dairy_company"><br>
-            <label>Dairy Number: </label><input type="text" name="dairy_number"><br>
-            <label>Address: </label><input type="text" name="address"><br>
-            <label>Customer Name: </label><input type="text" name="customer_name"><br>
-            <label>Region: </label>
-            <select name="region">
+            <label for="dairy_company">Dairy Company:</label>
+            <input type="text" name="dairy_company" required>
+            <label for="dairy_number">Dairy Number:</label>
+            <input type="text" name="dairy_number" required>
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" required>
+            <label for="region">Region:</label>
+            <select name="region" required>
+                <option value="">Select Region</option>
+                <option value="Northland">Northland</option>
                 <option value="Auckland">Auckland</option>
-                <option value="Canterbury">Canterbury</option>
-                <option value="Waikato">Waikato</option>
-                <option value="Wellington">Wellington</option>
-                <option value="Otago">Otago</option>
-                <!-- Add other regions as needed -->
-            </select><br>
-            <label>Farm Name: </label><input type="text" name="farm_name"><br>
-            <label>Island: </label>
-            <select name="island">
+                <!-- Add more regions as needed -->
+            </select>
+            <label for="farm_name">Farm Name:</label>
+            <input type="text" name="farm_name" required>
+            <label for="island">Island:</label>
+            <select name="island" required>
                 <option value="North Island">North Island</option>
                 <option value="South Island">South Island</option>
-            </select><br>
-            <label>Visit Date: </label><input type="date" name="visit_date" id="visit_date"><br>
-            <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
-            <label>Time Inspection Started: </label><input type="time" name="inspection_start" id="inspection_start"><br>
-            <label>Time Inspection Ended: </label><input type="time" name="inspection_end" id="inspection_end"><br>
-            <label>Inspection Completed by: </label><input type="text" name="completed_by"><br>
-
-            <!-- Call Type -->
-            <h2>Call Type</h2>
-            <label>Call Type: </label>
-            <select name="call_type">
-                <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
-                <option value="Follow-up Visit">Follow-up Visit</option>
-                <option value="Emergency Visit">Emergency Visit</option>
-            </select><br>
-            <label>General Visit Notes: </label><textarea name="visit_notes"></textarea><br>
+            </select>
+            <label for="visit_date">Visit Date:</label>
+            <input type="date" name="visit_date" required>
+            <label for="visit_type">Visit Type:</label>
+            <input type="text" name="visit_type" required>
+            <label for="inspection_start">Time Inspection Started:</label>
+            <input type="time" name="inspection_start" required>
+            <label for="inspection_end">Time Inspection Ended:</label>
+            <input type="time" name="inspection_end" required>
+            <label for="completed_by">Inspection Completed by:</label>
+            <input type="text" name="completed_by" required>
+            <label for="call_type">Call Type:</label>
+            <select name="call_type" required>
+                <option value="General">General</option>
+                <option value="Follow-Up">Follow-Up</option>
+            </select>
+            <label for="visit_notes">General Visit Notes:</label>
+            <textarea name="visit_notes"></textarea>
 
             <!-- Health & Safety Section -->
             <h2>Health & Safety</h2>
-            <div class="component">
-                <label>Health & Safety - General:</label><br>
-                <select name="health_safety_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="health_safety_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
+            <label for="health_safety_status">Status:</label>
+            <select name="health_safety_status" required>
+                <option value="ok">OK</option>
+                <option value="attention_required">Attention Required</option>
+            </select>
+            <label for="health_safety_comments">Comments:</label>
+            <input type="text" name="health_safety_comments">
+            <div class="photo-container">
+                <label for="health_safety_photo">Photo:</label>
+                <input type="file" accept="image/*" name="health_safety_photo">
             </div>
 
             <!-- Milking Plant Section -->
             <h2>Milking Plant</h2>
-            <div class="component">
-                <label>Pulsator Airline:</label><br>
-                <select name="pulsator_airline_status">
+            <div id="milkingPlantComponents">
+                <label>Pulsator Airline:</label>
+                <select name="pulsator_airline_status" required>
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="pulsator_airline_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Long Bend Elbows:</label><br>
-                <select name="long_bend_elbows_status">
+                </select>
+                <input type="text" name="pulsator_airline_comments" placeholder="Comments">
+                <div class="photo-container">
+                    <label for="pulsator_airline_photo">Photo:</label>
+                    <input type="file" accept="image/*" name="pulsator_airline_photo">
+                </div>
+
+                <!-- Repeat for each component in the Milking Plant -->
+                <label>Long Bend Elbows:</label>
+                <select name="long_bend_elbows_status" required>
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="long_bend_elbows_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Automatic Cup:</label><br>
-                <select name="automatic_cup_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="automatic_cup_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Remover:</label><br>
-                <select name="remover_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="remover_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Diaphragm:</label><br>
-                <select name="diaphragm_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="diaphragm_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Receiving Can:</label><br>
-                <select name="receiving_can_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="receiving_can_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Sanitary Trap:</label><br>
-                <select name="sanitary_trap_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="sanitary_trap_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
-            </div>
-            <div class="component">
-                <label>Main Milk Line:</label><br>
-                <select name="main_milk_line_status">
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="main_milk_line_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
+                </select>
+                <input type="text" name="long_bend_elbows_comments" placeholder="Comments">
+                <div class="photo-container">
+                    <label for="long_bend_elbows_photo">Photo:</label>
+                    <input type="file" accept="image/*" name="long_bend_elbows_photo">
+                </div>
+
+                <!-- Additional components go here -->
             </div>
 
             <!-- Milk Vat Section -->
             <h2>Milk Vat</h2>
-            <div class="component">
-                <label>Milk Vat Status:</label><br>
-                <select name="milk_vat_status">
+            <div id="milkVatComponents">
+                <label>Liner:</label>
+                <select name="liner_status" required>
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
-                    <option value="na">N/A</option>
-                </select><br>
-                <label>Comments: </label><input type="text" name="milk_vat_comments"><br>
-                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera"><br>
+                </select>
+                <input type="text" name="liner_comments" placeholder="Comments">
+                <div class="photo-container">
+                    <label for="liner_photo">Photo:</label>
+                    <input type="file" accept="image/*" name="liner_photo">
+                </div>
+
+                <!-- Repeat for each component in the Milk Vat -->
+                <label>Cluster:</label>
+                <select name="cluster_status" required>
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                </select>
+                <input type="text" name="cluster_comments" placeholder="Comments">
+                <div class="photo-container">
+                    <label for="cluster_photo">Photo:</label>
+                    <input type="file" accept="image/*" name="cluster_photo">
+                </div>
+
+                <!-- Additional components go here -->
             </div>
 
-            <!-- Summary Section -->
-            <h2>Summary</h2>
-            <div class="component">
-                <label>Any Issues or Recommendations:</label><br>
-                <textarea name="issues_recommendations"></textarea><br>
-            </div>
-            
-            <div class="center">
-                <button type="button" id="generate-pdf">Generate PDF</button>
-            </div>
+            <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        const { jsPDF } = window.jspdf;
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-        // Auto-populate the visit date with today's date
-        document.getElementById('visit_date').value = new Date().toISOString().split('T')[0];
+            // Gather form data
+            const formData = new FormData(document.getElementById('dairyCheckForm'));
+            const data = Object.fromEntries(formData.entries());
 
-        document.getElementById('generate-pdf').addEventListener('click', () => {
-            const pdf = new jsPDF();
+            // Header
+            doc.setFontSize(20);
+            doc.text('Dairy Shed Hygiene Checklist', 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Date: ${data.visit_date}`, 10, 20);
+            doc.text(`Farm: ${data.farm_name}`, 10, 30);
+            doc.text(`Customer: ${data.customer_name}`, 10, 40);
+            doc.text(`Inspected By: ${data.completed_by}`, 10, 50);
+            doc.text(`Visit Type: ${data.visit_type}`, 10, 60);
+            doc.text(`General Visit Notes: ${data.visit_notes}`, 10, 70);
 
-            pdf.text('Dairy Shed Hygiene Checklist', 20, 10);
-            pdf.text('Farm Details', 20, 20);
-            pdf.text(`Dairy Company: ${document.querySelector('input[name="dairy_company"]').value}`, 20, 30);
-            pdf.text(`Dairy Number: ${document.querySelector('input[name="dairy_number"]').value}`, 20, 40);
-            pdf.text(`Address: ${document.querySelector('input[name="address"]').value}`, 20, 50);
-            pdf.text(`Customer Name: ${document.querySelector('input[name="customer_name"]').value}`, 20, 60);
-            pdf.text(`Region: ${document.querySelector('select[name="region"]').value}`, 20, 70);
-            pdf.text(`Farm Name: ${document.querySelector('input[name="farm_name"]').value}`, 20, 80);
-            pdf.text(`Island: ${document.querySelector('select[name="island"]').value}`, 20, 90);
-            pdf.text(`Visit Date: ${document.querySelector('input[name="visit_date"]').value}`, 20, 100);
-            pdf.text(`Visit Type: ${document.querySelector('input[name="visit_type"]').value}`, 20, 110);
-            pdf.text(`Time Inspection Started: ${document.querySelector('input[name="inspection_start"]').value}`, 20, 120);
-            pdf.text(`Time Inspection Ended: ${document.querySelector('input[name="inspection_end"]').value}`, 20, 130);
-            pdf.text(`Inspection Completed by: ${document.querySelector('input[name="completed_by"]').value}`, 20, 140);
-            
-            pdf.text('Health & Safety', 20, 160);
-            pdf.text(`Status: ${document.querySelector('select[name="health_safety_status"]').value}`, 20, 170);
-            pdf.text(`Comments: ${document.querySelector('input[name="health_safety_comments"]').value}`, 20, 180);
-            
-            pdf.text('Milking Plant', 20, 200);
-            pdf.text(`Pulsator Airline: ${document.querySelector('select[name="pulsator_airline_status"]').value}`, 20, 210);
-            pdf.text(`Comments: ${document.querySelector('input[name="pulsator_airline_comments"]').value}`, 20, 220);
-            pdf.text(`Long Bend Elbows: ${document.querySelector('select[name="long_bend_elbows_status"]').value}`, 20, 230);
-            pdf.text(`Comments: ${document.querySelector('input[name="long_bend_elbows_comments"]').value}`, 20, 240);
-            pdf.text(`Automatic Cup: ${document.querySelector('select[name="automatic_cup_status"]').value}`, 20, 250);
-            pdf.text(`Comments: ${document.querySelector('input[name="automatic_cup_comments"]').value}`, 20, 260);
-            pdf.text(`Remover: ${document.querySelector('select[name="remover_status"]').value}`, 20, 270);
-            pdf.text(`Comments: ${document.querySelector('input[name="remover_comments"]').value}`, 20, 280);
-            pdf.text(`Diaphragm: ${document.querySelector('select[name="diaphragm_status"]').value}`, 20, 290);
-            pdf.text(`Comments: ${document.querySelector('input[name="diaphragm_comments"]').value}`, 20, 300);
-            pdf.text(`Receiving Can: ${document.querySelector('select[name="receiving_can_status"]').value}`, 20, 310);
-            pdf.text(`Comments: ${document.querySelector('input[name="receiving_can_comments"]').value}`, 20, 320);
-            pdf.text(`Sanitary Trap: ${document.querySelector('select[name="sanitary_trap_status"]').value}`, 20, 330);
-            pdf.text(`Comments: ${document.querySelector('input[name="sanitary_trap_comments"]').value}`, 20, 340);
-            pdf.text(`Main Milk Line: ${document.querySelector('select[name="main_milk_line_status"]').value}`, 20, 350);
-            pdf.text(`Comments: ${document.querySelector('input[name="main_milk_line_comments"]').value}`, 20, 360);
-            
-            pdf.text('Milk Vat', 20, 380);
-            pdf.text(`Status: ${document.querySelector('select[name="milk_vat_status"]').value}`, 20, 390);
-            pdf.text(`Comments: ${document.querySelector('input[name="milk_vat_comments"]').value}`, 20, 400);
-            
-            pdf.text('Summary', 20, 420);
-            pdf.text(`Issues/Recommendations: ${document.querySelector('textarea[name="issues_recommendations"]').value}`, 20, 430);
+            // Health & Safety Section
+            doc.text('Health & Safety', 10, 90);
+            doc.text(`Status: ${data.health_safety_status}`, 10, 100);
+            doc.text(`Comments: ${data.health_safety_comments}`, 10, 110);
 
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        });
+            // Milking Plant Section
+            doc.text('Milking Plant', 10, 130);
+            const milkingPlantComponents = [
+                { name: 'Pulsator Airline', status: data.pulsator_airline_status, comments: data.pulsator_airline_comments },
+                { name: 'Long Bend Elbows', status: data.long_bend_elbows_status, comments: data.long_bend_elbows_comments }
+                // Add additional components as necessary
+            ];
+            milkingPlantComponents.forEach((component, index) => {
+                const yPosition = 140 + (index * 10);
+                doc.text(`${component.name}: ${component.status}`, 10, yPosition);
+                doc.text(`Comments: ${component.comments}`, 10, yPosition + 10);
+            });
+
+            // Milk Vat Section
+            doc.text('Milk Vat', 10, 200);
+            const milkVatComponents = [
+                { name: 'Liner', status: data.liner_status, comments: data.liner_comments },
+                { name: 'Cluster', status: data.cluster_status, comments: data.cluster_comments }
+                // Add additional components as necessary
+            ];
+            milkVatComponents.forEach((component, index) => {
+                const yPosition = 210 + (index * 10);
+                doc.text(`${component.name}: ${component.status}`, 10, yPosition);
+                doc.text(`Comments: ${component.comments}`, 10, yPosition + 10);
+            });
+
+            // Save PDF
+            doc.save('dairy_shed_hygiene_checklist.pdf');
+        }
     </script>
 </body>
 </html>
