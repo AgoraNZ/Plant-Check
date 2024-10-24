@@ -4,448 +4,531 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
+            background-color: #001f3f; /* Navy blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #001F3F; /* Navy blue background */
-            color: white;
         }
-
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
+        .container {
+            background-color: white;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
+            width: 80%;
+            max-height: 100vh;
+            overflow-y: auto; /* Scrollable if the content is too long */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-
-        h1, h2 {
-            color: #FF851B; /* Accent color */
+        .photo-upload {
+            display: none;
         }
-
+        .center {
+            text-align: center;
+        }
         label {
-            display: block;
-            margin: 10px 0 5px;
+            font-weight: bold;
         }
-
-        input, select, textarea {
+        select, input[type="text"], textarea, input[type="date"], input[type="time"], input[type="file"] {
             width: 100%;
-            padding: 10px;
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .component {
             margin-bottom: 20px;
-            border-radius: 5px;
-            border: none;
         }
-
         button {
-            background-color: #FF851B; /* Button color */
+            background-color: #007bff;
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
         }
-
         button:hover {
-            background-color: #FF4136; /* Hover color */
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Dairy Shed Hygiene Checklist</h1>
-        <form id="dairyCheckForm">
+    <div class="container">
+        <h1 class="center">Dairy Shed Hygiene Checklist</h1>
+        <form id="dairyShedForm">
+
             <!-- Farm Details -->
             <h2>Farm Details</h2>
-            <label for="dairy_company">Dairy Company:</label>
-            <input type="text" name="dairy_company" required>
-            <label for="dairy_number">Dairy Number:</label>
-            <input type="text" name="dairy_number" required>
-            <label for="address">Address:</label>
-            <input type="text" name="address" required>
-            <label for="customer_name">Customer Name:</label>
-            <input type="text" name="customer_name" required>
-            <label for="region">Region:</label>
-            <select name="region" required>
-                <option value="">Select Region</option>
-                <option value="Northland">Northland</option>
+            <label>Dairy Company: </label><input type="text" name="dairy_company"><br>
+            <label>Dairy Number: </label><input type="text" name="dairy_number"><br>
+            <label>Address: </label><input type="text" name="address"><br>
+            <label>Customer Name: </label><input type="text" name="customer_name"><br>
+            <label>Region: </label>
+            <select name="region">
                 <option value="Auckland">Auckland</option>
-                <!-- Add more regions as needed -->
-            </select>
-            <label for="farm_name">Farm Name:</label>
-            <input type="text" name="farm_name" required>
-            <label for="island">Island:</label>
-            <select name="island" required>
+                <option value="Canterbury">Canterbury</option>
+                <option value="Waikato">Waikato</option>
+                <option value="Wellington">Wellington</option>
+                <option value="Otago">Otago</option>
+                <option value="Bay of Plenty">Bay of Plenty</option>
+                <option value="Gisborne">Gisborne</option>
+                <option value="Hawke's Bay">Hawke's Bay</option>
+                <option value="Manawatu-Wanganui">Manawatu-Wanganui</option>
+                <option value="Nelson">Nelson</option>
+                <option value="Northland">Northland</option>
+                <option value="Taranaki">Taranaki</option>
+                <option value="West Coast">West Coast</option>
+            </select><br>
+            <label>Farm Name: </label><input type="text" name="farm_name"><br>
+            <label>Island: </label>
+            <select name="island">
                 <option value="North Island">North Island</option>
                 <option value="South Island">South Island</option>
-            </select>
-            <label for="visit_date">Visit Date:</label>
-            <input type="date" name="visit_date" value="" required>
-            <label for="visit_type">Visit Type:</label>
-            <input type="text" name="visit_type" required>
-            <label for="inspection_start">Time Inspection Started:</label>
-            <input type="time" name="inspection_start" required>
-            <label for="inspection_end">Time Inspection Ended:</label>
-            <input type="time" name="inspection_end" required>
-            <label for="completed_by">Inspection Completed by:</label>
-            <input type="text" name="completed_by" required>
-            <label for="call_type">Call Type:</label>
-            <select name="call_type" required>
-                <option value="General">General</option>
-                <option value="Follow-Up">Follow-Up</option>
-            </select>
-            <label for="visit_notes">General Visit Notes:</label>
-            <textarea name="visit_notes"></textarea>
+            </select><br>
+            <label>Visit Date: </label><input type="date" name="visit_date" id="visit_date" value="" required><br>
+            <label>Visit Type: </label><input type="text" name="visit_type" value="Milking Plant and Milk Vat check"><br>
+            <label>Time Inspection Started: </label><input type="time" name="inspection_start" id="inspection_start"><br>
+            <label>Time Inspection Ended: </label><input type="time" name="inspection_end" id="inspection_end"><br>
+            <label>Inspection Completed by: </label><input type="text" name="completed_by"><br>
+
+            <!-- Call Type -->
+            <h2>Call Type</h2>
+            <label>Call Type: </label>
+            <select name="call_type">
+                <option value="Regular Scheduled Visit">Regular Scheduled Visit</option>
+                <option value="Follow-up Visit">Follow-up Visit</option>
+                <option value="Emergency Visit">Emergency Visit</option>
+            </select><br>
+            <label>General Visit Notes: </label><textarea name="visit_notes"></textarea><br>
 
             <!-- Health & Safety Section -->
             <h2>Health & Safety</h2>
-            <label for="health_safety_status">Status:</label>
-            <select name="health_safety_status" required>
-                <option value="ok">OK</option>
-                <option value="attention_required">Attention Required</option>
-            </select>
-            <label for="health_safety_comments">Comments:</label>
-            <input type="text" name="health_safety_comments">
+            <div class="component">
+                <label>Health & Safety - General:</label><br>
+                <select name="health_safety_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="health_safety_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
 
             <!-- Milking Plant Section -->
             <h2>Milking Plant</h2>
-            <div id="milkingPlantComponents">
-                <label>Pulsator Airline:</label>
-                <select name="pulsator_airline_status" required>
+            <div class="component">
+                <label>Pulsator Airline Status:</label><br>
+                <select name="pulsator_airline_status" onchange="togglePhoto(this)">
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="pulsator_airline_comments" placeholder="Comments">
-                
-                <label>Long Bend Elbows:</label>
-                <select name="long_bend_elbows_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="long_bend_elbows_comments" placeholder="Comments">
-                
-                <label>Automatic Cup:</label>
-                <select name="automatic_cup_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="automatic_cup_comments" placeholder="Comments">
-
-                <label>Remover:</label>
-                <select name="remover_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="remover_comments" placeholder="Comments">
-
-                <label>Diaphragm:</label>
-                <select name="diaphragm_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="diaphragm_comments" placeholder="Comments">
-
-                <label>Receiving Can:</label>
-                <select name="receiving_can_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="receiving_can_comments" placeholder="Comments">
-
-                <label>Sanitary Trap:</label>
-                <select name="sanitary_trap_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="sanitary_trap_comments" placeholder="Comments">
-
-                <label>Main Milk Line:</label>
-                <select name="main_milk_line_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="main_milk_line_comments" placeholder="Comments">
-
-                <label>Milk Line Seals in Good Condition:</label>
-                <select name="milk_line_seals_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="milk_line_seals_comments" placeholder="Comments">
-
-                <label>Stainless Droppers:</label>
-                <select name="stainless_droppers_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="stainless_droppers_comments" placeholder="Comments">
-
-                <label>Long Milk Rubber:</label>
-                <select name="long_milk_rubber_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="long_milk_rubber_comments" placeholder="Comments">
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="pulsator_airline_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
-
-            <!-- Milk Vat Section -->
-            <h2>Milk Vat</h2>
-            <div id="milkVatComponents">
-                <label>Liner:</label>
-                <select name="liner_status" required>
+            <div class="component">
+                <label>Long Bend Elbows Status:</label><br>
+                <select name="long_bend_elbows_status" onchange="togglePhoto(this)">
                     <option value="ok">OK</option>
                     <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="liner_comments" placeholder="Comments">
-
-                <label>Cluster:</label>
-                <select name="cluster_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="cluster_comments" placeholder="Comments">
-
-                <label>Cluster Seal:</label>
-                <select name="cluster_seal_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="cluster_seal_comments" placeholder="Comments">
-
-                <label>Cluster Button:</label>
-                <select name="cluster_button_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="cluster_button_comments" placeholder="Comments">
-
-                <label>Non Return Valve at Milk Pump:</label>
-                <select name="non_return_valve_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="non_return_valve_comments" placeholder="Comments">
-
-                <label>Milk Pump:</label>
-                <select name="milk_pump_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="milk_pump_comments" placeholder="Comments">
-
-                <label>Filter Housing:</label>
-                <select name="filter_housing_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="filter_housing_comments" placeholder="Comments">
-
-                <label>Plate Cooler:</label>
-                <select name="plate_cooler_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plate_cooler_comments" placeholder="Comments">
-
-                <label>Interceptor:</label>
-                <select name="interceptor_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="interceptor_comments" placeholder="Comments">
-
-                <label>Receiver Airline:</label>
-                <select name="receiver_airline_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="receiver_airline_comments" placeholder="Comments">
-
-                <label>Flushing Pulsator:</label>
-                <select name="flushing_pulsator_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="flushing_pulsator_comments" placeholder="Comments">
-
-                <label>Air Purge Valve:</label>
-                <select name="air_purge_valve_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="air_purge_valve_comments" placeholder="Comments">
-
-                <label>Vacuum Level:</label>
-                <select name="vacuum_level_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="vacuum_level_comments" placeholder="Comments">
-
-                <label>Main Airline:</label>
-                <select name="main_airline_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="main_airline_comments" placeholder="Comments">
-
-                <label>Plant Drainage - Milk Pump:</label>
-                <select name="plant_drainage_milk_pump_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plant_drainage_milk_pump_comments" placeholder="Comments">
-
-                <label>Plant Drainage - Filter/s:</label>
-                <select name="plant_drainage_filter_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plant_drainage_filter_comments" placeholder="Comments">
-
-                <label>Plant Drainage - Plate Cooler:</label>
-                <select name="plant_drainage_plate_cooler_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plant_drainage_plate_cooler_comments" placeholder="Comments">
-
-                <label>Plant Drainage - Vat Entry:</label>
-                <select name="plant_drainage_vat_entry_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plant_drainage_vat_entry_comments" placeholder="Comments">
-
-                <label>Plant Wash Tap:</label>
-                <select name="plant_wash_tap_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="plant_wash_tap_comments" placeholder="Comments">
-
-                <label>Wash Jetters:</label>
-                <select name="wash_jetters_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="wash_jetters_comments" placeholder="Comments">
-
-                <label>Centre Gland:</label>
-                <select name="centre_gland_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="centre_gland_comments" placeholder="Comments">
-
-                <label>Test Bucket:</label>
-                <select name="test_bucket_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="test_bucket_comments" placeholder="Comments">
-
-                <label>Inlet Valve:</label>
-                <select name="inlet_valve_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="inlet_valve_comments" placeholder="Comments">
-
-                <label>Non-Return Valve:</label>
-                <select name="non_return_valve_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="non_return_valve_comments" placeholder="Comments">
-
-                <label>Spray Ball:</label>
-                <select name="spray_ball_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="spray_ball_comments" placeholder="Comments">
-
-                <label>Agitator:</label>
-                <select name="agitator_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="agitator_comments" placeholder="Comments">
-
-                <label>Silo Door:</label>
-                <select name="silo_door_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="silo_door_comments" placeholder="Comments">
-
-                <label>Manhole Seal:</label>
-                <select name="manhole_seal_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="manhole_seal_comments" placeholder="Comments">
-
-                <label>Vat Outlet:</label>
-                <select name="vat_outlet_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="vat_outlet_comments" placeholder="Comments">
-
-                <label>Walls in Silo:</label>
-                <select name="walls_in_silo_status" required>
-                    <option value="ok">OK</option>
-                    <option value="attention_required">Attention Required</option>
-                </select>
-                <input type="text" name="walls_in_silo_comments" placeholder="Comments">
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="long_bend_elbows_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
             </div>
-
-            <!-- Signature Details Section -->
-            <h2>Signature Details</h2>
-            <label for="role">Role:</label>
-            <input type="text" name="role" required>
-            <label for="user">User:</label>
-            <input type="text" name="user" required>
-            <label for="signed_at">Signed At:</label>
-            <input type="text" name="signed_at" required>
-            <label for="comment">Comment:</label>
-            <textarea name="comment"></textarea>
-
-            <!-- Generate PDF Button -->
-            <button type="button" onclick="generatePDF()">Generate PDF</button>
+            <div class="component">
+                <label>Automatic Cup Remover Status:</label><br>
+                <select name="automatic_cup_remover_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="automatic_cup_remover_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Diaphragm Status:</label><br>
+                <select name="diaphragm_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="diaphragm_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Receiving Can Status:</label><br>
+                <select name="receiving_can_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="receiving_can_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Sanitary Trap Status:</label><br>
+                <select name="sanitary_trap_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="sanitary_trap_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Main Milk Line Status:</label><br>
+                <select name="main_milk_line_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="main_milk_line_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Milk Line Seals Status:</label><br>
+                <select name="milk_line_seals_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="milk_line_seals_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Stainless Droppers Status:</label><br>
+                <select name="stainless_droppers_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="stainless_droppers_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Long Milk Rubber Status:</label><br>
+                <select name="long_milk_rubber_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="long_milk_rubber_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Liner Status:</label><br>
+                <select name="liner_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="liner_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Cluster Status:</label><br>
+                <select name="cluster_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="cluster_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Cluster Seal Status:</label><br>
+                <select name="cluster_seal_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="cluster_seal_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Cluster Button Status:</label><br>
+                <select name="cluster_button_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="cluster_button_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Non Return Valve at Milk Pump Status:</label><br>
+                <select name="non_return_valve_milk_pump_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="non_return_valve_milk_pump_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Milk Pump Status:</label><br>
+                <select name="milk_pump_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="milk_pump_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Filter Housing Status:</label><br>
+                <select name="filter_housing_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="filter_housing_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plate Cooler Status:</label><br>
+                <select name="plate_cooler_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plate_cooler_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Interceptor Status:</label><br>
+                <select name="interceptor_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="interceptor_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Receiver Airline Status:</label><br>
+                <select name="receiver_airline_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="receiver_airline_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Flushing Pulsator Status:</label><br>
+                <select name="flushing_pulsator_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="flushing_pulsator_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Air Purge Valve Status:</label><br>
+                <select name="air_purge_valve_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="air_purge_valve_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Vacuum Level Status:</label><br>
+                <select name="vacuum_level_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="vacuum_level_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Main Airline Status:</label><br>
+                <select name="main_airline_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="main_airline_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plant Drainage - Milk Pump Status:</label><br>
+                <select name="plant_drainage_milk_pump_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plant_drainage_milk_pump_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plant Drainage - Filter/s Status:</label><br>
+                <select name="plant_drainage_filter_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plant_drainage_filter_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plant Drainage - Plate Cooler Status:</label><br>
+                <select name="plant_drainage_plate_cooler_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plant_drainage_plate_cooler_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plant Drainage - Vat Entry Status:</label><br>
+                <select name="plant_drainage_vat_entry_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plant_drainage_vat_entry_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Plant Wash Tap Status:</label><br>
+                <select name="plant_wash_tap_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="plant_wash_tap_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Wash Jetters Status:</label><br>
+                <select name="wash_jetters_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="wash_jetters_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Centre Gland Status:</label><br>
+                <select name="centre_gland_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="centre_gland_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Test Bucket Status:</label><br>
+                <select name="test_bucket_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="test_bucket_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Inlet Valve Status:</label><br>
+                <select name="inlet_valve_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="inlet_valve_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Non-Return Valve Status:</label><br>
+                <select name="non_return_valve_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="non_return_valve_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Spray Ball Status:</label><br>
+                <select name="spray_ball_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="spray_ball_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Agitator Status:</label><br>
+                <select name="agitator_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="agitator_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Silo Door Status:</label><br>
+                <select name="silo_door_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="silo_door_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Manhole Seal Status:</label><br>
+                <select name="manhole_seal_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="manhole_seal_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Vat Outlet Status:</label><br>
+                <select name="vat_outlet_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="vat_outlet_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <div class="component">
+                <label>Walls in Silo Status:</label><br>
+                <select name="walls_in_silo_status" onchange="togglePhoto(this)">
+                    <option value="ok">OK</option>
+                    <option value="attention_required">Attention Required</option>
+                    <option value="na">N/A</option>
+                </select><br>
+                <label>Comments: </label><input type="text" name="walls_in_silo_comments"><br>
+                <label>Upload/Take Photo: </label><input type="file" accept="image/*" capture="camera" class="photo-upload"><br>
+            </div>
+            <button type="submit">Submit Checklist</button>
         </form>
     </div>
 
     <script>
-        async function generatePDF() {
-            // Gather form data
-            const formData = new FormData(document.getElementById('dairyShedForm'));
-            const data = Object.fromEntries(formData.entries());
-
-            // Send data to server for PDF generation
-            const response = await fetch('/generate-pdf', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'dairy_shed_hygiene_checklist.pdf';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } else {
-                alert('Failed to generate PDF.');
-            }
+        function togglePhoto(selectElement) {
+            const photoUpload = selectElement.parentNode.querySelector('.photo-upload');
+            photoUpload.style.display = selectElement.value === 'attention_required' ? 'block' : 'none';
         }
     </script>
 </body>
