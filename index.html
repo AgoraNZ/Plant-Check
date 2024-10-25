@@ -7,72 +7,67 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff; /* Light background */
-            color: #333; /* Dark text */
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
         }
         h1 {
             text-align: center;
-            color: #2e8b57; /* Dark green color */
+            color: #FFA500; /* Orange */
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff; /* White background for the form */
+            background: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: bold;
         }
         input[type="text"], input[type="time"], select, textarea {
             width: 100%;
             padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc; /* Light border */
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
             border-radius: 4px;
         }
         input[type="file"] {
-            margin: 8px 0;
+            margin-top: 10px;
         }
-        .photo-upload {
-            display: none; /* Hidden by default */
+        .hidden {
+            display: none;
         }
-        .status {
-            display: flex;
-            align-items: center;
+        .form-section {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFA500; /* Orange */
+            padding-bottom: 10px;
         }
-        .status label {
-            margin-right: 10px;
-        }
-        .checklist-item {
-            margin-bottom: 15px;
-            border: 1px solid #ddd; /* Light border */
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #f9f9f9; /* Light grey for checklist items */
-        }
-        button {
-            background-color: #2e8b57; /* Dark green color */
+        .btn {
+            background-color: #FFA500; /* Orange */
             color: white;
             padding: 10px 15px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
+            font-size: 16px;
         }
-        button:hover {
-            background-color: #2c7a4d; /* Darker green on hover */
+        .btn:hover {
+            background-color: #e59400; /* Darker Orange */
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Dairy Shed Hygiene Checklist</h1>
+<div class="container">
+    <h1>Dairy Shed Hygiene Checklist</h1>
+    <form id="checklistForm">
 
-        <form id="checklist-form">
+        <div class="form-section">
             <h2>Farm Details</h2>
             <label for="dairyCompany">Dairy Company:</label>
             <input type="text" id="dairyCompany" required>
@@ -88,22 +83,8 @@
 
             <label for="region">Region:</label>
             <select id="region" required>
-                <option value="" disabled selected>Select Region</option>
-                <option value="Northland">Northland</option>
-                <option value="Auckland">Auckland</option>
-                <option value="Waikato">Waikato</option>
-                <option value="Bay of Plenty">Bay of Plenty</option>
-                <option value="Gisborne">Gisborne</option>
-                <option value="Hawke's Bay">Hawke's Bay</option>
-                <option value="Taranaki">Taranaki</option>
-                <option value="Manawatu-Wanganui">Manawatu-Wanganui</option>
-                <option value="Wellington">Wellington</option>
-                <option value="Nelson">Nelson</option>
-                <option value="Marlborough">Marlborough</option>
-                <option value="West Coast">West Coast</option>
-                <option value="Canterbury">Canterbury</option>
-                <option value="Otago">Otago</option>
-                <option value="Southland">Southland</option>
+                <option value="">Select Region</option>
+                <!-- Add region options here -->
             </select>
 
             <label for="farmName">Farm Name:</label>
@@ -116,673 +97,125 @@
             </select>
 
             <label for="visitDate">Visit Date:</label>
-            <input type="text" id="visitDate" value="" readonly required>
+            <input type="text" id="visitDate" value="" readonly>
 
             <label for="visitType">Visit Type:</label>
             <input type="text" id="visitType" required>
 
-            <label for="startTime">Time Inspection Started:</label>
-            <input type="time" id="startTime" required>
+            <label for="timeInspectionStarted">Time Inspection Started:</label>
+            <input type="time" id="timeInspectionStarted" required>
 
-            <label for="endTime">Time Inspection Ended:</label>
-            <input type="time" id="endTime" required>
+            <label for="timeInspectionEnded">Time Inspection Ended:</label>
+            <input type="time" id="timeInspectionEnded" required>
 
-            <label for="inspector">Inspection Completed by:</label>
-            <input type="text" id="inspector" required>
+            <label for="inspectionCompletedBy">Inspection Completed by:</label>
+            <input type="text" id="inspectionCompletedBy" required>
 
             <label for="callType">Call Type:</label>
             <input type="text" id="callType" required>
+        </div>
 
-            <h2>Health & Safety</h2>
-            <div class="checklist-item">
-                <label for="healthSafetyRating">Rating:</label>
-                <select id="healthSafetyRating">
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="NA">NA</option>
-                </select>
-                <label for="healthSafetyComments">Comments:</label>
-                <textarea id="healthSafetyComments"></textarea>
-            </div>
+        <div class="form-section">
+            <h2>HEALTH & SAFETY</h2>
+            <label for="healthSafetyRating">Rating:</label>
+            <select id="healthSafetyRating" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
 
-            <h2>Milking Plant</h2>
-            <div class="checklist-item">
-                <label for="milkingPlantRating">Rating:</label>
-                <select id="milkingPlantRating">
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="NA">NA</option>
-                </select>
-                <label for="milkingPlantComments">Comments:</label>
-                <textarea id="milkingPlantComments"></textarea>
-            </div>
+            <label for="healthSafetyComments">Comments:</label>
+            <textarea id="healthSafetyComments" rows="4"></textarea>
+        </div>
 
-            <h3>Milking Plant and Milk Vat Check - Health & Safety – General</h3>
+        <div class="form-section">
+            <h2>MILKING PLANT</h2>
+            <label for="milkingPlantRating">Rating:</label>
+            <select id="milkingPlantRating" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
 
-            <!-- Checklist Items -->
-            <div class="checklist-item">
-                <h4>Pulsator Airline</h4>
-                <div class="status">
-                    <label for="pulsatorRating">Rating:</label>
-                    <select id="pulsatorRating" onchange="togglePhotoUpload('pulsatorPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="pulsatorComments">Comments:</label>
-                <textarea id="pulsatorComments"></textarea>
-                <input type="file" id="pulsatorPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <label for="milkingPlantComments">Comments:</label>
+            <textarea id="milkingPlantComments" rows="4"></textarea>
+        </div>
 
-            <div class="checklist-item">
-                <h4>Long Bend Elbows</h4>
-                <div class="status">
-                    <label for="longBendElbowsRating">Rating:</label>
-                    <select id="longBendElbowsRating" onchange="togglePhotoUpload('longBendElbowsPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="longBendElbowsComments">Comments:</label>
-                <textarea id="longBendElbowsComments"></textarea>
-                <input type="file" id="longBendElbowsPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+        <div class="form-section">
+            <h2>Milking Plant and Milk Vat Check</h2>
 
-            <div class="checklist-item">
-                <h4>Automatic Cup</h4>
-                <div class="status">
-                    <label for="automaticCupRating">Rating:</label>
-                    <select id="automaticCupRating" onchange="togglePhotoUpload('automaticCupPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="automaticCupComments">Comments:</label>
-                <textarea id="automaticCupComments"></textarea>
-                <input type="file" id="automaticCupPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <label>Pulsator Airline:</label>
+            <label for="pulsatorAirlineRating">Rating:</label>
+            <select id="pulsatorAirlineRating" onchange="toggleUpload(this, 'pulsatorAirlineUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="pulsatorAirlineComments">Comments:</label>
+            <textarea id="pulsatorAirlineComments" rows="2"></textarea>
+            <input type="file" id="pulsatorAirlineUpload" class="hidden" accept="image/*">
 
-            <div class="checklist-item">
-                <h4>Remover</h4>
-                <div class="status">
-                    <label for="removerRating">Rating:</label>
-                    <select id="removerRating" onchange="togglePhotoUpload('removerPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="removerComments">Comments:</label>
-                <textarea id="removerComments"></textarea>
-                <input type="file" id="removerPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <label>Automatic Cup / Remover:</label>
+            <label for="automaticCupRemoverRating">Rating:</label>
+            <select id="automaticCupRemoverRating" onchange="toggleUpload(this, 'automaticCupRemoverUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="automaticCupRemoverComments">Comments:</label>
+            <textarea id="automaticCupRemoverComments" rows="2"></textarea>
+            <input type="file" id="automaticCupRemoverUpload" class="hidden" accept="image/*">
 
-            <div class="checklist-item">
-                <h4>Diaphragm</h4>
-                <div class="status">
-                    <label for="diaphragmRating">Rating:</label>
-                    <select id="diaphragmRating" onchange="togglePhotoUpload('diaphragmPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="diaphragmComments">Comments:</label>
-                <textarea id="diaphragmComments"></textarea>
-                <input type="file" id="diaphragmPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <label for="diaphragmRating">Diaphragm:</label>
+            <select id="diaphragmRating" onchange="toggleUpload(this, 'diaphragmUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="diaphragmComments">Comments:</label>
+            <textarea id="diaphragmComments" rows="2"></textarea>
+            <input type="file" id="diaphragmUpload" class="hidden" accept="image/*">
 
-            <div class="checklist-item">
-                <h4>Receiving Can</h4>
-                <div class="status">
-                    <label for="receivingCanRating">Rating:</label>
-                    <select id="receivingCanRating" onchange="togglePhotoUpload('receivingCanPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="receivingCanComments">Comments:</label>
-                <textarea id="receivingCanComments"></textarea>
-                <input type="file" id="receivingCanPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <!-- Add additional checks here following the same structure -->
+            <!-- Example for Receiving Can -->
+            <label>Receiving Can:</label>
+            <label for="receivingCanRating">Rating:</label>
+            <select id="receivingCanRating" onchange="toggleUpload(this, 'receivingCanUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="receivingCanComments">Comments:</label>
+            <textarea id="receivingCanComments" rows="2"></textarea>
+            <input type="file" id="receivingCanUpload" class="hidden" accept="image/*">
 
-            <div class="checklist-item">
-                <h4>Sanitary Trap</h4>
-                <div class="status">
-                    <label for="sanitaryTrapRating">Rating:</label>
-                    <select id="sanitaryTrapRating" onchange="togglePhotoUpload('sanitaryTrapPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="sanitaryTrapComments">Comments:</label>
-                <textarea id="sanitaryTrapComments"></textarea>
-                <input type="file" id="sanitaryTrapPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+            <!-- Continue for all other items similarly -->
 
-            <div class="checklist-item">
-                <h4>Main Milk Line</h4>
-                <div class="status">
-                    <label for="mainMilkLineRating">Rating:</label>
-                    <select id="mainMilkLineRating" onchange="togglePhotoUpload('mainMilkLinePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="mainMilkLineComments">Comments:</label>
-                <textarea id="mainMilkLineComments"></textarea>
-                <input type="file" id="mainMilkLinePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+        </div>
 
-            <div class="checklist-item">
-                <h4>Milk Line Seals in good condition</h4>
-                <div class="status">
-                    <label for="milkLineSealsRating">Rating:</label>
-                    <select id="milkLineSealsRating" onchange="togglePhotoUpload('milkLineSealsPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="milkLineSealsComments">Comments:</label>
-                <textarea id="milkLineSealsComments"></textarea>
-                <input type="file" id="milkLineSealsPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+        <button type="submit" class="btn">Submit Checklist</button>
+    </form>
+</div>
 
-            <div class="checklist-item">
-                <h4>Stainless Droppers</h4>
-                <div class="status">
-                    <label for="stainlessDroppersRating">Rating:</label>
-                    <select id="stainlessDroppersRating" onchange="togglePhotoUpload('stainlessDroppersPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="stainlessDroppersComments">Comments:</label>
-                <textarea id="stainlessDroppersComments"></textarea>
-                <input type="file" id="stainlessDroppersPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
+<script>
+    document.getElementById('visitDate').value = new Date().toLocaleDateString();
 
-            <div class="checklist-item">
-                <h4>Long Milk Rubber</h4>
-                <div class="status">
-                    <label for="longMilkRubberRating">Rating:</label>
-                    <select id="longMilkRubberRating" onchange="togglePhotoUpload('longMilkRubberPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="longMilkRubberComments">Comments:</label>
-                <textarea id="longMilkRubberComments"></textarea>
-                <input type="file" id="longMilkRubberPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Liner</h4>
-                <div class="status">
-                    <label for="linerRating">Rating:</label>
-                    <select id="linerRating" onchange="togglePhotoUpload('linerPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="linerComments">Comments:</label>
-                <textarea id="linerComments"></textarea>
-                <input type="file" id="linerPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Cluster</h4>
-                <div class="status">
-                    <label for="clusterRating">Rating:</label>
-                    <select id="clusterRating" onchange="togglePhotoUpload('clusterPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="clusterComments">Comments:</label>
-                <textarea id="clusterComments"></textarea>
-                <input type="file" id="clusterPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Cluster Seal</h4>
-                <div class="status">
-                    <label for="clusterSealRating">Rating:</label>
-                    <select id="clusterSealRating" onchange="togglePhotoUpload('clusterSealPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="clusterSealComments">Comments:</label>
-                <textarea id="clusterSealComments"></textarea>
-                <input type="file" id="clusterSealPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Cluster Button</h4>
-                <div class="status">
-                    <label for="clusterButtonRating">Rating:</label>
-                    <select id="clusterButtonRating" onchange="togglePhotoUpload('clusterButtonPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="clusterButtonComments">Comments:</label>
-                <textarea id="clusterButtonComments"></textarea>
-                <input type="file" id="clusterButtonPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Non Return Valve at Milk Pump</h4>
-                <div class="status">
-                    <label for="nonReturnValveRating">Rating:</label>
-                    <select id="nonReturnValveRating" onchange="togglePhotoUpload('nonReturnValvePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="nonReturnValveComments">Comments:</label>
-                <textarea id="nonReturnValveComments"></textarea>
-                <input type="file" id="nonReturnValvePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Milk Pump</h4>
-                <div class="status">
-                    <label for="milkPumpRating">Rating:</label>
-                    <select id="milkPumpRating" onchange="togglePhotoUpload('milkPumpPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="milkPumpComments">Comments:</label>
-                <textarea id="milkPumpComments"></textarea>
-                <input type="file" id="milkPumpPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Filter Housing</h4>
-                <div class="status">
-                    <label for="filterHousingRating">Rating:</label>
-                    <select id="filterHousingRating" onchange="togglePhotoUpload('filterHousingPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="filterHousingComments">Comments:</label>
-                <textarea id="filterHousingComments"></textarea>
-                <input type="file" id="filterHousingPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plate Cooler</h4>
-                <div class="status">
-                    <label for="plateCoolerRating">Rating:</label>
-                    <select id="plateCoolerRating" onchange="togglePhotoUpload('plateCoolerPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plateCoolerComments">Comments:</label>
-                <textarea id="plateCoolerComments"></textarea>
-                <input type="file" id="plateCoolerPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Interceptor</h4>
-                <div class="status">
-                    <label for="interceptorRating">Rating:</label>
-                    <select id="interceptorRating" onchange="togglePhotoUpload('interceptorPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="interceptorComments">Comments:</label>
-                <textarea id="interceptorComments"></textarea>
-                <input type="file" id="interceptorPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Receiver Airline</h4>
-                <div class="status">
-                    <label for="receiverAirlineRating">Rating:</label>
-                    <select id="receiverAirlineRating" onchange="togglePhotoUpload('receiverAirlinePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="receiverAirlineComments">Comments:</label>
-                <textarea id="receiverAirlineComments"></textarea>
-                <input type="file" id="receiverAirlinePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Flushing Pulsator</h4>
-                <div class="status">
-                    <label for="flushingPulsatorRating">Rating:</label>
-                    <select id="flushingPulsatorRating" onchange="togglePhotoUpload('flushingPulsatorPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="flushingPulsatorComments">Comments:</label>
-                <textarea id="flushingPulsatorComments"></textarea>
-                <input type="file" id="flushingPulsatorPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Air Purge Valve</h4>
-                <div class="status">
-                    <label for="airPurgeValveRating">Rating:</label>
-                    <select id="airPurgeValveRating" onchange="togglePhotoUpload('airPurgeValvePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="airPurgeValveComments">Comments:</label>
-                <textarea id="airPurgeValveComments"></textarea>
-                <input type="file" id="airPurgeValvePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Vacuum Level</h4>
-                <div class="status">
-                    <label for="vacuumLevelRating">Rating:</label>
-                    <select id="vacuumLevelRating" onchange="togglePhotoUpload('vacuumLevelPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="vacuumLevelComments">Comments:</label>
-                <textarea id="vacuumLevelComments"></textarea>
-                <input type="file" id="vacuumLevelPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Main Airline</h4>
-                <div class="status">
-                    <label for="mainAirlineRating">Rating:</label>
-                    <select id="mainAirlineRating" onchange="togglePhotoUpload('mainAirlinePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="mainAirlineComments">Comments:</label>
-                <textarea id="mainAirlineComments"></textarea>
-                <input type="file" id="mainAirlinePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plant Drainage - Milk Pump</h4>
-                <div class="status">
-                    <label for="plantDrainageMilkPumpRating">Rating:</label>
-                    <select id="plantDrainageMilkPumpRating" onchange="togglePhotoUpload('plantDrainageMilkPumpPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plantDrainageMilkPumpComments">Comments:</label>
-                <textarea id="plantDrainageMilkPumpComments"></textarea>
-                <input type="file" id="plantDrainageMilkPumpPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plant Drainage - Filter/s</h4>
-                <div class="status">
-                    <label for="plantDrainageFilterRating">Rating:</label>
-                    <select id="plantDrainageFilterRating" onchange="togglePhotoUpload('plantDrainageFilterPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plantDrainageFilterComments">Comments:</label>
-                <textarea id="plantDrainageFilterComments"></textarea>
-                <input type="file" id="plantDrainageFilterPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plant Drainage - Plate Cooler</h4>
-                <div class="status">
-                    <label for="plantDrainagePlateCoolerRating">Rating:</label>
-                    <select id="plantDrainagePlateCoolerRating" onchange="togglePhotoUpload('plantDrainagePlateCoolerPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plantDrainagePlateCoolerComments">Comments:</label>
-                <textarea id="plantDrainagePlateCoolerComments"></textarea>
-                <input type="file" id="plantDrainagePlateCoolerPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plant Drainage - Vat Entry</h4>
-                <div class="status">
-                    <label for="plantDrainageVatEntryRating">Rating:</label>
-                    <select id="plantDrainageVatEntryRating" onchange="togglePhotoUpload('plantDrainageVatEntryPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plantDrainageVatEntryComments">Comments:</label>
-                <textarea id="plantDrainageVatEntryComments"></textarea>
-                <input type="file" id="plantDrainageVatEntryPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Plant Wash Tap</h4>
-                <div class="status">
-                    <label for="plantWashTapRating">Rating:</label>
-                    <select id="plantWashTapRating" onchange="togglePhotoUpload('plantWashTapPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="plantWashTapComments">Comments:</label>
-                <textarea id="plantWashTapComments"></textarea>
-                <input type="file" id="plantWashTapPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Wash Jetters</h4>
-                <div class="status">
-                    <label for="washJettersRating">Rating:</label>
-                    <select id="washJettersRating" onchange="togglePhotoUpload('washJettersPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="washJettersComments">Comments:</label>
-                <textarea id="washJettersComments"></textarea>
-                <input type="file" id="washJettersPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Centre Gland</h4>
-                <div class="status">
-                    <label for="centreGlandRating">Rating:</label>
-                    <select id="centreGlandRating" onchange="togglePhotoUpload('centreGlandPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="centreGlandComments">Comments:</label>
-                <textarea id="centreGlandComments"></textarea>
-                <input type="file" id="centreGlandPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Test Bucket</h4>
-                <div class="status">
-                    <label for="testBucketRating">Rating:</label>
-                    <select id="testBucketRating" onchange="togglePhotoUpload('testBucketPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="testBucketComments">Comments:</label>
-                <textarea id="testBucketComments"></textarea>
-                <input type="file" id="testBucketPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Inlet Valve</h4>
-                <div class="status">
-                    <label for="inletValveRating">Rating:</label>
-                    <select id="inletValveRating" onchange="togglePhotoUpload('inletValvePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="inletValveComments">Comments:</label>
-                <textarea id="inletValveComments"></textarea>
-                <input type="file" id="inletValvePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Non-Return Valve</h4>
-                <div class="status">
-                    <label for="nonReturnValveRating">Rating:</label>
-                    <select id="nonReturnValveRating" onchange="togglePhotoUpload('nonReturnValvePhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="nonReturnValveComments">Comments:</label>
-                <textarea id="nonReturnValveComments"></textarea>
-                <input type="file" id="nonReturnValvePhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Spray Ball</h4>
-                <div class="status">
-                    <label for="sprayBallRating">Rating:</label>
-                    <select id="sprayBallRating" onchange="togglePhotoUpload('sprayBallPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="sprayBallComments">Comments:</label>
-                <textarea id="sprayBallComments"></textarea>
-                <input type="file" id="sprayBallPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Agitator</h4>
-                <div class="status">
-                    <label for="agitatorRating">Rating:</label>
-                    <select id="agitatorRating" onchange="togglePhotoUpload('agitatorPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="agitatorComments">Comments:</label>
-                <textarea id="agitatorComments"></textarea>
-                <input type="file" id="agitatorPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Silo Door</h4>
-                <div class="status">
-                    <label for="siloDoorRating">Rating:</label>
-                    <select id="siloDoorRating" onchange="togglePhotoUpload('siloDoorPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="siloDoorComments">Comments:</label>
-                <textarea id="siloDoorComments"></textarea>
-                <input type="file" id="siloDoorPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Manhole Seal</h4>
-                <div class="status">
-                    <label for="manholeSealRating">Rating:</label>
-                    <select id="manholeSealRating" onchange="togglePhotoUpload('manholeSealPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="manholeSealComments">Comments:</label>
-                <textarea id="manholeSealComments"></textarea>
-                <input type="file" id="manholeSealPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Vat Outlet</h4>
-                <div class="status">
-                    <label for="vatOutletRating">Rating:</label>
-                    <select id="vatOutletRating" onchange="togglePhotoUpload('vatOutletPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="vatOutletComments">Comments:</label>
-                <textarea id="vatOutletComments"></textarea>
-                <input type="file" id="vatOutletPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <div class="checklist-item">
-                <h4>Walls in Silo</h4>
-                <div class="status">
-                    <label for="wallsInSiloRating">Rating:</label>
-                    <select id="wallsInSiloRating" onchange="togglePhotoUpload('wallsInSiloPhotoUpload', this)">
-                        <option value="OK">OK</option>
-                        <option value="Attention Required">Attention Required</option>
-                        <option value="NA">NA</option>
-                    </select>
-                </div>
-                <label for="wallsInSiloComments">Comments:</label>
-                <textarea id="wallsInSiloComments"></textarea>
-                <input type="file" id="wallsInSiloPhotoUpload" class="photo-upload" accept="image/*">
-            </div>
-
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    <script>
-        function togglePhotoUpload(photoUploadId, selectElement) {
-            const photoUpload = document.getElementById(photoUploadId);
-            photoUpload.style.display = selectElement.value === "Attention Required" ? "block" : "none";
+    function toggleUpload(selectElement, uploadId) {
+        const uploadInput = document.getElementById(uploadId);
+        if (selectElement.value === "Attention Required") {
+            uploadInput.classList.remove('hidden');
+        } else {
+            uploadInput.classList.add('hidden');
+            uploadInput.value = ""; // Clear the upload input
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
