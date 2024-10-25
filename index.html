@@ -93,25 +93,25 @@
         
         <h2>HEALTH & SAFETY</h2>
         <label>Rating:</label>
-        <select id="healthSafetyRating" required>
+        <select id="healthSafetyRating" class="checklist-rating" required>
             <option value="OK">OK</option>
             <option value="Attention Required">Attention Required</option>
             <option value="NA">NA</option>
         </select>
-        
         <label>Comments:</label>
         <textarea id="healthSafetyComments"></textarea>
+        <input type="file" class="image-upload" accept="image/*">
         
         <h2>MILKING PLANT</h2>
         <label>Rating:</label>
-        <select id="milkingPlantRating" required>
+        <select id="milkingPlantRating" class="checklist-rating" required>
             <option value="OK">OK</option>
             <option value="Attention Required">Attention Required</option>
             <option value="NA">NA</option>
         </select>
-        
         <label>Comments:</label>
         <textarea id="milkingPlantComments"></textarea>
+        <input type="file" class="image-upload" accept="image/*">
         
         <h2>Checklist Items</h2>
         <div id="checklistItems">
@@ -165,7 +165,7 @@
         // Show/hide image upload based on rating
         document.querySelectorAll('.checklist-rating').forEach(select => {
             select.addEventListener('change', function () {
-                const imageUpload = this.parentElement.nextElementSibling.nextElementSibling;
+                const imageUpload = this.parentElement.querySelector('.image-upload');
                 if (this.value === "Attention Required") {
                     imageUpload.style.display = 'block';
                 } else {
@@ -201,35 +201,4 @@
             doc.text(`Comments: ${document.getElementById('healthSafetyComments').value}`, 20, 180);
             
             doc.text("MILKING PLANT", 20, 190);
-            doc.text(`Rating: ${document.getElementById('milkingPlantRating').value}`, 20, 200);
-            doc.text(`Comments: ${document.getElementById('milkingPlantComments').value}`, 20, 210);
-
-            // Adding checklist items to PDF
-            const checklistItems = document.querySelectorAll('#checklistItems > div');
-            let y = 220; // Start position for checklist items
-            checklistItems.forEach(async item => {
-                const title = item.querySelector('h5').innerText;
-                const rating = item.querySelector('.checklist-rating').value;
-                const comments = item.querySelector('.checklist-comments').value;
-                doc.text(`${title}: Rating: ${rating}, Comments: ${comments}`, 20, y);
-                
-                // Handle image uploads
-                const imageUpload = item.querySelector('.image-upload');
-                if (imageUpload.files.length > 0) {
-                    const file = imageUpload.files[0];
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        doc.addImage(e.target.result, 'JPEG', 20, y + 10, 50, 50); // Adjust image size as needed
-                        y += 60; // Move down for next item
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    y += 10; // Move down for next item
-                }
-            });
-
-            doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        });
-    </script>
-</body>
-</html>
+            doc.text(`Rating: ${document.getElement
