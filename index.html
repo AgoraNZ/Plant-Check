@@ -17,7 +17,7 @@
             display: block;
             margin: 10px 0 5px;
         }
-        input[type="text"], input[type="time"], input[type="date"], select {
+        input[type="text"], input[type="time"], input[type="date"], select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #FF851B; /* Orange accents */
@@ -113,10 +113,7 @@
         <label>Comments:</label>
         <textarea id="milkingPlantComments"></textarea>
         
-        <h3>Milking Plant and Milk Vat Check</h3>
-        <h4>Health & Safety – General</h4>
-
-        <!-- Checklist Items -->
+        <h2>Checklist Items</h2>
         <div id="checklistItems">
             <div>
                 <h5>Pulsator Airline</h5>
@@ -178,7 +175,7 @@
         });
 
         // Generate PDF
-        document.getElementById('generatePDF').addEventListener('click', function () {
+        document.getElementById('generatePDF').addEventListener('click', async function () {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
@@ -210,12 +207,25 @@
             // Adding checklist items to PDF
             const checklistItems = document.querySelectorAll('#checklistItems > div');
             let y = 220; // Start position for checklist items
-            checklistItems.forEach(item => {
+            checklistItems.forEach(async item => {
                 const title = item.querySelector('h5').innerText;
                 const rating = item.querySelector('.checklist-rating').value;
                 const comments = item.querySelector('.checklist-comments').value;
                 doc.text(`${title}: Rating: ${rating}, Comments: ${comments}`, 20, y);
-                y += 10; // Move down for next item
+                
+                // Handle image uploads
+                const imageUpload = item.querySelector('.image-upload');
+                if (imageUpload.files.length > 0) {
+                    const file = imageUpload.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        doc.addImage(e.target.result, 'JPEG', 20, y + 10, 50, 50); // Adjust image size as needed
+                        y += 60; // Move down for next item
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    y += 10; // Move down for next item
+                }
             });
 
             doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
