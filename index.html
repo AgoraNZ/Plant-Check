@@ -7,22 +7,22 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            color: #333;
+            background-color: #001F3F; /* Navy Blue */
+            color: #fff;
             margin: 0;
             padding: 20px;
         }
         h1 {
             text-align: center;
-            color: #FFA500; /* Orange */
+            color: #FF851B; /* Orange */
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: #fff;
+            background: #003366; /* Darker Navy Blue */
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
         label {
             display: block;
@@ -44,20 +44,23 @@
         }
         .form-section {
             margin-bottom: 20px;
-            border-bottom: 2px solid #FFA500; /* Orange */
+            border-bottom: 2px solid #FF851B; /* Orange */
             padding-bottom: 10px;
         }
         .btn {
-            background-color: #FFA500; /* Orange */
+            background-color: #FF851B; /* Orange */
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            display: block;
+            width: 100%;
+            text-align: center;
         }
         .btn:hover {
-            background-color: #e59400; /* Darker Orange */
+            background-color: #FF4136; /* Red hover color */
         }
     </style>
 </head>
@@ -131,21 +134,6 @@
 
         <div class="form-section">
             <h2>MILKING PLANT</h2>
-            <label for="milkingPlantRating">Rating:</label>
-            <select id="milkingPlantRating" required>
-                <option value="">Select Rating</option>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="NA">NA</option>
-            </select>
-
-            <label for="milkingPlantComments">Comments:</label>
-            <textarea id="milkingPlantComments" rows="4"></textarea>
-        </div>
-
-        <div class="form-section">
-            <h2>Milking Plant and Milk Vat Check</h2>
-
             <label>Pulsator Airline:</label>
             <label for="pulsatorAirlineRating">Rating:</label>
             <select id="pulsatorAirlineRating" onchange="toggleUpload(this, 'pulsatorAirlineUpload')" required>
@@ -181,8 +169,6 @@
             <textarea id="diaphragmComments" rows="2"></textarea>
             <input type="file" id="diaphragmUpload" class="hidden" accept="image/*">
 
-            <!-- Add additional checks here following the same structure -->
-            <!-- Example for Receiving Can -->
             <label>Receiving Can:</label>
             <label for="receivingCanRating">Rating:</label>
             <select id="receivingCanRating" onchange="toggleUpload(this, 'receivingCanUpload')" required>
@@ -195,27 +181,428 @@
             <textarea id="receivingCanComments" rows="2"></textarea>
             <input type="file" id="receivingCanUpload" class="hidden" accept="image/*">
 
-            <!-- Continue for all other items similarly -->
+            <label>Sanitary Trap:</label>
+            <label for="sanitaryTrapRating">Rating:</label>
+            <select id="sanitaryTrapRating" onchange="toggleUpload(this, 'sanitaryTrapUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="sanitaryTrapComments">Comments:</label>
+            <textarea id="sanitaryTrapComments" rows="2"></textarea>
+            <input type="file" id="sanitaryTrapUpload" class="hidden" accept="image/*">
 
-        </div>
+            <label>Main Milk Line:</label>
+            <label for="mainMilkLineRating">Rating:</label>
+            <select id="mainMilkLineRating" onchange="toggleUpload(this, 'mainMilkLineUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="mainMilkLineComments">Comments:</label>
+            <textarea id="mainMilkLineComments" rows="2"></textarea>
+            <input type="file" id="mainMilkLineUpload" class="hidden" accept="image/*">
 
-        <button type="submit" class="btn">Submit Checklist</button>
-    </form>
-</div>
+            <label>Milk Line Seals in Good Condition:</label>
+            <label for="milkLineSealsRating">Rating:</label>
+            <select id="milkLineSealsRating" onchange="toggleUpload(this, 'milkLineSealsUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="milkLineSealsComments">Comments:</label>
+            <textarea id="milkLineSealsComments" rows="2"></textarea>
+            <input type="file" id="milkLineSealsUpload" class="hidden" accept="image/*">
 
-<script>
-    document.getElementById('visitDate').value = new Date().toLocaleDateString();
+            <label>Stainless Droppers:</label>
+            <label for="stainlessDroppersRating">Rating:</label>
+            <select id="stainlessDroppersRating" onchange="toggleUpload(this, 'stainlessDroppersUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="stainlessDroppersComments">Comments:</label>
+            <textarea id="stainlessDroppersComments" rows="2"></textarea>
+            <input type="file" id="stainlessDroppersUpload" class="hidden" accept="image/*">
 
-    function toggleUpload(selectElement, uploadId) {
-        const uploadInput = document.getElementById(uploadId);
-        if (selectElement.value === "Attention Required") {
-            uploadInput.classList.remove('hidden');
-        } else {
-            uploadInput.classList.add('hidden');
-            uploadInput.value = ""; // Clear the upload input
-        }
-    }
-</script>
+            <label>Long Milk Rubber:</label>
+            <label for="longMilkRubberRating">Rating:</label>
+            <select id="longMilkRubberRating" onchange="toggleUpload(this, 'longMilkRubberUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="longMilkRubberComments">Comments:</label>
+            <textarea id="longMilkRubberComments" rows="2"></textarea>
+            <input type="file" id="longMilkRubberUpload" class="hidden" accept="image/*">
 
+            <label>Liner:</label>
+            <label for="linerRating">Rating:</label>
+            <select id="linerRating" onchange="toggleUpload(this, 'linerUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="linerComments">Comments:</label>
+            <textarea id="linerComments" rows="2"></textarea>
+            <input type="file" id="linerUpload" class="hidden" accept="image/*">
+
+            <label>Cluster:</label>
+            <label for="clusterRating">Rating:</label>
+            <select id="clusterRating" onchange="toggleUpload(this, 'clusterUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="clusterComments">Comments:</label>
+            <textarea id="clusterComments" rows="2"></textarea>
+            <input type="file" id="clusterUpload" class="hidden" accept="image/*">
+
+            <label>Cluster Seal:</label>
+            <label for="clusterSealRating">Rating:</label>
+            <select id="clusterSealRating" onchange="toggleUpload(this, 'clusterSealUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="clusterSealComments">Comments:</label>
+            <textarea id="clusterSealComments" rows="2"></textarea>
+            <input type="file" id="clusterSealUpload" class="hidden" accept="image/*">
+
+            <label>Cluster Button:</label>
+            <label for="clusterButtonRating">Rating:</label>
+            <select id="clusterButtonRating" onchange="toggleUpload(this, 'clusterButtonUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="clusterButtonComments">Comments:</label>
+            <textarea id="clusterButtonComments" rows="2"></textarea>
+            <input type="file" id="clusterButtonUpload" class="hidden" accept="image/*">
+
+            <label>Non Return Valve at Milk Pump:</label>
+            <label for="nonReturnValveRating">Rating:</label>
+            <select id="nonReturnValveRating" onchange="toggleUpload(this, 'nonReturnValveUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="nonReturnValveComments">Comments:</label>
+            <textarea id="nonReturnValveComments" rows="2"></textarea>
+            <input type="file" id="nonReturnValveUpload" class="hidden" accept="image/*">
+
+            <label>Milk Pump:</label>
+            <label for="milkPumpRating">Rating:</label>
+            <select id="milkPumpRating" onchange="toggleUpload(this, 'milkPumpUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="milkPumpComments">Comments:</label>
+            <textarea id="milkPumpComments" rows="2"></textarea>
+            <input type="file" id="milkPumpUpload" class="hidden" accept="image/*">
+
+            <label>Filter Housing:</label>
+            <label for="filterHousingRating">Rating:</label>
+            <select id="filterHousingRating" onchange="toggleUpload(this, 'filterHousingUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="filterHousingComments">Comments:</label>
+            <textarea id="filterHousingComments" rows="2"></textarea>
+            <input type="file" id="filterHousingUpload" class="hidden" accept="image/*">
+
+            <label>Plate Cooler:</label>
+            <label for="plateCoolerRating">Rating:</label>
+            <select id="plateCoolerRating" onchange="toggleUpload(this, 'plateCoolerUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plateCoolerComments">Comments:</label>
+            <textarea id="plateCoolerComments" rows="2"></textarea>
+            <input type="file" id="plateCoolerUpload" class="hidden" accept="image/*">
+
+            <label>Interceptor:</label>
+            <label for="interceptorRating">Rating:</label>
+            <select id="interceptorRating" onchange="toggleUpload(this, 'interceptorUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="interceptorComments">Comments:</label>
+            <textarea id="interceptorComments" rows="2"></textarea>
+            <input type="file" id="interceptorUpload" class="hidden" accept="image/*">
+
+            <label>Receiver Airline:</label>
+            <label for="receiverAirlineRating">Rating:</label>
+            <select id="receiverAirlineRating" onchange="toggleUpload(this, 'receiverAirlineUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="receiverAirlineComments">Comments:</label>
+            <textarea id="receiverAirlineComments" rows="2"></textarea>
+            <input type="file" id="receiverAirlineUpload" class="hidden" accept="image/*">
+
+            <label>Flushing Pulsator:</label>
+            <label for="flushingPulsatorRating">Rating:</label>
+            <select id="flushingPulsatorRating" onchange="toggleUpload(this, 'flushingPulsatorUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="flushingPulsatorComments">Comments:</label>
+            <textarea id="flushingPulsatorComments" rows="2"></textarea>
+            <input type="file" id="flushingPulsatorUpload" class="hidden" accept="image/*">
+
+            <label>Air Purge Valve:</label>
+            <label for="airPurgeValveRating">Rating:</label>
+            <select id="airPurgeValveRating" onchange="toggleUpload(this, 'airPurgeValveUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="airPurgeValveComments">Comments:</label>
+            <textarea id="airPurgeValveComments" rows="2"></textarea>
+            <input type="file" id="airPurgeValveUpload" class="hidden" accept="image/*">
+
+            <label>Vacuum Level:</label>
+            <label for="vacuumLevelRating">Rating:</label>
+            <select id="vacuumLevelRating" onchange="toggleUpload(this, 'vacuumLevelUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="vacuumLevelComments">Comments:</label>
+            <textarea id="vacuumLevelComments" rows="2"></textarea>
+            <input type="file" id="vacuumLevelUpload" class="hidden" accept="image/*">
+
+            <label>Main Airline:</label>
+            <label for="mainAirlineRating">Rating:</label>
+            <select id="mainAirlineRating" onchange="toggleUpload(this, 'mainAirlineUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="mainAirlineComments">Comments:</label>
+            <textarea id="mainAirlineComments" rows="2"></textarea>
+            <input type="file" id="mainAirlineUpload" class="hidden" accept="image/*">
+
+            <label>Plant Drainage - Milk Pump:</label>
+            <label for="plantDrainageMilkPumpRating">Rating:</label>
+            <select id="plantDrainageMilkPumpRating" onchange="toggleUpload(this, 'plantDrainageMilkPumpUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plantDrainageMilkPumpComments">Comments:</label>
+            <textarea id="plantDrainageMilkPumpComments" rows="2"></textarea>
+            <input type="file" id="plantDrainageMilkPumpUpload" class="hidden" accept="image/*">
+
+            <label>Plant Drainage - Filter/s:</label>
+            <label for="plantDrainageFilterRating">Rating:</label>
+            <select id="plantDrainageFilterRating" onchange="toggleUpload(this, 'plantDrainageFilterUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plantDrainageFilterComments">Comments:</label>
+            <textarea id="plantDrainageFilterComments" rows="2"></textarea>
+            <input type="file" id="plantDrainageFilterUpload" class="hidden" accept="image/*">
+
+            <label>Plant Drainage - Plate Cooler:</label>
+            <label for="plantDrainagePlateCoolerRating">Rating:</label>
+            <select id="plantDrainagePlateCoolerRating" onchange="toggleUpload(this, 'plantDrainagePlateCoolerUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plantDrainagePlateCoolerComments">Comments:</label>
+            <textarea id="plantDrainagePlateCoolerComments" rows="2"></textarea>
+            <input type="file" id="plantDrainagePlateCoolerUpload" class="hidden" accept="image/*">
+
+            <label>Plant Drainage - Vat Entry:</label>
+            <label for="plantDrainageVatEntryRating">Rating:</label>
+            <select id="plantDrainageVatEntryRating" onchange="toggleUpload(this, 'plantDrainageVatEntryUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plantDrainageVatEntryComments">Comments:</label>
+            <textarea id="plantDrainageVatEntryComments" rows="2"></textarea>
+            <input type="file" id="plantDrainageVatEntryUpload" class="hidden" accept="image/*">
+
+            <label>Plant Wash Tap:</label>
+            <label for="plantWashTapRating">Rating:</label>
+            <select id="plantWashTapRating" onchange="toggleUpload(this, 'plantWashTapUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="plantWashTapComments">Comments:</label>
+            <textarea id="plantWashTapComments" rows="2"></textarea>
+            <input type="file" id="plantWashTapUpload" class="hidden" accept="image/*">
+
+            <label>Wash Jetters:</label>
+            <label for="washJettersRating">Rating:</label>
+            <select id="washJettersRating" onchange="toggleUpload(this, 'washJettersUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="washJettersComments">Comments:</label>
+            <textarea id="washJettersComments" rows="2"></textarea>
+            <input type="file" id="washJettersUpload" class="hidden" accept="image/*">
+
+            <label>Centre Gland:</label>
+            <label for="centreGlandRating">Rating:</label>
+            <select id="centreGlandRating" onchange="toggleUpload(this, 'centreGlandUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="centreGlandComments">Comments:</label>
+            <textarea id="centreGlandComments" rows="2"></textarea>
+            <input type="file" id="centreGlandUpload" class="hidden" accept="image/*">
+
+            <label>Test Bucket:</label>
+            <label for="testBucketRating">Rating:</label>
+            <select id="testBucketRating" onchange="toggleUpload(this, 'testBucketUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="testBucketComments">Comments:</label>
+            <textarea id="testBucketComments" rows="2"></textarea>
+            <input type="file" id="testBucketUpload" class="hidden" accept="image/*">
+
+            <label>Inlet Valve:</label>
+            <label for="inletValveRating">Rating:</label>
+            <select id="inletValveRating" onchange="toggleUpload(this, 'inletValveUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="inletValveComments">Comments:</label>
+            <textarea id="inletValveComments" rows="2"></textarea>
+            <input type="file" id="inletValveUpload" class="hidden" accept="image/*">
+
+            <label>Non-Return Valve:</label>
+            <label for="nonReturnValveRating">Rating:</label>
+            <select id="nonReturnValveRating" onchange="toggleUpload(this, 'nonReturnValveUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="nonReturnValveComments">Comments:</label>
+            <textarea id="nonReturnValveComments" rows="2"></textarea>
+            <input type="file" id="nonReturnValveUpload" class="hidden" accept="image/*">
+
+            <label>Spray Ball:</label>
+            <label for="sprayBallRating">Rating:</label>
+            <select id="sprayBallRating" onchange="toggleUpload(this, 'sprayBallUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="sprayBallComments">Comments:</label>
+            <textarea id="sprayBallComments" rows="2"></textarea>
+            <input type="file" id="sprayBallUpload" class="hidden" accept="image/*">
+
+            <label>Agitator:</label>
+            <label for="agitatorRating">Rating:</label>
+            <select id="agitatorRating" onchange="toggleUpload(this, 'agitatorUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="agitatorComments">Comments:</label>
+            <textarea id="agitatorComments" rows="2"></textarea>
+            <input type="file" id="agitatorUpload" class="hidden" accept="image/*">
+
+            <label>Silo door:</label>
+            <label for="siloDoorRating">Rating:</label>
+            <select id="siloDoorRating" onchange="toggleUpload(this, 'siloDoorUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="siloDoorComments">Comments:</label>
+            <textarea id="siloDoorComments" rows="2"></textarea>
+            <input type="file" id="siloDoorUpload" class="hidden" accept="image/*">
+
+            <label>Manhole Seal:</label>
+            <label for="manholeSealRating">Rating:</label>
+            <select id="manholeSealRating" onchange="toggleUpload(this, 'manholeSealUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="manholeSealComments">Comments:</label>
+            <textarea id="manholeSealComments" rows="2"></textarea>
+            <input type="file" id="manholeSealUpload" class="hidden" accept="image/*">
+
+            <label>Vat Outlet:</label>
+            <label for="vatOutletRating">Rating:</label>
+            <select id="vatOutletRating" onchange="toggleUpload(this, 'vatOutletUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="vatOutletComments">Comments:</label>
+            <textarea id="vatOutletComments" rows="2"></textarea>
+            <input type="file" id="vatOutletUpload" class="hidden" accept="image/*">
+
+            <label>Walls in Silo:</label>
+            <label for="wallsInSiloRating">Rating:</label>
+            <select id="wallsInSiloRating" onchange="toggleUpload(this, 'wallsInSiloUpload')" required>
+                <option value="">Select Rating</option>
+                <option value="OK">OK</option>
+                <<option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+            <label for="wallsInSiloComments">Comments:</label>
+            <textarea id="wallsInSiloComments" rows="2"></textarea>
+            <input type="file" id="wallsInSiloUpload" class="hidden" accept="image/*">
+
+            <button id="generatePDFButton" type="button" onclick="generatePDF()">Generate PDF</button>
+        </form>
+    </div>
 </body>
 </html>
