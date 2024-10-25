@@ -7,133 +7,73 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #001F3F; /* Navy Blue */
-            color: #fff;
-            margin: 0;
+            background-color: #001F3F; /* Navy blue */
+            color: white;
             padding: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #FF851B; /* Orange */
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #003366; /* Darker Navy Blue */
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
+
         label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"], input[type="time"], select, textarea {
-            width: 100%;
+
+        select, textarea, input[type="file"], button {
+            margin: 5px 0;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
         }
-        input[type="file"] {
-            margin-top: 10px;
+
+        select, textarea {
+            background-color: #005B99; /* Darker shade for input fields */
+            color: white;
         }
+
+        button {
+            background-color: #FF851B; /* Orange */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF4136; /* Red hover color */
+        }
+
         .hidden {
             display: none;
         }
-        .form-section {
-            margin-bottom: 20px;
-            border-bottom: 2px solid #FF851B; /* Orange */
-            padding-bottom: 10px;
-        }
-        .btn {
-            background-color: #FF851B; /* Orange */
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-        .btn:hover {
-            background-color: #FF4136; /* Red hover color */
-        }
     </style>
+    <script>
+        function toggleUpload(selectElement, uploadId) {
+            const uploadField = document.getElementById(uploadId);
+            uploadField.classList.toggle('hidden', selectElement.value !== 'Attention Required');
+        }
+
+        function generatePDF() {
+            // PDF generation logic here
+            alert("PDF Generation functionality is not yet implemented.");
+        }
+    </script>
 </head>
 <body>
+    <div>
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        <form id="hygieneChecklist">
 
-<div class="container">
-    <h1>Dairy Shed Hygiene Checklist</h1>
-    <form id="checklistForm">
+            <h2>Milking Plant</h2>
 
-        <div class="form-section">
-            <h2>Farm Details</h2>
-            <label for="dairyCompany">Dairy Company:</label>
-            <input type="text" id="dairyCompany" required>
-
-            <label for="dairyNumber">Dairy Number:</label>
-            <input type="text" id="dairyNumber" required>
-
-            <label for="address">Address:</label>
-            <input type="text" id="address" required>
-
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" required>
-
-            <label for="region">Region:</label>
-            <select id="region" required>
-                <option value="">Select Region</option>
-                <!-- Add region options here -->
-            </select>
-
-            <label for="farmName">Farm Name:</label>
-            <input type="text" id="farmName" required>
-
-            <label for="island">Island:</label>
-            <select id="island" required>
-                <option value="North Island">North Island</option>
-                <option value="South Island">South Island</option>
-            </select>
-
-            <label for="visitDate">Visit Date:</label>
-            <input type="text" id="visitDate" value="" readonly>
-
-            <label for="visitType">Visit Type:</label>
-            <input type="text" id="visitType" required>
-
-            <label for="timeInspectionStarted">Time Inspection Started:</label>
-            <input type="time" id="timeInspectionStarted" required>
-
-            <label for="timeInspectionEnded">Time Inspection Ended:</label>
-            <input type="time" id="timeInspectionEnded" required>
-
-            <label for="inspectionCompletedBy">Inspection Completed by:</label>
-            <input type="text" id="inspectionCompletedBy" required>
-
-            <label for="callType">Call Type:</label>
-            <input type="text" id="callType" required>
-        </div>
-
-        <div class="form-section">
-            <h2>HEALTH & SAFETY</h2>
-            <label for="healthSafetyRating">Rating:</label>
-            <select id="healthSafetyRating" required>
+            <label>Automatic Cup and Remover:</label>
+            <label for="automaticCupRemoverRating">Rating:</label>
+            <select id="automaticCupRemoverRating" onchange="toggleUpload(this, 'automaticCupRemoverUpload')" required>
                 <option value="">Select Rating</option>
                 <option value="OK">OK</option>
                 <option value="Attention Required">Attention Required</option>
                 <option value="NA">NA</option>
             </select>
+            <label for="automaticCupRemoverComments">Comments:</label>
+            <textarea id="automaticCupRemoverComments" rows="2"></textarea>
+            <input type="file" id="automaticCupRemoverUpload" class="hidden" accept="image/*">
 
-            <label for="healthSafetyComments">Comments:</label>
-            <textarea id="healthSafetyComments" rows="4"></textarea>
-        </div>
-
-        <div class="form-section">
-            <h2>MILKING PLANT</h2>
             <label>Pulsator Airline:</label>
             <label for="pulsatorAirlineRating">Rating:</label>
             <select id="pulsatorAirlineRating" onchange="toggleUpload(this, 'pulsatorAirlineUpload')" required>
@@ -146,28 +86,29 @@
             <textarea id="pulsatorAirlineComments" rows="2"></textarea>
             <input type="file" id="pulsatorAirlineUpload" class="hidden" accept="image/*">
 
-            <label>Automatic Cup / Remover:</label>
-            <label for="automaticCupRemoverRating">Rating:</label>
-            <select id="automaticCupRemoverRating" onchange="toggleUpload(this, 'automaticCupRemoverUpload')" required>
+            <label>Long Bend Elbows:</label>
+            <label for="longBendElbowsRating">Rating:</label>
+            <select id="longBendElbowsRating" onchange="toggleUpload(this, 'longBendElbowsUpload')" required>
                 <option value="">Select Rating</option>
                 <option value="OK">OK</option>
                 <option value="Attention Required">Attention Required</option>
                 <option value="NA">NA</option>
             </select>
-            <label for="automaticCupRemoverComments">Comments:</label>
-            <textarea id="automaticCupRemoverComments" rows="2"></textarea>
-            <input type="file" id="automaticCupRemoverUpload" class="hidden" accept="image/*">
+            <label for="longBendElbowsComments">Comments:</label>
+            <textarea id="longBendElbowsComments" rows="2"></textarea>
+            <input type="file" id="longBendElbowsUpload" class="hidden" accept="image/*">
 
-            <label for="diaphragmRating">Diaphragm:</label>
-            <select id="diaphragmRating" onchange="toggleUpload(this, 'diaphragmUpload')" required>
+            <label>Diaphram:</label>
+            <label for="diaphramRating">Rating:</label>
+            <select id="diaphramRating" onchange="toggleUpload(this, 'diaphramUpload')" required>
                 <option value="">Select Rating</option>
                 <option value="OK">OK</option>
                 <option value="Attention Required">Attention Required</option>
                 <option value="NA">NA</option>
             </select>
-            <label for="diaphragmComments">Comments:</label>
-            <textarea id="diaphragmComments" rows="2"></textarea>
-            <input type="file" id="diaphragmUpload" class="hidden" accept="image/*">
+            <label for="diaphramComments">Comments:</label>
+            <textarea id="diaphramComments" rows="2"></textarea>
+            <input type="file" id="diaphramUpload" class="hidden" accept="image/*">
 
             <label>Receiving Can:</label>
             <label for="receivingCanRating">Rating:</label>
@@ -289,7 +230,7 @@
             <textarea id="clusterButtonComments" rows="2"></textarea>
             <input type="file" id="clusterButtonUpload" class="hidden" accept="image/*">
 
-            <label>Non Return Valve at Milk Pump:</label>
+            <label>Non-Return Valve at Milk Pump:</label>
             <label for="nonReturnValveRating">Rating:</label>
             <select id="nonReturnValveRating" onchange="toggleUpload(this, 'nonReturnValveUpload')" required>
                 <option value="">Select Rating</option>
@@ -518,16 +459,16 @@
             <input type="file" id="inletValveUpload" class="hidden" accept="image/*">
 
             <label>Non-Return Valve:</label>
-            <label for="nonReturnValveRating">Rating:</label>
-            <select id="nonReturnValveRating" onchange="toggleUpload(this, 'nonReturnValveUpload')" required>
+            <label for="nonReturnValve2Rating">Rating:</label>
+            <select id="nonReturnValve2Rating" onchange="toggleUpload(this, 'nonReturnValve2Upload')" required>
                 <option value="">Select Rating</option>
                 <option value="OK">OK</option>
                 <option value="Attention Required">Attention Required</option>
                 <option value="NA">NA</option>
             </select>
-            <label for="nonReturnValveComments">Comments:</label>
-            <textarea id="nonReturnValveComments" rows="2"></textarea>
-            <input type="file" id="nonReturnValveUpload" class="hidden" accept="image/*">
+            <label for="nonReturnValve2Comments">Comments:</label>
+            <textarea id="nonReturnValve2Comments" rows="2"></textarea>
+            <input type="file" id="nonReturnValve2Upload" class="hidden" accept="image/*">
 
             <label>Spray Ball:</label>
             <label for="sprayBallRating">Rating:</label>
@@ -553,7 +494,7 @@
             <textarea id="agitatorComments" rows="2"></textarea>
             <input type="file" id="agitatorUpload" class="hidden" accept="image/*">
 
-            <label>Silo door:</label>
+            <label>Silo Door:</label>
             <label for="siloDoorRating">Rating:</label>
             <select id="siloDoorRating" onchange="toggleUpload(this, 'siloDoorUpload')" required>
                 <option value="">Select Rating</option>
@@ -594,15 +535,26 @@
             <select id="wallsInSiloRating" onchange="toggleUpload(this, 'wallsInSiloUpload')" required>
                 <option value="">Select Rating</option>
                 <option value="OK">OK</option>
-                <<option value="Attention Required">Attention Required</option>
+                <option value="Attention Required">Attention Required</option>
                 <option value="NA">NA</option>
             </select>
             <label for="wallsInSiloComments">Comments:</label>
             <textarea id="wallsInSiloComments" rows="2"></textarea>
             <input type="file" id="wallsInSiloUpload" class="hidden" accept="image/*">
+        </div>
 
-            <button id="generatePDFButton" type="button" onclick="generatePDF()">Generate PDF</button>
-        </form>
-    </div>
+        <button type="button" onclick="generatePDF()">Generate PDF</button>
+    </form>
+
+    <script>
+        function toggleUpload(selectElement, uploadId) {
+            const uploadField = document.getElementById(uploadId);
+            uploadField.classList.toggle('hidden', selectElement.value !== 'Attention Required');
+        }
+
+        function generatePDF() {
+            // Implementation for PDF generation
+        }
+    </script>
 </body>
 </html>
