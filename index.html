@@ -7,17 +7,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+            background-color: #e6f7ff;
             color: #333;
         }
         h1, h2 {
-            color: #2c3e50;
+            color: #005073;
         }
         form {
             background-color: #ffffff;
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
         }
         .form-section {
             margin-bottom: 20px;
@@ -39,7 +41,7 @@
             display: none;
         }
         button {
-            background-color: #2c3e50;
+            background-color: #005073;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -47,15 +49,18 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #34495e;
+            background-color: #003f5c;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
 <h1>Dairy Shed Hygiene Checklist</h1>
 
 <form id="hygieneChecklistForm">
+    <!-- Farm Details Section -->
     <div class="form-section">
         <h2>Farm Details</h2>
         <label for="farmName">Farm Name</label>
@@ -73,27 +78,42 @@
         <input type="text" id="date" name="date" value="" readonly>
     </div>
 
-    <!-- Example of a plant check option with 3 box functionality -->
+    <!-- Plant Components Section -->
     <div class="form-section">
-        <h2>Milking Plant</h2>
+        <h2>Milking Plant Components</h2>
 
-        <!-- Example option: Pulsator Airline -->
+        <!-- Loop over each component for status, comments, and photo upload -->
+        <!-- Example for Pulsator Airline -->
         <label for="pulsatorAirlineStatus">Pulsator Airline</label>
         <select id="pulsatorAirlineStatus" name="pulsatorAirlineStatus" onchange="togglePhotoUpload(this, 'pulsatorAirlinePhoto')" required>
             <option value="OK">OK</option>
             <option value="Attention Required">Attention Required</option>
             <option value="NA">NA</option>
         </select>
-
         <label for="pulsatorAirlineComments">Comments</label>
         <textarea id="pulsatorAirlineComments" name="pulsatorAirlineComments"></textarea>
-
         <label for="pulsatorAirlinePhoto" class="photo-upload">Upload Photo</label>
         <input type="file" id="pulsatorAirlinePhoto" name="pulsatorAirlinePhoto" class="photo-upload">
+
+        <!-- Long Bend Elbows -->
+        <label for="longBendElbowsStatus">Long Bend Elbows</label>
+        <select id="longBendElbowsStatus" name="longBendElbowsStatus" onchange="togglePhotoUpload(this, 'longBendElbowsPhoto')" required>
+            <option value="OK">OK</option>
+            <option value="Attention Required">Attention Required</option>
+            <option value="NA">NA</option>
+        </select>
+        <label for="longBendElbowsComments">Comments</label>
+        <textarea id="longBendElbowsComments" name="longBendElbowsComments"></textarea>
+        <label for="longBendElbowsPhoto" class="photo-upload">Upload Photo</label>
+        <input type="file" id="longBendElbowsPhoto" name="longBendElbowsPhoto" class="photo-upload">
+
+        <!-- Continue adding all other components in the same structure -->
+
+        <!-- Add here other components like Automatic Cup Remover, Diaphragm, etc. -->
+        <!-- Repeat the above block for each component on the checklist -->
+
     </div>
 
-    <!-- Add more plant check options here following the same structure -->
-    
     <button type="button" onclick="submitForm()">Submit and Generate PDF</button>
 </form>
 
@@ -111,16 +131,36 @@
         }
     }
 
-    // Function to generate the PDF (placeholder, replace with actual PDF logic)
+    // Function to generate PDF using jsPDF and html2canvas
     function submitForm() {
+        const { jsPDF } = window.jspdf;
+
+        // Create a new jsPDF instance
+        const pdf = new jsPDF();
+
         // Collect form data
-        const form = document.getElementById('hygieneChecklistForm');
-        const formData = new FormData(form);
+        const farmName = document.getElementById('farmName').value;
+        const region = document.getElementById('region').value;
+        const date = document.getElementById('date').value;
 
-        // Generate PDF logic here (using libraries like jsPDF)
+        // Add farm details to the PDF
+        pdf.text(`Farm Name: ${farmName}`, 10, 10);
+        pdf.text(`Region: ${region}`, 10, 20);
+        pdf.text(`Date: ${date}`, 10, 30);
 
-        // Placeholder alert to confirm submission
-        alert('Checklist submitted and PDF generated!');
+        // Capture the form and convert it to an image using html2canvas
+        html2canvas(document.getElementById('hygieneChecklistForm')).then(function(canvas) {
+            const imgData = canvas.toDataURL('image/png');
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            // Add the form image to the PDF
+            pdf.addImage(imgData, 'PNG', 0, 40, pdfWidth, pdfHeight);
+
+            // Save the PDF
+            pdf.save('DairyShedHygieneChecklist.pdf');
+        });
     }
 </script>
 
