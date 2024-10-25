@@ -4,485 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
+            background-color: #001F3F; /* Navy blue background */
+            color: white;
         }
 
-        h1, h2, h3 {
-            color: #005b96; /* Color used in the last perfect design */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
 
-        form {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        h1, h2 {
+            color: #FF851B; /* Accent color */
         }
 
         label {
             display: block;
-            margin-top: 10px;
+            margin: 10px 0 5px;
         }
 
-        input[type="text"],
-        input[type="date"],
-        input[type="time"],
-        select,
-        textarea {
+        input, select, textarea {
             width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #001F3F; /* Match form background color */
+            color: white;
         }
 
         button {
-            background-color: #005b96; /* Color used in the last perfect design */
+            background-color: #FF851B; /* Button color */
             color: white;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #004080; /* Darker shade for hover */
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .checkbox-group div {
-            width: 45%;
-            margin-right: 10%;
-            margin-bottom: 10px;
-        }
-
-        .checkbox-group div:last-child {
-            margin-right: 0;
-        }
-
-        .pdf-container {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .pdf-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 24px;
-        }
-
-        .pdf-section {
-            margin: 15px 0;
-        }
-
-        .pdf-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .pdf-table th, .pdf-table td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .pdf-table th {
-            background-color: #005b96; /* Color used in the last perfect design */
-            color: white;
-        }
-
-        .pdf-footer {
-            margin-top: 20px;
-            text-align: right;
+            background-color: #FF4136; /* Hover color */
         }
     </style>
 </head>
 <body>
+    <div class="form-container">
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        <form id="dairyCheckForm">
+            <!-- Farm Details Section -->
+            <h2>Farm Details</h2>
+            <label for="dairy_company">Dairy Company:</label>
+            <input type="text" name="dairy_company" required>
+            <label for="dairy_number">Dairy Number:</label>
+            <input type="text" name="dairy_number" required>
+            <label for="address">Address:</label>
+            <input type="text" name="address" required>
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" required>
+            <label for="region">Region:</label>
+            <select name="region" required>
+                <option value="">Select Region</option>
+                <option value="Northland">Northland</option>
+                <option value="Auckland">Auckland</option>
+                <!-- Add more regions as needed -->
+            </select>
+            <label for="farm_name">Farm Name:</label>
+            <input type="text" name="farm_name" required>
+            <label for="island">Island:</label>
+            <select name="island" required>
+                <option value="North Island">North Island</option>
+                <option value="South Island">South Island</option>
+            </select>
+            <label for="visit_date">Visit Date:</label>
+            <input type="date" name="visit_date" value="" required>
+            <label for="visit_type">Visit Type:</label>
+            <input type="text" name="visit_type" required>
+            <label for="inspection_start">Time Inspection Started:</label>
+            <input type="time" name="inspection_start" required>
+            <label for="inspection_end">Time Inspection Ended:</label>
+            <input type="time" name="inspection_end" required>
+            <label for="completed_by">Inspection Completed by:</label>
+            <input type="text" name="completed_by" required>
+            <label for="call_type">Call Type:</label>
+            <select name="call_type" required>
+                <option value="General">General</option>
+                <option value="Follow-Up">Follow-Up</option>
+            </select>
+            <label for="visit_notes">General Visit Notes:</label>
+            <textarea name="visit_notes"></textarea>
 
-<h1>Dairy Shed Hygiene Checklist</h1>
-<form id="checklist-form">
-    <h2>Farm Details</h2>
-    <label>Dairy Company:</label>
-    <input type="text" id="dairyCompany" required>
-    
-    <label>Dairy Number:</label>
-    <input type="text" id="dairyNumber" required>
-    
-    <label>Address:</label>
-    <input type="text" id="address" required>
-    
-    <label>Customer Name:</label>
-    <input type="text" id="customerName" required>
-    
-    <label>Region:</label>
-    <input type="text" id="region" required>
-    
-    <label>Farm Name:</label>
-    <input type="text" id="farmName" required>
-    
-    <h2>North Island Milking Plant and Milk Vat Check</h2>
-    <label>Inspector:</label>
-    <input type="text" id="inspector" required>
-    
-    <label>Island:</label>
-    <select id="island" required>
-        <option value="North Island">North Island</option>
-        <option value="South Island">South Island</option>
-    </select>
+            <!-- Health & Safety Section -->
+            <h2>Health & Safety</h2>
+            <label for="health_safety_status">Status:</label>
+            <select name="health_safety_status" required>
+                <option value="ok">OK</option>
+                <option value="attention_required">Attention Required</option>
+            </select>
+            <input type="text" name="health_safety_comments" placeholder="Comments">
+            
+            <!-- Add remaining sections here following the same format -->
 
-    <label>Visit Date:</label>
-    <input type="date" id="visitDate" required>
-
-    <label>Time Inspection Started:</label>
-    <input type="time" id="inspectionStarted" required>
-    
-    <label>Time Inspection Ended:</label>
-    <input type="time" id="inspectionEnded" required>
-
-    <label>Inspection Completed by:</label>
-    <input type="text" id="completedBy" required>
-    
-    <label>Call Type:</label>
-    <input type="text" id="callType" required>
-
-    <label>General Visit Notes:</label>
-    <textarea id="generalNotes" rows="4"></textarea>
-
-    <h2>Health & Safety Checklist</h2>
-    <div class="checkbox-group">
-        <div>
-            <label>Pulsator Airline:</label>
-            <select class="checklist-item" id="pulsatorAirline" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Long Bend Elbows:</label>
-            <select class="checklist-item" id="longBendElbows" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Automatic Cup Remover:</label>
-            <select class="checklist-item" id="automaticCupRemover" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Diaphragm:</label>
-            <select class="checklist-item" id="diaphragm" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Receiving Can:</label>
-            <select class="checklist-item" id="receivingCan" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Sanitary Trap:</label>
-            <select class="checklist-item" id="sanitaryTrap" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Main Milk Line:</label>
-            <select class="checklist-item" id="mainMilkLine" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Milk Line Seals in good condition:</label>
-            <select class="checklist-item" id="milkLineSeals" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Stainless Droppers:</label>
-            <select class="checklist-item" id="stainlessDroppers" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Long Milk Rubber:</label>
-            <select class="checklist-item" id="longMilkRubber" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Liner:</label>
-            <select class="checklist-item" id="liner" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Cluster:</label>
-            <select class="checklist-item" id="cluster" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Cluster Seal:</label>
-            <select class="checklist-item" id="clusterSeal" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Cluster Button:</label>
-            <select class="checklist-item" id="clusterButton" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Non Return Valve at Milk Pump:</label>
-            <select class="checklist-item" id="nonReturnValveMilkPump" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Milk Pump:</label>
-            <select class="checklist-item" id="milkPump" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Filter Housing:</label>
-            <select class="checklist-item" id="filterHousing" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plate Cooler:</label>
-            <select class="checklist-item" id="plateCooler" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Interceptor:</label>
-            <select class="checklist-item" id="interceptor" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Receiver Airline:</label>
-            <select class="checklist-item" id="receiverAirline" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Flushing Pulsator:</label>
-            <select class="checklist-item" id="flushingPulsator" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Air Purge Valve:</label>
-            <select class="checklist-item" id="airPurgeValve" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Vacuum Level:</label>
-            <select class="checklist-item" id="vacuumLevel" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Main Airline:</label>
-            <select class="checklist-item" id="mainAirline" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plant Drainage - Milk Pump:</label>
-            <select class="checklist-item" id="plantDrainageMilkPump" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plant Drainage - Filter/s:</label>
-            <select class="checklist-item" id="plantDrainageFilter" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plant Drainage - Plate Cooler:</label>
-            <select class="checklist-item" id="plantDrainagePlateCooler" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plant Drainage - Vat Entry:</label>
-            <select class="checklist-item" id="plantDrainageVatEntry" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Plant Wash Tap:</label>
-            <select class="checklist-item" id="plantWashTap" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Wash Jetters:</label>
-            <select class="checklist-item" id="washJetters" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Centre Gland:</label>
-            <select class="checklist-item" id="centreGland" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Test Bucket:</label>
-            <select class="checklist-item" id="testBucket" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Inlet Valve:</label>
-            <select class="checklist-item" id="inletValve" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Non-Return Valve:</label>
-            <select class="checklist-item" id="nonReturnValve" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Spray Ball:</label>
-            <select class="checklist-item" id="sprayBall" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Agitator:</label>
-            <select class="checklist-item" id="agitator" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Silo Door:</label>
-            <select class="checklist-item" id="siloDoor" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Manhole Seal:</label>
-            <select class="checklist-item" id="manholeSeal" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Vat Outlet:</label>
-            <select class="checklist-item" id="vatOutlet" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <label>Walls in Silo:</label>
-            <select class="checklist-item" id="wallsInSilo" required>
-                <option value="OK">OK</option>
-                <option value="Attention Required">Attention Required</option>
-                <option value="Not Checked">Not Checked</option>
-            </select>
-        </div>
-        <div>
-            <button type="submit">Generate PDF</button>
-        </div>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
