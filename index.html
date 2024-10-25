@@ -78,12 +78,12 @@
         <input type="text" id="date" name="date" value="" readonly>
     </div>
 
-    <!-- Plant Components Section -->
+    <!-- Checklist Section -->
     <div class="form-section">
         <h2>Milking Plant Components</h2>
 
-        <!-- Loop over each component for status, comments, and photo upload -->
-        <!-- Example for Pulsator Airline -->
+        <!-- Checklist Items (with 3-box options: status, comments, photo upload) -->
+        <!-- Example: Pulsator Airline -->
         <label for="pulsatorAirlineStatus">Pulsator Airline</label>
         <select id="pulsatorAirlineStatus" name="pulsatorAirlineStatus" onchange="togglePhotoUpload(this, 'pulsatorAirlinePhoto')" required>
             <option value="OK">OK</option>
@@ -95,7 +95,8 @@
         <label for="pulsatorAirlinePhoto" class="photo-upload">Upload Photo</label>
         <input type="file" id="pulsatorAirlinePhoto" name="pulsatorAirlinePhoto" class="photo-upload">
 
-        <!-- Long Bend Elbows -->
+        <!-- Repeat this structure for all checklist components -->
+
         <label for="longBendElbowsStatus">Long Bend Elbows</label>
         <select id="longBendElbowsStatus" name="longBendElbowsStatus" onchange="togglePhotoUpload(this, 'longBendElbowsPhoto')" required>
             <option value="OK">OK</option>
@@ -107,11 +108,33 @@
         <label for="longBendElbowsPhoto" class="photo-upload">Upload Photo</label>
         <input type="file" id="longBendElbowsPhoto" name="longBendElbowsPhoto" class="photo-upload">
 
-        <!-- Continue adding all other components in the same structure -->
+        <!-- Example: Automatic Cup Remover -->
+        <label for="automaticCupRemoverStatus">Automatic Cup Remover</label>
+        <select id="automaticCupRemoverStatus" name="automaticCupRemoverStatus" onchange="togglePhotoUpload(this, 'automaticCupRemoverPhoto')" required>
+            <option value="OK">OK</option>
+            <option value="Attention Required">Attention Required</option>
+            <option value="NA">NA</option>
+        </select>
+        <label for="automaticCupRemoverComments">Comments</label>
+        <textarea id="automaticCupRemoverComments" name="automaticCupRemoverComments"></textarea>
+        <label for="automaticCupRemoverPhoto" class="photo-upload">Upload Photo</label>
+        <input type="file" id="automaticCupRemoverPhoto" name="automaticCupRemoverPhoto" class="photo-upload">
 
-        <!-- Add here other components like Automatic Cup Remover, Diaphragm, etc. -->
-        <!-- Repeat the above block for each component on the checklist -->
+        <!-- Add all other components in this pattern -->
 
+        <label for="diaphragmStatus">Diaphragm</label>
+        <select id="diaphragmStatus" name="diaphragmStatus" onchange="togglePhotoUpload(this, 'diaphragmPhoto')" required>
+            <option value="OK">OK</option>
+            <option value="Attention Required">Attention Required</option>
+            <option value="NA">NA</option>
+        </select>
+        <label for="diaphragmComments">Comments</label>
+        <textarea id="diaphragmComments" name="diaphragmComments"></textarea>
+        <label for="diaphragmPhoto" class="photo-upload">Upload Photo</label>
+        <input type="file" id="diaphragmPhoto" name="diaphragmPhoto" class="photo-upload">
+
+        <!-- Repeat the same structure for all the other checklist items, such as: 
+        "Receiving Can", "Sanitary Trap", "Main Milk Line", "Milk Line Seals", etc. -->
     </div>
 
     <button type="button" onclick="submitForm()">Submit and Generate PDF</button>
