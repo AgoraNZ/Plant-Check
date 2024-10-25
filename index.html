@@ -10,128 +10,216 @@
             color: white;
             font-family: Arial, sans-serif;
         }
-
+        h1 {
+            text-align: center;
+        }
         label {
             display: block;
-            margin: 10px 0;
+            margin: 10px 0 5px;
         }
-
-        .photo-upload {
-            display: none; /* Hide photo upload by default */
+        input[type="text"], input[type="time"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #FF851B; /* Orange accents */
+            border-radius: 5px;
+            background-color: #001F3F;
+            color: white;
         }
-
         button {
             background-color: #FF851B; /* Orange accents */
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
-
         button:hover {
             background-color: #FF4136; /* Red hover color */
+        }
+        .image-upload {
+            display: none; /* Initially hidden */
         }
     </style>
 </head>
 <body>
     <h1>Dairy Shed Hygiene Checklist</h1>
-    
-    <form id="hygiene-checklist-form">
-        <!-- Customer Information -->
-        <div>
-            <label>Customer Name: <input type="text" name="customerName" required></label>
-            <label>Farm Address: <input type="text" name="farmAddress" required></label>
-            <label>Date: <input type="date" name="checkDate" value="" required></label>
-        </div>
+    <form id="hygieneForm">
+        <h2>Farm Details</h2>
+        <label>Dairy Company:</label>
+        <input type="text" id="dairyCompany" required>
+        
+        <label>Dairy Number:</label>
+        <input type="text" id="dairyNumber" required>
+        
+        <label>Address:</label>
+        <input type="text" id="address" required>
+        
+        <label>Customer Name:</label>
+        <input type="text" id="customerName" required>
+        
+        <label>Region:</label>
+        <select id="region" required>
+            <option value="">Select Region</option>
+            <!-- Add options for regions -->
+        </select>
+        
+        <label>Farm Name:</label>
+        <input type="text" id="farmName" required>
+        
+        <label>Island:</label>
+        <select id="island" required>
+            <option value="North Island">North Island</option>
+            <option value="South Island">South Island</option>
+        </select>
+        
+        <label>Visit Date:</label>
+        <input type="date" id="visitDate" required>
+        
+        <label>Visit Type:</label>
+        <input type="text" id="visitType" required>
+        
+        <label>Time Inspection Started:</label>
+        <input type="time" id="timeStarted" required>
+        
+        <label>Time Inspection Ended:</label>
+        <input type="time" id="timeEnded" required>
+        
+        <label>Inspection Completed by:</label>
+        <input type="text" id="completedBy" required>
+        
+        <label>Call Type:</label>
+        <input type="text" id="callType" required>
+        
+        <h2>HEALTH & SAFETY</h2>
+        <label>Rating:</label>
+        <select id="healthSafetyRating" required>
+            <option value="OK">OK</option>
+            <option value="Attention Required">Attention Required</option>
+            <option value="NA">NA</option>
+        </select>
+        
+        <label>Comments:</label>
+        <textarea id="healthSafetyComments"></textarea>
+        
+        <h2>MILKING PLANT</h2>
+        <label>Rating:</label>
+        <select id="milkingPlantRating" required>
+            <option value="OK">OK</option>
+            <option value="Attention Required">Attention Required</option>
+            <option value="NA">NA</option>
+        </select>
+        
+        <label>Comments:</label>
+        <textarea id="milkingPlantComments"></textarea>
+        
+        <h3>Milking Plant and Milk Vat Check</h3>
+        <h4>Health & Safety – General</h4>
 
-        <h2>Milking Plant</h2>
-
-        <div>
-            <label>Automatic Cup & Remover:
-                <select name="autoCupRemoverRating" onchange="toggleUpload(this, 'autoCupRemoverPhoto')" required>
-                    <option value="">Select Rating</option>
+        <!-- Checklist Items -->
+        <div id="checklistItems">
+            <div>
+                <h5>Pulsator Airline</h5>
+                <label>Rating:</label>
+                <select class="checklist-rating" required>
                     <option value="OK">OK</option>
                     <option value="Attention Required">Attention Required</option>
                     <option value="NA">NA</option>
                 </select>
-                Comments: <input type="text" name="autoCupRemoverComments">
-                <input type="file" class="photo-upload" name="autoCupRemoverPhoto" accept="image/*">
-            </label>
-        </div>
-
-        <!-- Additional checklist items here -->
-        <div>
-            <label>Flushing Pulsator:
-                <select name="flushingPulsatorRating" onchange="toggleUpload(this, 'flushingPulsatorPhoto')" required>
-                    <option value="">Select Rating</option>
+                <label>Comments:</label>
+                <textarea class="checklist-comments"></textarea>
+                <input type="file" class="image-upload" accept="image/*">
+            </div>
+            <div>
+                <h5>Long Bend Elbows</h5>
+                <label>Rating:</label>
+                <select class="checklist-rating" required>
                     <option value="OK">OK</option>
                     <option value="Attention Required">Attention Required</option>
                     <option value="NA">NA</option>
                 </select>
-                Comments: <input type="text" name="flushingPulsatorComments">
-                <input type="file" class="photo-upload" name="flushingPulsatorPhoto" accept="image/*">
-            </label>
-        </div>
-
-        <div>
-            <label>Air Purge Valve:
-                <select name="airPurgeValveRating" onchange="toggleUpload(this, 'airPurgeValvePhoto')" required>
-                    <option value="">Select Rating</option>
+                <label>Comments:</label>
+                <textarea class="checklist-comments"></textarea>
+                <input type="file" class="image-upload" accept="image/*">
+            </div>
+            <div>
+                <h5>Automatic Cup / Remover</h5>
+                <label>Rating:</label>
+                <select class="checklist-rating" required>
                     <option value="OK">OK</option>
                     <option value="Attention Required">Attention Required</option>
                     <option value="NA">NA</option>
                 </select>
-                Comments: <input type="text" name="airPurgeValveComments">
-                <input type="file" class="photo-upload" name="airPurgeValvePhoto" accept="image/*">
-            </label>
+                <label>Comments:</label>
+                <textarea class="checklist-comments"></textarea>
+                <input type="file" class="image-upload" accept="image/*">
+            </div>
+            <!-- Repeat the structure for all items in your checklist -->
         </div>
 
-        <!-- Continue adding all checklist items similar to above -->
-
-        <div>
-            <button type="button" class="generate-pdf">Generate PDF</button>
-        </div>
+        <button type="button" id="generatePDF">Generate PDF</button>
     </form>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Auto-populate today's date
-            const today = new Date().toISOString().split('T')[0];
-            document.querySelector('input[name="checkDate"]').value = today;
+        // Auto-populate today's date
+        document.getElementById('visitDate').valueAsDate = new Date();
+
+        // Show/hide image upload based on rating
+        document.querySelectorAll('.checklist-rating').forEach(select => {
+            select.addEventListener('change', function () {
+                const imageUpload = this.parentElement.nextElementSibling.nextElementSibling;
+                if (this.value === "Attention Required") {
+                    imageUpload.style.display = 'block';
+                } else {
+                    imageUpload.style.display = 'none';
+                }
+            });
         });
 
-        document.querySelector('.generate-pdf').addEventListener('click', function () {
-            // Get form data
-            const formData = new FormData(document.querySelector('#hygiene-checklist-form'));
+        // Generate PDF
+        document.getElementById('generatePDF').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-            // Process form data and generate a PDF
-            const pdfContent = `
-                Customer Name: ${formData.get('customerName')}
-                Farm Address: ${formData.get('farmAddress')}
-                Check Date: ${formData.get('checkDate')}
-                Automatic Cup & Remover Rating: ${formData.get('autoCupRemoverRating')}
-                Comments: ${formData.get('autoCupRemoverComments')}
-                Flushing Pulsator Rating: ${formData.get('flushingPulsatorRating')}
-                Comments: ${formData.get('flushingPulsatorComments')}
-                Air Purge Valve Rating: ${formData.get('airPurgeValveRating')}
-                Comments: ${formData.get('airPurgeValveComments')}
-                // Add other checklist items here
-            `;
+            // Adding form data to PDF
+            doc.text("Dairy Shed Hygiene Checklist", 20, 10);
+            doc.text("Farm Details", 20, 20);
+            doc.text(`Dairy Company: ${document.getElementById('dairyCompany').value}`, 20, 30);
+            doc.text(`Dairy Number: ${document.getElementById('dairyNumber').value}`, 20, 40);
+            doc.text(`Address: ${document.getElementById('address').value}`, 20, 50);
+            doc.text(`Customer Name: ${document.getElementById('customerName').value}`, 20, 60);
+            doc.text(`Region: ${document.getElementById('region').value}`, 20, 70);
+            doc.text(`Farm Name: ${document.getElementById('farmName').value}`, 20, 80);
+            doc.text(`Island: ${document.getElementById('island').value}`, 20, 90);
+            doc.text(`Visit Date: ${document.getElementById('visitDate').value}`, 20, 100);
+            doc.text(`Visit Type: ${document.getElementById('visitType').value}`, 20, 110);
+            doc.text(`Time Inspection Started: ${document.getElementById('timeStarted').value}`, 20, 120);
+            doc.text(`Time Inspection Ended: ${document.getElementById('timeEnded').value}`, 20, 130);
+            doc.text(`Inspection Completed by: ${document.getElementById('completedBy').value}`, 20, 140);
+            doc.text(`Call Type: ${document.getElementById('callType').value}`, 20, 150);
+            
+            doc.text("HEALTH & SAFETY", 20, 160);
+            doc.text(`Rating: ${document.getElementById('healthSafetyRating').value}`, 20, 170);
+            doc.text(`Comments: ${document.getElementById('healthSafetyComments').value}`, 20, 180);
+            
+            doc.text("MILKING PLANT", 20, 190);
+            doc.text(`Rating: ${document.getElementById('milkingPlantRating').value}`, 20, 200);
+            doc.text(`Comments: ${document.getElementById('milkingPlantComments').value}`, 20, 210);
 
-            const blob = new Blob([pdfContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Dairy_Shed_Hygiene_Checklist.txt'; // Change extension as needed for PDF
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            // Adding checklist items to PDF
+            const checklistItems = document.querySelectorAll('#checklistItems > div');
+            let y = 220; // Start position for checklist items
+            checklistItems.forEach(item => {
+                const title = item.querySelector('h5').innerText;
+                const rating = item.querySelector('.checklist-rating').value;
+                const comments = item.querySelector('.checklist-comments').value;
+                doc.text(`${title}: Rating: ${rating}, Comments: ${comments}`, 20, y);
+                y += 10; // Move down for next item
+            });
+
+            doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
         });
-
-        function toggleUpload(selectElement, photoUploadClass) {
-            const photoUpload = document.querySelector(`.${photoUploadClass}`);
-            photoUpload.style.display = selectElement.value === 'Attention Required' ? 'block' : 'none';
-        }
     </script>
 </body>
 </html>
