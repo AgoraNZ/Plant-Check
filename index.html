@@ -7,356 +7,198 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            color: #333;
+            background-color: #E8E8E8; /* Adjust this to your preferred background color */
+            color: #2F2F2F; /* Adjust text color as needed */
         }
 
-        .container {
-            width: 90%;
+        .form-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9); /* Slightly lighter background for contrast */
+            border-radius: 10px;
         }
 
-        h1 {
-            text-align: center;
-            color: #007BFF;
-        }
-
-        h2 {
-            color: #007BFF;
-            margin-top: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
+        h1, h2 {
+            color: #2E8B57; /* Adjust this to your accent color */
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin: 10px 0 5px;
         }
 
-        input[type="text"],
-        input[type="date"],
-        input[type="time"],
-        select,
-        textarea {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="file"] {
-            margin-top: 5px;
-        }
-
-        .form-actions {
-            text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
         }
 
         button {
-            background-color: #007BFF;
+            background-color: #2E8B57; /* Adjust button color to match your scheme */
             color: white;
+            padding: 10px 20px;
             border: none;
-            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            margin: 5px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #218838; /* Adjust hover color */
         }
-        
-        .photo-preview {
+
+        .photo-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            margin-bottom: 20px;
         }
-        
-        .photo-preview img {
-            max-width: 100px;
-            max-height: 100px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        .photo-container img {
+            max-width: 100%;
+            margin-top: 5px;
+        }
+
+        .conditional-upload {
+            display: none; /* Hide by default */
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="form-container">
         <h1>Dairy Shed Hygiene Checklist</h1>
-        
-        <form id="checklist-form">
+        <form id="hygieneChecklistForm">
             <h2>Farm Details</h2>
-            <div class="form-group">
-                <label>Dairy Company:</label>
-                <input type="text" name="dairy_company" required>
-            </div>
-            <div class="form-group">
-                <label>Dairy Number:</label>
-                <input type="text" name="dairy_number" required>
-            </div>
-            <div class="form-group">
-                <label>Address:</label>
-                <input type="text" name="address" required>
-            </div>
-            <div class="form-group">
-                <label>Customer Name:</label>
-                <input type="text" name="customer_name" required>
-            </div>
-            <div class="form-group">
-                <label>Region:</label>
-                <select name="region" required>
-                    <option value="" disabled selected>Select Region</option>
-                    <option value="Northland">Northland</option>
-                    <option value="Auckland">Auckland</option>
-                    <option value="Waikato">Waikato</option>
-                    <option value="Bay of Plenty">Bay of Plenty</option>
-                    <option value="Gisborne">Gisborne</option>
-                    <option value="Hawke's Bay">Hawke's Bay</option>
-                    <option value="Taranaki">Taranaki</option>
-                    <option value="Manawatu-Wanganui">Manawatu-Wanganui</option>
-                    <option value="Wellington">Wellington</option>
-                    <option value="Tasman">Tasman</option>
-                    <option value="Nelson">Nelson</option>
-                    <option value="Marlborough">Marlborough</option>
-                    <option value="West Coast">West Coast</option>
-                    <option value="Canterbury">Canterbury</option>
-                    <option value="Otago">Otago</option>
-                    <option value="Southland">Southland</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Farm Name:</label>
-                <input type="text" name="farm_name" required>
-            </div>
-            <div class="form-group">
-                <label>Island:</label>
-                <select name="island" required>
-                    <option value="North Island">North Island</option>
-                    <option value="South Island">South Island</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Visit Date:</label>
-                <input type="date" name="visit_date" value="" required>
-            </div>
-            <div class="form-group">
-                <label>Visit Type:</label>
-                <input type="text" name="visit_type" required>
-            </div>
-            <div class="form-group">
-                <label>Time Inspection Started:</label>
-                <input type="time" name="inspection_start_time" required>
-            </div>
-            <div class="form-group">
-                <label>Time Inspection Ended:</label>
-                <input type="time" name="inspection_end_time" required>
-            </div>
-            <div class="form-group">
-                <label>Inspection Completed by:</label>
-                <input type="text" name="inspector_name" required>
-            </div>
-            <div class="form-group">
-                <label>Call Type:</label>
-                <input type="text" name="call_type" required>
-            </div>
-            
-            <h2>Health & Safety</h2>
-            <div class="form-group">
-                <label>Rating:</label>
-                <select name="health_safety_rating" required>
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="N/A">N/A</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Comments:</label>
-                <textarea name="health_safety_comments"></textarea>
-            </div>
+            <label for="dairyCompany">Dairy Company:</label>
+            <input type="text" id="dairyCompany" required>
 
-            <h2>Milking Plant</h2>
-            <div class="form-group">
-                <label>Rating:</label>
-                <select name="milking_plant_rating" required>
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="N/A">N/A</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Comments:</label>
-                <textarea name="milking_plant_comments"></textarea>
-            </div>
+            <label for="dairyNumber">Dairy Number:</label>
+            <input type="text" id="dairyNumber" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" required>
+
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" required>
+
+            <label for="region">Region:</label>
+            <select id="region" required>
+                <option value="">Select a region</option>
+                <option value="Region1">Region 1</option>
+                <option value="Region2">Region 2</option>
+                <option value="Region3">Region 3</option>
+                <!-- Add other regions as needed -->
+            </select>
+
+            <label for="farmName">Farm Name:</label>
+            <input type="text" id="farmName" required>
+
+            <label for="island">Island:</label>
+            <select id="island" required>
+                <option value="North Island">North Island</option>
+                <option value="South Island">South Island</option>
+            </select>
+
+            <label for="visitDate">Visit Date:</label>
+            <input type="text" id="visitDate" value="" readonly>
+
+            <label for="visitType">Visit Type:</label>
+            <input type="text" id="visitType" required>
+
+            <label for="timeStarted">Time Inspection Started:</label>
+            <input type="time" id="timeStarted" required>
+
+            <label for="timeEnded">Time Inspection Ended:</label>
+            <input type="time" id="timeEnded" required>
+
+            <label for="completedBy">Inspection Completed by:</label>
+            <input type="text" id="completedBy" required>
+
+            <label for="callType">Call Type:</label>
+            <input type="text" id="callType" required>
+
+            <h2>HEALTH & SAFETY</h2>
+            <label for="healthRating">Rating:</label>
+            <select id="healthRating">
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+
+            <label for="healthComments">Comments:</label>
+            <textarea id="healthComments" rows="3"></textarea>
+
+            <h2>MILKING PLANT</h2>
+            <label for="milkingRating">Rating:</label>
+            <select id="milkingRating">
+                <option value="OK">OK</option>
+                <option value="Attention Required">Attention Required</option>
+                <option value="NA">NA</option>
+            </select>
+
+            <label for="milkingComments">Comments:</label>
+            <textarea id="milkingComments" rows="3"></textarea>
 
             <h2>Milking Plant and Milk Vat Check</h2>
-            <div class="plant-check">
-                <script>
-                    const plantCheckItems = [
-                        "Pulsator Airline",
-                        "Long Bend Elbows",
-                        "Automatic Cup",
-                        "Remover",
-                        "Diaphragm",
-                        "Receiving Can",
-                        "Sanitary Trap",
-                        "Main Milk Line",
-                        "Milk Line Seals in Good Condition",
-                        "Stainless Droppers",
-                        "Long Milk Rubber",
-                        "Liner",
-                        "Cluster",
-                        "Cluster Seal",
-                        "Cluster Button",
-                        "Non Return Valve at Milk Pump",
-                        "Milk Pump",
-                        "Filter Housing",
-                        "Plate Cooler",
-                        "Interceptor",
-                        "Receiver Airline",
-                        "Flushing Pulsator",
-                        "Air Purge Valve",
-                        "Vacuum Level",
-                        "Main Airline",
-                        "Plant Drainage - Milk Pump",
-                        "Plant Drainage - Filter/s",
-                        "Plant Drainage - Plate Cooler",
-                        "Plant Drainage - Vat Entry",
-                        "Plant Wash Tap",
-                        "Wash Jetters",
-                        "Centre Gland",
-                        "Test Bucket",
-                        "Inlet Valve",
-                        "Non-Return Valve",
-                        "Spray Ball",
-                        "Agitator",
-                        "Silo Door",
-                        "Manhole Seal",
-                        "Vat Outlet",
-                        "Walls in Silo"
-                    ];
-                    plantCheckItems.forEach(item => {
-                        document.write(`
-                            <div class="form-group">
-                                <label>${item}:</label>
-                                <select name="${item.replace(/ /g, "_").toLowerCase()}_rating" required>
-                                    <option value="OK">OK</option>
-                                    <option value="Attention Required">Attention Required</option>
-                                    <option value="N/A">N/A</option>
-                                </select>
-                                <textarea name="${item.replace(/ /g, "_").toLowerCase()}_comments"></textarea>
-                                <input type="file" name="${item.replace(/ /g, "_").toLowerCase()}_photo" accept="image/*">
-                                <div class="photo-preview" id="${item.replace(/ /g, "_").toLowerCase()}_preview"></div>
-                            </div>
-                        `);
-                    });
-                </script>
+            <h3>Health & Safety – General</h3>
+
+            <!-- Repeated checklist items with photo upload -->
+            <div class="checklist-item">
+                <label for="pulsatorAirline">Pulsator Airline</label>
+                <select id="pulsatorAirline">
+                    <option value="OK">OK</option>
+                    <option value="Attention Required">Attention Required</option>
+                    <option value="NA">NA</option>
+                </select>
+                <textarea rows="3" placeholder="Comments"></textarea>
+                <div class="photo-container">
+                    <input type="file" id="pulsatorAirlinePhoto" class="conditional-upload">
+                    <label for="pulsatorAirlinePhoto">Upload Photo (if Attention Required)</label>
+                </div>
             </div>
 
-            <div class="form-actions">
-                <button type="button" id="generate-pdf">Generate PDF</button>
+            <!-- Repeat for each checklist item -->
+            <!-- Example for another item -->
+            <div class="checklist-item">
+                <label for="longBendElbows">Long Bend Elbows</label>
+                <select id="longBendElbows">
+                    <option value="OK">OK</option>
+                    <option value="Attention Required">Attention Required</option>
+                    <option value="NA">NA</option>
+                </select>
+                <textarea rows="3" placeholder="Comments"></textarea>
+                <div class="photo-container">
+                    <input type="file" id="longBendElbowsPhoto" class="conditional-upload">
+                    <label for="longBendElbowsPhoto">Upload Photo (if Attention Required)</label>
+                </div>
             </div>
+
+            <!-- Add remaining checklist items similarly -->
+            <!-- ... -->
+
+            <button type="submit">Submit</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('generate-pdf').addEventListener('click', function() {
-            const { jsPDF } = window.jspdf;
+        // Auto-populate today's date
+        document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
 
-            const doc = new jsPDF();
-            const form = document.getElementById('checklist-form');
-            const formData = new FormData(form);
+        // Show/Hide photo upload based on rating selection
+        const checklistItems = document.querySelectorAll('.checklist-item');
+        checklistItems.forEach(item => {
+            const ratingSelect = item.querySelector('select');
+            const photoInput = item.querySelector('input[type="file"]');
 
-            let pdfContent = '';
-
-            for (const [key, value] of formData.entries()) {
-                pdfContent += `${key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}: ${value}\n`;
-            }
-
-            // Generate PDF
-            doc.text(pdfContent, 10, 10);
-            let y = 30;
-
-            // Loop through all plant check items
-            const plantCheckItems = [
-                "Pulsator Airline",
-                "Long Bend Elbows",
-                "Automatic Cup",
-                "Remover",
-                "Diaphragm",
-                "Receiving Can",
-                "Sanitary Trap",
-                "Main Milk Line",
-                "Milk Line Seals in Good Condition",
-                "Stainless Droppers",
-                "Long Milk Rubber",
-                "Liner",
-                "Cluster",
-                "Cluster Seal",
-                "Cluster Button",
-                "Non Return Valve at Milk Pump",
-                "Milk Pump",
-                "Filter Housing",
-                "Plate Cooler",
-                "Interceptor",
-                "Receiver Airline",
-                "Flushing Pulsator",
-                "Air Purge Valve",
-                "Vacuum Level",
-                "Main Airline",
-                "Plant Drainage - Milk Pump",
-                "Plant Drainage - Filter/s",
-                "Plant Drainage - Plate Cooler",
-                "Plant Drainage - Vat Entry",
-                "Plant Wash Tap",
-                "Wash Jetters",
-                "Centre Gland",
-                "Test Bucket",
-                "Inlet Valve",
-                "Non-Return Valve",
-                "Spray Ball",
-                "Agitator",
-                "Silo Door",
-                "Manhole Seal",
-                "Vat Outlet",
-                "Walls in Silo"
-            ];
-
-            plantCheckItems.forEach(item => {
-                const photoInput = form.querySelector(`input[name="${item.replace(/ /g, "_").toLowerCase()}_photo"]`);
-                
-                // Add rating and comments to PDF
-                const rating = formData.get(`${item.replace(/ /g, "_").toLowerCase()}_rating`);
-                const comments = formData.get(`${item.replace(/ /g, "_").toLowerCase()}_comments`);
-                pdfContent += `${item}: Rating: ${rating}, Comments: ${comments}\n`;
-
-                // Handle photo uploads
-                if (photoInput.files.length > 0) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const imgData = e.target.result;
-                        doc.addImage(imgData, 'JPEG', 10, y, 50, 50);
-                        y += 60; // Adjust Y position for next item
-                        if (y > 280) { // Check for page overflow
-                            doc.addPage(); // Add new page if needed
-                            y = 10; // Reset y position
-                        }
-                    };
-                    reader.readAsDataURL(photoInput.files[0]);
+            ratingSelect.addEventListener('change', () => {
+                if (ratingSelect.value === 'Attention Required') {
+                    photoInput.style.display = 'block';
+                } else {
+                    photoInput.style.display = 'none';
+                    photoInput.value = ''; // Reset file input
                 }
             });
-
-            // Save PDF
-            doc.save('Dairy_Shed_Hygiene_Checklist.pdf');
         });
     </script>
 </body>
