@@ -60,6 +60,7 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY"></script> <!-- Replace YOUR_GOOGLE_API_KEY with your Google Maps API Key -->
 </head>
 <body>
     <div class="container">
@@ -169,7 +170,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.1</div>
+        <div class="version">Version 4.2</div>
     </div>
 
     <script>
@@ -189,6 +190,53 @@
         document.addEventListener("DOMContentLoaded", () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('visit-date').value = today;
+
+            // Get user's location to autofill region and island
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    // Reverse geocode to get the region and island
+                    const geocoder = new google.maps.Geocoder();
+                    const latlng = { lat: lat, lng: lng };
+                    geocoder.geocode({ location: latlng }, (results, status) => {
+                        if (status === "OK" && results[0]) {
+                            const addressComponents = results[0].address_components;
+                            let region = "";
+                            let island = "North Island"; // Default to North Island
+
+                            addressComponents.forEach((component) => {
+                                if (component.types.includes("administrative_area_level_1")) {
+                                    region = component.long_name;
+                                }
+                                if (component.types.includes("country") && component.long_name === "New Zealand") {
+                                    if (["Southland", "Otago", "West Coast", "Canterbury", "Marlborough", "Nelson"].includes(region)) {
+                                        island = "South Island";
+                                    }
+                                }
+                            });
+
+                            // Set the region and island fields
+                            const regionSelect = document.getElementById("region");
+                            for (let i = 0; i < regionSelect.options.length; i++) {
+                                if (regionSelect.options[i].text.toLowerCase() === region.toLowerCase()) {
+                                    regionSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+
+                            const islandSelect = document.getElementById("island");
+                            for (let i = 0; i < islandSelect.options.length; i++) {
+                                if (islandSelect.options[i].text === island) {
+                                    islandSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                });
+            }
 
             const checklistContainer = document.getElementById('checklist-items');
             checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
@@ -300,72 +348,4 @@
                     reader.onload = function (event) {
                         images.push({ image: event.target.result, itemName: itemName });
                     };
-                    reader.readAsDataURL(imageFile);
-                    await new Promise((resolve) => reader.onloadend = resolve);
-                }
-
-                checklistTable.push(row);
-            }
-
-            // Generate checklist items table
-            pdf.autoTable({
-                startY: 300,
-                head: [['Item', 'Status', 'Comments']],
-                body: checklistTable,
-                styles: {
-                    fontSize: 10,
-                    cellPadding: 5,
-                },
-                headStyles: {
-                    fillColor: '#002B5C',
-                    textColor: '#FFFFFF'
-                }
-            });
-
-            // Add temperature data
-            let currentY = pdf.lastAutoTable.finalY + 20;
-
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Temperature Measurements:', 40, currentY);
-            currentY += 20;
-
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Hot Water Temp: ${formData.get('hot-water-temp')}°C`, 40, currentY);
-            currentY += 15;
-            pdf.text(`Time Taken: ${formData.get('hot-water-time')}`, 40, currentY);
-            currentY += 20;
-
-            pdf.text(`Milk Temp: ${formData.get('milk-temp')}°C`, 40, currentY);
-            currentY += 15;
-            pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
-            currentY += 20;
-
-            // Add images below the table with proper alignment
-            if (images.length > 0) {
-                pdf.setFont('helvetica', 'bold');
-                pdf.text('Photos:', 40, currentY);
-                currentY += 20;
-
-                images.forEach((imgDetail, index) => {
-                    pdf.setFont('helvetica', 'normal');
-                    pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
-                    currentY += 10;
-
-                    const pageHeight = pdf.internal.pageSize.height;
-
-                    // Check if adding the image exceeds the page height
-                    if (currentY + 160 > pageHeight) {
-                        pdf.addPage();
-                        currentY = 50; // Reset Y position for new page
-                    }
-
-                    pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
-                    currentY += 160; // Spacing for the next image
-                });
-            }
-
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        }
-    </script>
-</body>
-</html>
+                    reader
