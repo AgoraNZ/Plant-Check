@@ -60,7 +60,6 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=places"></script> <!-- Replace YOUR_GOOGLE_API_KEY with your Google Maps API Key -->
 </head>
 <body>
     <div class="container">
@@ -148,9 +147,29 @@
                 </div>
             </div>
 
+            <!-- Special Checklist Items: Hot Water Temp and Milk Temp -->
+            <div class="section mb-4">
+                <h2>Temperature Measurements</h2>
+                <div class="checklist-item">
+                    <label for="hot-water-temp">Hot Water Temp (°C):</label>
+                    <input type="number" class="form-control" id="hot-water-temp" name="hot-water-temp" step="0.1">
+                    
+                    <label for="hot-water-time">Time Taken:</label>
+                    <input type="time" class="form-control" id="hot-water-time" name="hot-water-time">
+                </div>
+                
+                <div class="checklist-item">
+                    <label for="milk-temp">Milk Temp (°C):</label>
+                    <input type="number" class="form-control" id="milk-temp" name="milk-temp" step="0.1">
+                    
+                    <label for="milk-time">Time Taken:</label>
+                    <input type="time" class="form-control" id="milk-time" name="milk-time">
+                </div>
+            </div>
+
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.9</div>
+        <div class="version">Version 4.0</div>
     </div>
 
     <script>
@@ -220,39 +239,6 @@
                 });
 
                 checklistContainer.appendChild(itemContainer);
-            });
-
-            // Auto-fill customer details based on dairy number
-            document.getElementById('dairy-number').addEventListener('input', function() {
-                const dairyNumber = this.value;
-                if (customerData[dairyNumber]) {
-                    const customer = customerData[dairyNumber];
-                    document.getElementById('dairy-company').value = customer.dairyCompany;
-                    document.getElementById('address').value = customer.address;
-                    document.getElementById('customer-name').value = customer.customerName;
-                    document.getElementById('region').value = customer.region;
-                    document.getElementById('farm-name').value = customer.farmName;
-                    document.getElementById('island').value = customer.island;
-                }
-            });
-
-            // Address autocomplete setup with improved flexibility
-            const addressInput = document.getElementById('address');
-            const autocomplete = new google.maps.places.Autocomplete(addressInput);
-            
-            autocomplete.addListener('place_changed', function () {
-                const place = autocomplete.getPlace();
-                if (!place.formatted_address) {
-                    addressInput.setCustomValidity('Please select an address from the suggestions or enter a valid address.');
-                } else {
-                    addressInput.setCustomValidity('');
-                }
-            });
-
-            google.maps.event.addDomListener(addressInput, 'keydown', function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault(); // Prevents form submission when pressing Enter in the address field
-                }
             });
         });
 
@@ -336,9 +322,25 @@
                 }
             });
 
-            // Add images below the table with proper alignment
+            // Add temperature data
             let currentY = pdf.lastAutoTable.finalY + 20;
 
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Temperature Measurements:', 40, currentY);
+            currentY += 20;
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`Hot Water Temp: ${formData.get('hot-water-temp')}°C`, 40, currentY);
+            currentY += 15;
+            pdf.text(`Time Taken: ${formData.get('hot-water-time')}`, 40, currentY);
+            currentY += 20;
+
+            pdf.text(`Milk Temp: ${formData.get('milk-temp')}°C`, 40, currentY);
+            currentY += 15;
+            pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
+            currentY += 20;
+
+            // Add images below the table with proper alignment
             if (images.length > 0) {
                 pdf.setFont('helvetica', 'bold');
                 pdf.text('Photos:', 40, currentY);
