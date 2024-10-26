@@ -149,7 +149,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.2</div>
+        <div class="version">Version 3.3</div>
     </div>
 
     <script>
@@ -270,38 +270,64 @@
             pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, 310);
 
+            const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
-            let currentY = 330; // Set the initial Y position for the checklist items
 
-            // Iterate over each checklist item and add content to PDF
+            // Iterate over checklist items to populate table and images
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                // Add item name, status, and comments
-                pdf.setFont('helvetica', 'bold');
-                pdf.text(`Item: ${itemName}`, 40, currentY);
-                currentY += 15;
-                pdf.setFont('helvetica', 'normal');
-                pdf.text(`Status: ${status}`, 40, currentY);
-                currentY += 15;
-                pdf.text(`Comments: ${comments}`, 40, currentY);
-                currentY += 20;
+                const row = [itemName, status, comments];
 
-                // Add image if available
+                // Check if there's an image associated with the checklist item
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 120, 120);
-                        currentY += 140; // Adjust the Y position for the next content
+                        row.push({ image: event.target.result, itemName: itemName });
                     };
                     reader.readAsDataURL(imageFile);
                 } else {
-                    currentY += 20; // Space for the next item if no image is available
+                    row.push(null); // No image
                 }
+
+                checklistTable.push(row);
             }
+
+            // Generate table with images
+            pdf.autoTable({
+                startY: 330,
+                head: [['Item', 'Status', 'Comments', 'Photo']],
+                body: checklistTable.map(row => {
+                    const [item, status, comments, photo] = row;
+
+                    return [
+                        item,
+                        status,
+                        comments,
+                        photo ? {
+                            content: photo.image,
+                            width: 40,
+                            height: 40
+                        } : ""
+                    ];
+                }),
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 5,
+                    valign: 'middle',
+                    halign: 'left'
+                },
+                columnStyles: {
+                    3: { halign: 'center', valign: 'middle', minCellHeight: 50 }
+                },
+                headStyles: {
+                    fillColor: '#002B5C',
+                    textColor: '#FFFFFF'
+                }
+            });
 
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
