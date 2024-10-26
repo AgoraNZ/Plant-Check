@@ -59,6 +59,7 @@
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -130,7 +131,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.6</div>
+        <div class="version">Version 2.7</div>
     </div>
 
     <script>
@@ -220,137 +221,4 @@
                 customerName: formData.get('customer-name'),
                 region: formData.get('region'),
                 farmName: formData.get('farm-name'),
-                island: formData.get('island')
-            };
-
-            let pdf = new jsPDF('p', 'pt', 'a4');
-            let y = 40;
-
-            // Add Header
-            pdf.setFontSize(22);
-            pdf.setTextColor('#FF851B');
-            pdf.text('Dairy Shed Hygiene Checklist', 40, y);
-            y += 30;
-            pdf.setLineWidth(1.5);
-            pdf.setDrawColor('#FF851B');
-            pdf.line(40, y, 550, y);
-            y += 30;
-
-            // Farm Details Section
-            pdf.setFontSize(16);
-            pdf.setTextColor('#FF851B');
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Farm Details', 40, y);
-            y += 20;
-
-            pdf.setFontSize(12);
-            pdf.setTextColor('#000000');
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, y);
-            y += 15;
-            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, y);
-            y += 15;
-            pdf.text(`Address: ${formData.get('address')}`, 40, y);
-            y += 15;
-            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, y);
-            y += 15;
-            pdf.text(`Region: ${formData.get('region')}`, 40, y);
-            y += 15;
-            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, y);
-            y += 15;
-            pdf.text(`Island: ${formData.get('island')}`, 40, y);
-            y += 15;
-            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, y);
-            y += 15;
-            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, y);
-            y += 15;
-            pdf.text(`Call Type: ${formData.get('call-type')}`, 40, y);
-            y += 30;
-
-            // Checklist Items Section
-            pdf.setFontSize(16);
-            pdf.setTextColor('#FF851B');
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Checklist Items', 40, y);
-            y += 20;
-            pdf.setLineWidth(1.0);
-            pdf.setDrawColor('#FF851B');
-            pdf.line(40, y, 550, y);
-            y += 20;
-
-            pdf.setFontSize(12);
-            pdf.setTextColor('#000000');
-            const checklistItemsDiv = document.getElementById('checklist-items').children;
-
-            for (let item of checklistItemsDiv) {
-                const itemName = item.querySelector('label').textContent;
-                const status = item.querySelector('select').value;
-                const comments = item.querySelector('input[type="text"]').value;
-
-                // Add icons for status
-                let statusIcon;
-                if (status === 'ok') {
-                    statusIcon = '✔️';
-                } else if (status === 'attention-required') {
-                    statusIcon = '⚠️';
-                } else {
-                    statusIcon = '❌';
-                }
-
-                pdf.setFont('helvetica', 'bold');
-                pdf.text(`${itemName}: ${statusIcon}`, 40, y);
-                y += 15;
-                pdf.setFont('helvetica', 'normal');
-                if (comments) {
-                    pdf.text(`Comments: ${comments}`, 60, y);
-                    y += 15;
-                }
-
-                const imageUpload = item.querySelector('input[type="file"]');
-                if (status === 'attention-required' && imageUpload.files.length > 0) {
-                    await new Promise((resolve) => {
-                        const file = imageUpload.files[0];
-                        const reader = new FileReader();
-                        reader.onload = function (event) {
-                            const img = new Image();
-                            img.src = event.target.result;
-                            img.onload = function () {
-                                pdf.addImage(img, 'JPEG', 40, y, 100, 100);
-                                y += 110;
-                                if (y > 720) {
-                                    pdf.addPage();
-                                    y = 40;
-                                }
-                                resolve();
-                            };
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                } else {
-                    y += 10;
-                }
-
-                if (y > 720) {
-                    pdf.addPage();
-                    y = 40;
-                }
-            }
-
-            // Add Footer
-            y = 760;
-            pdf.setFontSize(10);
-            pdf.setTextColor('#808080');
-            pdf.text('Generated by Dairy Shed Hygiene Checklist System', 40, y);
-            pdf.text('Version 2.6', 500, y);
-
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        }
-    </script>
-</body>
-</html>
+                island:
