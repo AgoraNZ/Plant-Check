@@ -273,7 +273,7 @@
             const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
 
-            let imageYPosition = 320; // Set the initial Y position for images
+            let currentY = 320; // Set the initial Y position for checklist items and images
 
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
@@ -283,32 +283,38 @@
 
                 checklistTable.push([itemName, status, comments]);
 
+                // Add the checklist item to the PDF
+                pdf.autoTable({
+                    startY: currentY,
+                    head: [['Item', 'Status', 'Comments']],
+                    body: [[itemName, status, comments]],
+                    styles: {
+                        halign: 'left',
+                        valign: 'middle',
+                        fontSize: 10,
+                        cellPadding: 5
+                    },
+                    headStyles: {
+                        fillColor: '#002B5C'
+                    },
+                    didDrawPage: function (data) {
+                        currentY = data.cursor.y + 10; // Update currentY after drawing the table
+                    }
+                });
+
+                // If there's an image, add it and adjust the spacing
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pdf.addImage(event.target.result, 'JPEG', 40, imageYPosition, 100, 100);
-                        imageYPosition += 120; // Adjust the Y position for the next image
+                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 100, 100);
+                        currentY += 110; // Adjust the Y position for the next content to leave space for the image
                     };
                     reader.readAsDataURL(imageFile);
+                } else {
+                    currentY += 10; // Adjust spacing between items if there's no image
                 }
             }
 
-            pdf.autoTable({
-                startY: 320,
-                head: [['Item', 'Status', 'Comments']],
-                body: checklistTable,
-                styles: {
-                    halign: 'left',
-                    valign: 'middle',
-                    fontSize: 10,
-                    cellPadding: 5
-                },
-                headStyles: {
-                    fillColor: '#002B5C'
-                }
-            });
-
-            // Ensure all images are loaded before saving the PDF
             setTimeout(() => {
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
             }, 1000);
