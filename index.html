@@ -6,199 +6,165 @@
     <title>Dairy Shed Hygiene Checklist</title>
     <style>
         body {
-            background-color: #001F3F; /* Navy blue background */
-            color: white;
+            background-color: #001F3F;
+            color: #FFFFFF;
             font-family: Arial, sans-serif;
         }
-        h1 {
-            text-align: center;
+        h1, h2 {
+            color: #FF851B;
         }
         label {
             display: block;
-            margin: 10px 0 5px;
-        }
-        input[type="text"], input[type="time"], input[type="date"], select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #FF851B; /* Orange accents */
-            border-radius: 5px;
-            background-color: #001F3F;
-            color: white;
-        }
-        button {
-            background-color: #FF851B; /* Orange accents */
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
             margin-top: 10px;
         }
+        .section {
+            border-bottom: 2px solid #FF851B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        button {
+            background-color: #FF851B;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
         button:hover {
-            background-color: #FF4136; /* Red hover color */
+            background-color: #FF4136;
         }
         .image-upload {
-            display: none; /* Initially hidden */
+            display: none;
         }
     </style>
 </head>
 <body>
     <h1>Dairy Shed Hygiene Checklist</h1>
-    <form id="hygieneForm">
-        <h2>Farm Details</h2>
-        <label>Dairy Company:</label>
-        <input type="text" id="dairyCompany" required>
-        
-        <label>Dairy Number:</label>
-        <input type="text" id="dairyNumber" required>
-        
-        <label>Address:</label>
-        <input type="text" id="address" required>
-        
-        <label>Customer Name:</label>
-        <input type="text" id="customerName" required>
-        
-        <label>Region:</label>
-        <select id="region" required>
-            <option value="">Select Region</option>
-            <!-- Add options for regions -->
-        </select>
-        
-        <label>Farm Name:</label>
-        <input type="text" id="farmName" required>
-        
-        <label>Island:</label>
-        <select id="island" required>
-            <option value="North Island">North Island</option>
-            <option value="South Island">South Island</option>
-        </select>
-        
-        <label>Visit Date:</label>
-        <input type="date" id="visitDate" required>
-        
-        <label>Visit Type:</label>
-        <input type="text" id="visitType" required>
-        
-        <label>Time Inspection Started:</label>
-        <input type="time" id="timeStarted" required>
-        
-        <label>Time Inspection Ended:</label>
-        <input type="time" id="timeEnded" required>
-        
-        <label>Inspection Completed by:</label>
-        <input type="text" id="completedBy" required>
-        
-        <label>Call Type:</label>
-        <input type="text" id="callType" required>
-        
-        <h2>HEALTH & SAFETY</h2>
-        <label>Rating:</label>
-        <select id="healthSafetyRating" class="checklist-rating" required>
-            <option value="OK">OK</option>
-            <option value="Attention Required">Attention Required</option>
-            <option value="NA">NA</option>
-        </select>
-        <label>Comments:</label>
-        <textarea id="healthSafetyComments"></textarea>
-        <input type="file" class="image-upload" accept="image/*">
-        
-        <h2>MILKING PLANT</h2>
-        <label>Rating:</label>
-        <select id="milkingPlantRating" class="checklist-rating" required>
-            <option value="OK">OK</option>
-            <option value="Attention Required">Attention Required</option>
-            <option value="NA">NA</option>
-        </select>
-        <label>Comments:</label>
-        <textarea id="milkingPlantComments"></textarea>
-        <input type="file" class="image-upload" accept="image/*">
-        
-        <h2>Checklist Items</h2>
-        <div id="checklistItems">
-            <div>
-                <h5>Pulsator Airline</h5>
-                <label>Rating:</label>
-                <select class="checklist-rating" required>
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="NA">NA</option>
-                </select>
-                <label>Comments:</label>
-                <textarea class="checklist-comments"></textarea>
-                <input type="file" class="image-upload" accept="image/*">
-            </div>
-            <div>
-                <h5>Long Bend Elbows</h5>
-                <label>Rating:</label>
-                <select class="checklist-rating" required>
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="NA">NA</option>
-                </select>
-                <label>Comments:</label>
-                <textarea class="checklist-comments"></textarea>
-                <input type="file" class="image-upload" accept="image/*">
-            </div>
-            <div>
-                <h5>Automatic Cup / Remover</h5>
-                <label>Rating:</label>
-                <select class="checklist-rating" required>
-                    <option value="OK">OK</option>
-                    <option value="Attention Required">Attention Required</option>
-                    <option value="NA">NA</option>
-                </select>
-                <label>Comments:</label>
-                <textarea class="checklist-comments"></textarea>
-                <input type="file" class="image-upload" accept="image/*">
-            </div>
-            <!-- Repeat the structure for all items in your checklist -->
+    
+    <form id="hygiene-checklist-form">
+        <div class="section">
+            <h2>Farm Details</h2>
+            <label for="dairy-company">Dairy Company:</label>
+            <input type="text" id="dairy-company" name="dairy-company">
+
+            <label for="dairy-number">Dairy Number:</label>
+            <input type="text" id="dairy-number" name="dairy-number">
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address">
+
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" name="customer-name">
+
+            <label for="region">Region:</label>
+            <select id="region" name="region">
+                <option value="northland">Northland</option>
+                <option value="auckland">Auckland</option>
+                <option value="waikato">Waikato</option>
+                <option value="bay-of-plenty">Bay of Plenty</option>
+                <option value="gisborne">Gisborne</option>
+                <option value="hawkes-bay">Hawke's Bay</option>
+                <option value="taranaki">Taranaki</option>
+                <option value="manawatu-wanganui">Manawatu-Wanganui</option>
+                <option value="wellington">Wellington</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="farm-name">Farm Name:</label>
+            <input type="text" id="farm-name" name="farm-name">
+
+            <label for="island">Island:</label>
+            <select id="island" name="island">
+                <option value="north-island">North Island</option>
+                <option value="south-island">South Island</option>
+            </select>
+
+            <label for="visit-date">Visit Date:</label>
+            <input type="date" id="visit-date" name="visit-date">
+
+            <label for="visit-type">Visit Type:</label>
+            <input type="text" id="visit-type" name="visit-type">
+
+            <label for="inspection-start-time">Inspection Start Time:</label>
+            <input type="time" id="inspection-start-time" name="inspection-start-time">
+
+            <label for="inspection-end-time">Inspection End Time:</label>
+            <input type="time" id="inspection-end-time" name="inspection-end-time">
+
+            <label for="inspection-completed-by">Inspection Completed By:</label>
+            <input type="text" id="inspection-completed-by" name="inspection-completed-by">
+
+            <label for="call-type">Call Type:</label>
+            <input type="text" id="call-type" name="call-type">
         </div>
 
-        <button type="button" id="generatePDF">Generate PDF</button>
+        <div class="section">
+            <h2>Checklist Items</h2>
+            <div id="checklist-items">
+                <!-- Checklist items will be dynamically added here -->
+            </div>
+        </div>
+
+        <button type="button" onclick="generatePDF()">Generate PDF</button>
     </form>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        // Auto-populate today's date
-        document.getElementById('visitDate').valueAsDate = new Date();
+        const checklistItems = [
+            "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
+            "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
+            "Liner", "Cluster", "Cluster Seal", "Cluster Button", "Non Return Valve at Milk Pump", "Milk Pump",
+            "Filter Housing", "Plate Cooler", "Interceptor", "Receiver Airline", "Flushing Pulsator", "Air Purge Valve",
+            "Vacuum Level", "Main Airline", "Plant Drainage - Milk Pump", "Plant Drainage - Filter/s", "Plant Drainage - Plate Cooler",
+            "Plant Drainage - Vat Entry", "Plant Wash Tap", "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
+            "Non-Return Valve", "Spray Ball", "Agitator", "Silo Door", "Manhole Seal", "Vat Outlet", "Walls in Silo"
+        ];
 
-        // Show/hide image upload based on rating
-        document.querySelectorAll('.checklist-rating').forEach(select => {
-            select.addEventListener('change', function () {
-                const imageUpload = this.parentElement.querySelector('.image-upload');
-                if (this.value === "Attention Required") {
-                    imageUpload.style.display = 'block';
-                } else {
-                    imageUpload.style.display = 'none';
-                }
+        window.onload = () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('visit-date').value = today;
+
+            const checklistContainer = document.getElementById('checklist-items');
+            checklistItems.forEach(item => {
+                const itemContainer = document.createElement('div');
+                itemContainer.classList.add('checklist-item');
+
+                const label = document.createElement('label');
+                label.textContent = item;
+                itemContainer.appendChild(label);
+
+                const statusSelect = document.createElement('select');
+                statusSelect.innerHTML = `
+                    <option value="ok">OK</option>
+                    <option value="attention-required">Attention Required</option>
+                    <option value="na">N/A</option>
+                `;
+                itemContainer.appendChild(statusSelect);
+
+                const commentsInput = document.createElement('input');
+                commentsInput.type = 'text';
+                commentsInput.placeholder = 'Comments';
+                itemContainer.appendChild(commentsInput);
+
+                const imageUpload = document.createElement('input');
+                imageUpload.type = 'file';
+                imageUpload.classList.add('image-upload');
+                itemContainer.appendChild(imageUpload);
+
+                statusSelect.addEventListener('change', () => {
+                    if (statusSelect.value === 'attention-required') {
+                        imageUpload.style.display = 'block';
+                    } else {
+                        imageUpload.style.display = 'none';
+                    }
+                });
+
+                checklistContainer.appendChild(itemContainer);
             });
-        });
+        };
 
-        // Generate PDF
-        document.getElementById('generatePDF').addEventListener('click', async function () {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Adding form data to PDF
-            doc.text("Dairy Shed Hygiene Checklist", 20, 10);
-            doc.text("Farm Details", 20, 20);
-            doc.text(`Dairy Company: ${document.getElementById('dairyCompany').value}`, 20, 30);
-            doc.text(`Dairy Number: ${document.getElementById('dairyNumber').value}`, 20, 40);
-            doc.text(`Address: ${document.getElementById('address').value}`, 20, 50);
-            doc.text(`Customer Name: ${document.getElementById('customerName').value}`, 20, 60);
-            doc.text(`Region: ${document.getElementById('region').value}`, 20, 70);
-            doc.text(`Farm Name: ${document.getElementById('farmName').value}`, 20, 80);
-            doc.text(`Island: ${document.getElementById('island').value}`, 20, 90);
-            doc.text(`Visit Date: ${document.getElementById('visitDate').value}`, 20, 100);
-            doc.text(`Visit Type: ${document.getElementById('visitType').value}`, 20, 110);
-            doc.text(`Time Inspection Started: ${document.getElementById('timeStarted').value}`, 20, 120);
-            doc.text(`Time Inspection Ended: ${document.getElementById('timeEnded').value}`, 20, 130);
-            doc.text(`Inspection Completed by: ${document.getElementById('completedBy').value}`, 20, 140);
-            doc.text(`Call Type: ${document.getElementById('callType').value}`, 20, 150);
-            
-            doc.text("HEALTH & SAFETY", 20, 160);
-            doc.text(`Rating: ${document.getElementById('healthSafetyRating').value}`, 20, 170);
-            doc.text(`Comments: ${document.getElementById('healthSafetyComments').value}`, 20, 180);
-            
-            doc.text("MILKING PLANT", 20, 190);
-            doc.text(`Rating: ${document.getElement
+        function generatePDF() {
+            // Placeholder for PDF generation logic
+            alert('PDF generation will include all form data.');
+        }
+    </script>
+</body>
+</html>
