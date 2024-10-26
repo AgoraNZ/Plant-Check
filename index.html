@@ -46,7 +46,7 @@
             background-color: #FF4136;
         }
         .checklist-item {
-            margin-bottom: 30px; /* Adjusted for better alignment */
+            margin-bottom: 30px;
         }
         .form-control, .form-select {
             margin-top: 5px;
@@ -149,7 +149,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.1</div>
+        <div class="version">Version 3.2</div>
     </div>
 
     <script>
@@ -270,57 +270,38 @@
             pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, 310);
 
-            const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
+            let currentY = 330; // Set the initial Y position for the checklist items
 
-            let imageDetails = []; // Array to store image details
-
+            // Iterate over each checklist item and add content to PDF
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                checklistTable.push([itemName, status, comments]);
+                // Add item name, status, and comments
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`Item: ${itemName}`, 40, currentY);
+                currentY += 15;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Status: ${status}`, 40, currentY);
+                currentY += 15;
+                pdf.text(`Comments: ${comments}`, 40, currentY);
+                currentY += 20;
 
+                // Add image if available
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        imageDetails.push({ data: event.target.result, itemName: itemName });
+                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 120, 120);
+                        currentY += 140; // Adjust the Y position for the next content
                     };
                     reader.readAsDataURL(imageFile);
+                } else {
+                    currentY += 20; // Space for the next item if no image is available
                 }
             }
-
-            pdf.autoTable({
-                startY: 320,
-                head: [['Item', 'Status', 'Comments']],
-                body: checklistTable,
-                styles: {
-                    halign: 'left',
-                    valign: 'middle',
-                    fontSize: 10,
-                    cellPadding: 5
-                },
-                headStyles: {
-                    fillColor: '#002B5C'
-                },
-                rowPageBreak: 'avoid' // Ensure rows with images don't break across pages
-            });
-
-            // Add images after the table, organized by their checklist item
-            let currentY = pdf.lastAutoTable.finalY + 20;
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Attached Photos:', 40, currentY);
-            currentY += 20;
-
-            imageDetails.forEach((imgDetail) => {
-                pdf.setFont('helvetica', 'normal');
-                pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
-                currentY += 10;
-                pdf.addImage(imgDetail.data, 'JPEG', 40, currentY, 100, 100);
-                currentY += 120;
-            });
 
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
