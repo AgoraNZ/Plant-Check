@@ -169,7 +169,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.0</div>
+        <div class="version">Version 4.1</div>
     </div>
 
     <script>
@@ -346,13 +346,22 @@
                 pdf.text('Photos:', 40, currentY);
                 currentY += 20;
 
-                for (let imgDetail of images) {
+                images.forEach((imgDetail, index) => {
                     pdf.setFont('helvetica', 'normal');
                     pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
                     currentY += 10;
+
+                    const pageHeight = pdf.internal.pageSize.height;
+
+                    // Check if adding the image exceeds the page height
+                    if (currentY + 160 > pageHeight) {
+                        pdf.addPage();
+                        currentY = 50; // Reset Y position for new page
+                    }
+
                     pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
                     currentY += 160; // Spacing for the next image
-                }
+                });
             }
 
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
