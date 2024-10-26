@@ -46,7 +46,7 @@
             background-color: #FF4136;
         }
         .checklist-item {
-            margin-bottom: 30px; /* Increased spacing for better alignment */
+            margin-bottom: 50px; /* Increased spacing for better alignment */
         }
         .form-control, .form-select {
             margin-top: 5px;
@@ -149,7 +149,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.9</div>
+        <div class="version">Version 3.0</div>
     </div>
 
     <script>
@@ -286,8 +286,8 @@
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pdf.addImage(event.target.result, 'JPEG', 40, imageYPosition, 100, 100);
-                        imageYPosition += 120; // Adjust the Y position for the next image
+                        pdf.addImage(event.target.result, 'JPEG', 40, imageYPosition, 150, 150); // Increased image size for better clarity
+                        imageYPosition += 160; // Adjust the Y position for the next image
                     };
                     reader.readAsDataURL(imageFile);
                 }
@@ -305,13 +305,14 @@
                 },
                 headStyles: {
                     fillColor: '#002B5C'
-                }
+                },
+                rowPageBreak: 'avoid' // Ensure rows with images don't break across pages
             });
 
             // Ensure all images are loaded before saving the PDF
             setTimeout(() => {
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-            }, 1000);
+            }, 1500);
         }
     </script>
 </body>
