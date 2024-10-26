@@ -9,9 +9,23 @@
             background-color: #001F3F;
             color: #FFFFFF;
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #002B5C;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
         }
         h1, h2 {
             color: #FF851B;
+            text-align: center;
         }
         label {
             display: block;
@@ -28,6 +42,8 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
+            display: block;
+            margin: 20px auto;
         }
         button:hover {
             background-color: #FF4136;
@@ -35,77 +51,82 @@
         .image-upload {
             display: none;
         }
+        .checklist-item {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-    <h1>Dairy Shed Hygiene Checklist</h1>
-    
-    <form id="hygiene-checklist-form">
-        <div class="section">
-            <h2>Farm Details</h2>
-            <label for="dairy-company">Dairy Company:</label>
-            <input type="text" id="dairy-company" name="dairy-company">
+    <div class="container">
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        
+        <form id="hygiene-checklist-form">
+            <div class="section">
+                <h2>Farm Details</h2>
+                <label for="dairy-company">Dairy Company:</label>
+                <input type="text" id="dairy-company" name="dairy-company">
 
-            <label for="dairy-number">Dairy Number:</label>
-            <input type="text" id="dairy-number" name="dairy-number">
+                <label for="dairy-number">Dairy Number:</label>
+                <input type="text" id="dairy-number" name="dairy-number">
 
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
 
-            <label for="customer-name">Customer Name:</label>
-            <input type="text" id="customer-name" name="customer-name">
+                <label for="customer-name">Customer Name:</label>
+                <input type="text" id="customer-name" name="customer-name">
 
-            <label for="region">Region:</label>
-            <select id="region" name="region">
-                <option value="northland">Northland</option>
-                <option value="auckland">Auckland</option>
-                <option value="waikato">Waikato</option>
-                <option value="bay-of-plenty">Bay of Plenty</option>
-                <option value="gisborne">Gisborne</option>
-                <option value="hawkes-bay">Hawke's Bay</option>
-                <option value="taranaki">Taranaki</option>
-                <option value="manawatu-wanganui">Manawatu-Wanganui</option>
-                <option value="wellington">Wellington</option>
-                <option value="other">Other</option>
-            </select>
+                <label for="region">Region:</label>
+                <select id="region" name="region">
+                    <option value="northland">Northland</option>
+                    <option value="auckland">Auckland</option>
+                    <option value="waikato">Waikato</option>
+                    <option value="bay-of-plenty">Bay of Plenty</option>
+                    <option value="gisborne">Gisborne</option>
+                    <option value="hawkes-bay">Hawke's Bay</option>
+                    <option value="taranaki">Taranaki</option>
+                    <option value="manawatu-wanganui">Manawatu-Wanganui</option>
+                    <option value="wellington">Wellington</option>
+                    <option value="other">Other</option>
+                </select>
 
-            <label for="farm-name">Farm Name:</label>
-            <input type="text" id="farm-name" name="farm-name">
+                <label for="farm-name">Farm Name:</label>
+                <input type="text" id="farm-name" name="farm-name">
 
-            <label for="island">Island:</label>
-            <select id="island" name="island">
-                <option value="north-island">North Island</option>
-                <option value="south-island">South Island</option>
-            </select>
+                <label for="island">Island:</label>
+                <select id="island" name="island">
+                    <option value="north-island">North Island</option>
+                    <option value="south-island">South Island</option>
+                </select>
 
-            <label for="visit-date">Visit Date:</label>
-            <input type="date" id="visit-date" name="visit-date">
+                <label for="visit-date">Visit Date:</label>
+                <input type="date" id="visit-date" name="visit-date">
 
-            <label for="visit-type">Visit Type:</label>
-            <input type="text" id="visit-type" name="visit-type">
+                <label for="visit-type">Visit Type:</label>
+                <input type="text" id="visit-type" name="visit-type">
 
-            <label for="inspection-start-time">Inspection Start Time:</label>
-            <input type="time" id="inspection-start-time" name="inspection-start-time">
+                <label for="inspection-start-time">Inspection Start Time:</label>
+                <input type="time" id="inspection-start-time" name="inspection-start-time">
 
-            <label for="inspection-end-time">Inspection End Time:</label>
-            <input type="time" id="inspection-end-time" name="inspection-end-time">
+                <label for="inspection-end-time">Inspection End Time:</label>
+                <input type="time" id="inspection-end-time" name="inspection-end-time">
 
-            <label for="inspection-completed-by">Inspection Completed By:</label>
-            <input type="text" id="inspection-completed-by" name="inspection-completed-by">
+                <label for="inspection-completed-by">Inspection Completed By:</label>
+                <input type="text" id="inspection-completed-by" name="inspection-completed-by">
 
-            <label for="call-type">Call Type:</label>
-            <input type="text" id="call-type" name="call-type">
-        </div>
-
-        <div class="section">
-            <h2>Checklist Items</h2>
-            <div id="checklist-items">
-                <!-- Checklist items will be dynamically added here -->
+                <label for="call-type">Call Type:</label>
+                <input type="text" id="call-type" name="call-type">
             </div>
-        </div>
 
-        <button type="button" onclick="generatePDF()">Generate PDF</button>
-    </form>
+            <div class="section">
+                <h2>Checklist Items</h2>
+                <div id="checklist-items">
+                    <!-- Checklist items will be dynamically added here -->
+                </div>
+            </div>
+
+            <button type="button" onclick="generatePDF()">Generate PDF</button>
+        </form>
+    </div>
 
     <script>
         const checklistItems = [
@@ -162,8 +183,62 @@
         };
 
         function generatePDF() {
+            const form = document.getElementById('hygiene-checklist-form');
+            let formData = new FormData(form);
+            let pdfContent = "Dairy Shed Hygiene Checklist\n\n";
+
+            pdfContent += "Farm Details:\n";
+            pdfContent += `Dairy Company: ${formData.get('dairy-company')}\n`;
+            pdfContent += `Dairy Number: ${formData.get('dairy-number')}\n`;
+            pdfContent += `Address: ${formData.get('address')}\n`;
+            pdfContent += `Customer Name: ${formData.get('customer-name')}\n`;
+            pdfContent += `Region: ${formData.get('region')}\n`;
+            pdfContent += `Farm Name: ${formData.get('farm-name')}\n`;
+            pdfContent += `Island: ${formData.get('island')}\n`;
+            pdfContent += `Visit Date: ${formData.get('visit-date')}\n`;
+            pdfContent += `Visit Type: ${formData.get('visit-type')}\n`;
+            pdfContent += `Inspection Start Time: ${formData.get('inspection-start-time')}\n`;
+            pdfContent += `Inspection End Time: ${formData.get('inspection-end-time')}\n`;
+            pdfContent += `Inspection Completed By: ${formData.get('inspection-completed-by')}\n`;
+            pdfContent += `Call Type: ${formData.get('call-type')}\n\n`;
+
+            pdfContent += "Checklist Items:\n";
+            const checklistItemsDiv = document.getElementById('checklist-items').children;
+            let allOk = true;
+            for (let item of checklistItemsDiv) {
+                const itemName = item.querySelector('label').textContent;
+                const status = item.querySelector('select').value;
+                const comments = item.querySelector('input[type="text"]').value;
+                pdfContent += `${itemName}: ${status}\n`;
+                if (comments) {
+                    pdfContent += `Comments: ${comments}\n`;
+                }
+                if (status === 'attention-required') {
+                    allOk = false;
+                }
+                pdfContent += "\n";
+            }
+
+            if (allOk) {
+                pdfContent += `Shed Inspection completed on ${formData.get('visit-date')} with no issues found.\n`;
+            } else {
+                pdfContent += "Summary of Issues:\n";
+                for (let item of checklistItemsDiv) {
+                    const itemName = item.querySelector('label').textContent;
+                    const status = item.querySelector('select').value;
+                    if (status === 'attention-required') {
+                        const comments = item.querySelector('input[type="text"]').value;
+                        pdfContent += `${itemName}: Attention Required\n`;
+                        if (comments) {
+                            pdfContent += `Comments: ${comments}\n`;
+                        }
+                        pdfContent += "\n";
+                    }
+                }
+            }
+
             // Placeholder for PDF generation logic
-            alert('PDF generation will include all form data.');
+            alert(pdfContent);
         }
     </script>
 </body>
