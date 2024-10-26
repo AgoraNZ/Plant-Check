@@ -270,33 +270,46 @@
             pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, 310);
 
-            const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
+
+            let yPosition = 330;
 
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
+                const imageUpload = item.querySelector('input[type="file"]');
 
-                checklistTable.push([itemName, status, comments]);
+                pdf.text(`Item: ${itemName}`, 40, yPosition);
+                pdf.text(`Status: ${status}`, 200, yPosition);
+                pdf.text(`Comments: ${comments}`, 360, yPosition);
+                yPosition += 20;
+
+                // Check if there's an image to add
+                if (status === 'attention-required' && imageUpload.files.length > 0) {
+                    const file = imageUpload.files[0];
+                    const reader = new FileReader();
+                    await new Promise((resolve) => {
+                        reader.onload = function (event) {
+                            const img = new Image();
+                            img.src = event.target.result;
+                            img.onload = function () {
+                                pdf.addImage(img, 'JPEG', 40, yPosition, 100, 100);
+                                yPosition += 120;
+                                if (yPosition > 700) {
+                                    pdf.addPage();
+                                    yPosition = 40;
+                                }
+                                resolve();
+                            };
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
             }
 
-            pdf.autoTable({
-                startY: 320,
-                head: [['Item', 'Status', 'Comments']],
-                body: checklistTable,
-                styles: {
-                    halign: 'left',
-                    valign: 'middle',
-                    fontSize: 10,
-                    cellPadding: 5
-                },
-                headStyles: {
-    fillColor: '#002B5C'
-}
-            });
-
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+        }
         }
     </script>
 </body>
