@@ -69,16 +69,16 @@
             <div class="section mb-4">
                 <h2>Farm Details</h2>
                 <label for="dairy-company">Dairy Company:</label>
-<select id="dairy-company" name="dairy-company" class="form-select">
-    <option value="fonterra">Fonterra</option>
-    <option value="dairy-goat-coop">Dairy Goat Co-op</option>
-    <option value="green-valley">Green Valley Dairies</option>
-    <option value="maui-milk">Maui Milk</option>
-    <option value="oceania">Oceania</option>
-    <option value="ofi">OFI</option>
-    <option value="synlait">Synlait Milk LTD</option>
-    <option value="tatua">Tatua</option>
-</select>
+                <select id="dairy-company" name="dairy-company" class="form-select">
+                    <option value="fonterra">Fonterra</option>
+                    <option value="dairy-goat-coop">Dairy Goat Co-op</option>
+                    <option value="green-valley">Green Valley Dairies</option>
+                    <option value="maui-milk">Maui Milk</option>
+                    <option value="oceania">Oceania</option>
+                    <option value="ofi">OFI</option>
+                    <option value="synlait">Synlait Milk LTD</option>
+                    <option value="tatua">Tatua</option>
+                </select>
 
                 <label for="dairy-number">Dairy Number:</label>
                 <input type="text" class="form-control" id="dairy-number" name="dairy-number">
@@ -90,23 +90,23 @@
                 <input type="text" class="form-control" id="customer-name" name="customer-name">
 
                 <label for="region">Region:</label>
-<select id="region" name="region" class="form-select">
-    <option value="northland">Northland</option>
-    <option value="auckland">Auckland</option>
-    <option value="waikato">Waikato</option>
-    <option value="bay-of-plenty">Bay of Plenty</option>
-    <option value="gisborne">Gisborne</option>
-    <option value="hawkes-bay">Hawke's Bay</option>
-    <option value="taranaki">Taranaki</option>
-    <option value="manawatu-wanganui">Manawatu-Wanganui</option>
-    <option value="wellington">Wellington</option>
-    <option value="nelson">Nelson</option>
-    <option value="marlborough">Marlborough</option>
-    <option value="west-coast">West Coast</option>
-    <option value="canterbury">Canterbury</option>
-    <option value="otago">Otago</option>
-    <option value="southland">Southland</option>
-</select>
+                <select id="region" name="region" class="form-select">
+                    <option value="northland">Northland</option>
+                    <option value="auckland">Auckland</option>
+                    <option value="waikato">Waikato</option>
+                    <option value="bay-of-plenty">Bay of Plenty</option>
+                    <option value="gisborne">Gisborne</option>
+                    <option value="hawkes-bay">Hawke's Bay</option>
+                    <option value="taranaki">Taranaki</option>
+                    <option value="manawatu-wanganui">Manawatu-Wanganui</option>
+                    <option value="wellington">Wellington</option>
+                    <option value="nelson">Nelson</option>
+                    <option value="marlborough">Marlborough</option>
+                    <option value="west-coast">West Coast</option>
+                    <option value="canterbury">Canterbury</option>
+                    <option value="otago">Otago</option>
+                    <option value="southland">Southland</option>
+                </select>
 
                 <label for="farm-name">Farm Name:</label>
                 <input type="text" class="form-control" id="farm-name" name="farm-name">
@@ -121,7 +121,7 @@
                 <input type="date" class="form-control" id="visit-date" name="visit-date">
 
                 <label for="visit-type">Visit Type:</label>
-<input type="text" class="form-control" id="visit-type" name="visit-type" value="Milking Plant & Milk Vat Check" readonly>
+                <input type="text" class="form-control" id="visit-type" name="visit-type" value="Milking Plant & Milk Vat Check" readonly>
 
                 <label for="inspection-start-time">Inspection Start Time:</label>
                 <input type="time" class="form-control" id="inspection-start-time" name="inspection-start-time">
@@ -133,11 +133,11 @@
                 <input type="text" class="form-control" id="inspection-completed-by" name="inspection-completed-by">
 
                 <label for="call-type">Call Type:</label>
-<select id="call-type" name="call-type" class="form-select">
-    <option value="alert">Alert</option>
-    <option value="grade-call">Grade Call</option>
-    <option value="regular-scheduled-visit" selected>Regular Scheduled Visit</option>
-</select>
+                <select id="call-type" name="call-type" class="form-select">
+                    <option value="alert">Alert</option>
+                    <option value="grade-call">Grade Call</option>
+                    <option value="regular-scheduled-visit" selected>Regular Scheduled Visit</option>
+                </select>
             </div>
 
             <div class="section mb-4">
@@ -273,12 +273,24 @@
             const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
 
+            let imageYPosition = 320; // Set the initial Y position for images
+
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
+                const imageFile = item.querySelector('input[type="file"]').files[0];
 
                 checklistTable.push([itemName, status, comments]);
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        pdf.addImage(event.target.result, 'JPEG', 40, imageYPosition, 100, 100);
+                        imageYPosition += 120; // Adjust the Y position for the next image
+                    };
+                    reader.readAsDataURL(imageFile);
+                }
             }
 
             pdf.autoTable({
@@ -292,11 +304,14 @@
                     cellPadding: 5
                 },
                 headStyles: {
-    fillColor: '#002B5C'
-}
+                    fillColor: '#002B5C'
+                }
             });
 
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            // Ensure all images are loaded before saving the PDF
+            setTimeout(() => {
+                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            }, 1000);
         }
     </script>
 </body>
