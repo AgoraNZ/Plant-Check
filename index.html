@@ -130,7 +130,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.3</div>
+        <div class="version">Version 2.4</div>
     </div>
 
     <script>
@@ -152,6 +152,7 @@
             document.getElementById('visit-date').value = today;
 
             const checklistContainer = document.getElementById('checklist-items');
+            checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
@@ -206,3 +207,7 @@
                 }
             });
         });
+
+    </script>
+</body>
+</html>
