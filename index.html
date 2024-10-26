@@ -150,7 +150,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.8</div>
+        <div class="version">Version 3.9</div>
     </div>
 
     <script>
@@ -236,18 +236,16 @@
                 }
             });
 
-            // Address autocomplete setup with less restriction
+            // Address autocomplete setup with improved flexibility
             const addressInput = document.getElementById('address');
-            const autocomplete = new google.maps.places.Autocomplete(addressInput, {
-                types: ['geocode'],
-                fields: ['formatted_address']
-            });
-
-            addressInput.addEventListener('input', function () {
-                if (addressInput.value.length > 0) {
-                    addressInput.setCustomValidity('');
+            const autocomplete = new google.maps.places.Autocomplete(addressInput);
+            
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place.formatted_address) {
+                    addressInput.setCustomValidity('Please select an address from the suggestions or enter a valid address.');
                 } else {
-                    addressInput.setCustomValidity('Please enter a valid address.');
+                    addressInput.setCustomValidity('');
                 }
             });
 
