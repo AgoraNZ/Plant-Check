@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #FF851B;
+            background-color: #002B5C;
             color: #FFFFFF;
             font-family: Arial, sans-serif;
             min-height: 100vh;
@@ -26,14 +26,14 @@
             width: 100%;
         }
         h1, h2 {
-            color: #001F3F;
+            color: #FF851B;
             text-align: center;
         }
         label {
             margin-top: 10px;
         }
         button {
-            background-color: #001F3F;
+            background-color: #FF851B;
             color: #FFFFFF;
             border: none;
             padding: 10px 20px;
@@ -68,9 +68,7 @@
         <form id="hygiene-checklist-form">
             <div class="section mb-4">
                 <h2>Farm Details</h2>
-                <label for="dairy-number">Dairy Number:</label>
-<input type="text" class="form-control" id="dairy-number" name="dairy-number">
-<label for="dairy-company">Dairy Company:</label>
+                <label for="dairy-company">Dairy Company:</label>
 <select id="dairy-company" name="dairy-company" class="form-select">
     <option value="fonterra">Fonterra</option>
     <option value="dairy-goat-coop">Dairy Goat Co-op</option>
@@ -246,7 +244,7 @@
 
             let pdf = new jsPDF('p', 'pt', 'a4');
             pdf.setFontSize(22);
-            pdf.setTextColor('#001F3F');
+            pdf.setTextColor('#002B5C');
             pdf.text('Dairy Shed Hygiene Checklist', 40, 50);
 
             pdf.setFontSize(12);
@@ -294,7 +292,7 @@
                     cellPadding: 5
                 },
                 headStyles: {
-    fillColor: '#001F3F'
+    fillColor: '#002B5C'
 }
             });
 
