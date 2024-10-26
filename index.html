@@ -150,7 +150,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.6</div>
+        <div class="version">Version 3.7</div>
     </div>
 
     <script>
@@ -187,6 +187,7 @@
                     <option value="ok">OK</option>
                     <option value="attention-required">Attention Required</option>
                     <option value="na">N/A</option>
+                    <option value="not-checked">Not Checked</option>
                 `;
                 itemContainer.appendChild(statusSelect);
 
@@ -207,6 +208,14 @@
                         imageUpload.style.display = 'block';
                     } else {
                         imageUpload.style.display = 'none';
+                    }
+
+                    if (statusSelect.value === 'not-checked') {
+                        commentsInput.value = "Milk in Vat";
+                    } else {
+                        if (commentsInput.value === "Milk in Vat") {
+                            commentsInput.value = ""; // Clear the field if it was auto-filled by 'Not Checked'
+                        }
                     }
                 });
 
@@ -230,6 +239,11 @@
             // Address autocomplete setup
             const addressInput = document.getElementById('address');
             const autocomplete = new google.maps.places.Autocomplete(addressInput);
+            google.maps.event.addDomListener(addressInput, 'keydown', function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevents the form from submitting when pressing Enter in the address field
+                }
+            });
         });
 
         async function generatePDF() {
