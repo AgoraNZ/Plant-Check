@@ -130,7 +130,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.2</div>
+        <div class="version">Version 2.3</div>
     </div>
 
     <script>
@@ -148,12 +148,10 @@
         let customerData = {}; // To store customer details for auto-population
 
         document.addEventListener("DOMContentLoaded", () => {
-            console.log("Document loaded");
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('visit-date').value = today;
 
             const checklistContainer = document.getElementById('checklist-items');
-            console.log("Adding checklist items");
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
@@ -208,122 +206,3 @@
                 }
             });
         });
-
-        async function generatePDF() {
-            const form = document.getElementById('hygiene-checklist-form');
-            let formData = new FormData(form);
-            const dairyNumber = formData.get('dairy-number');
-
-            // Save customer data for future auto-population
-            customerData[dairyNumber] = {
-                dairyCompany: formData.get('dairy-company'),
-                address: formData.get('address'),
-                customerName: formData.get('customer-name'),
-                region: formData.get('region'),
-                farmName: formData.get('farm-name'),
-                island: formData.get('island')
-            };
-
-            let pdf = new jsPDF('p', 'pt', 'a4');
-            let y = 20;
-
-            pdf.setFontSize(18);
-            pdf.setTextColor('#FF851B');
-            pdf.text('Dairy Shed Hygiene Checklist', 40, y);
-            y += 30;
-
-            pdf.setFontSize(12);
-            pdf.setTextColor('#000000');
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Farm Details', 40, y);
-            y += 20;
-
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, y);
-            y += 15;
-            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, y);
-            y += 15;
-            pdf.text(`Address: ${formData.get('address')}`, 40, y);
-            y += 15;
-            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, y);
-            y += 15;
-            pdf.text(`Region: ${formData.get('region')}`, 40, y);
-            y += 15;
-            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, y);
-            y += 15;
-            pdf.text(`Island: ${formData.get('island')}`, 40, y);
-            y += 15;
-            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, y);
-            y += 15;
-            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, y);
-            y += 15;
-            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, y);
-            y += 15;
-            pdf.text(`Call Type: ${formData.get('call-type')}`, 40, y);
-            y += 30;
-
-            pdf.setFontSize(16);
-            pdf.setTextColor('#FF851B');
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Checklist Items:', 40, y);
-            y += 20;
-
-            pdf.setFontSize(12);
-            pdf.setTextColor('#000000');
-            const checklistItemsDiv = document.getElementById('checklist-items').children;
-
-            for (let item of checklistItemsDiv) {
-                const itemName = item.querySelector('label').textContent;
-                const status = item.querySelector('select').value;
-                const comments = item.querySelector('input[type="text"]').value;
-
-                pdf.setFont('helvetica', 'bold');
-                pdf.text(`${itemName}:`, 40, y);
-                y += 15;
-                pdf.setFont('helvetica', 'normal');
-                pdf.text(`Status: ${status}`, 60, y);
-                y += 15;
-                if (comments) {
-                    pdf.text(`Comments: ${comments}`, 60, y);
-                    y += 15;
-                }
-
-                const imageUpload = item.querySelector('input[type="file"]');
-                if (status === 'attention-required' && imageUpload.files.length > 0) {
-                    await new Promise((resolve) => {
-                        const file = imageUpload.files[0];
-                        const reader = new FileReader();
-                        reader.onload = function (event) {
-                            const img = new Image();
-                            img.src = event.target.result;
-                            img.onload = function () {
-                                pdf.addImage(img, 'JPEG', 40, y, 100, 100);
-                                y += 110;
-                                if (y > 720) {
-                                    pdf.addPage();
-                                    y = 20;
-                                }
-                                resolve();
-                            };
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                } else {
-                    y += 10;
-                }
-
-                if (y > 720) {
-                    pdf.addPage();
-                    y = 20;
-                }
-            }
-
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        }
-    </script>
-</body>
-</html>
