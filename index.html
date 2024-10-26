@@ -60,7 +60,6 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY"></script> <!-- Replace YOUR_GOOGLE_API_KEY with your Google Maps API Key -->
 </head>
 <body>
     <div class="container">
@@ -143,33 +142,9 @@
 
             <div class="section mb-4">
                 <h2>Checklist Items</h2>
-                <!-- Statically Define Checklist Items -->
-                <div class="checklist-item">
-                    <label>Pulsator Airline</label>
-                    <select class="form-select" name="status-pulsator-airline">
-                        <option value="ok">OK</option>
-                        <option value="attention-required">Attention Required</option>
-                        <option value="na">N/A</option>
-                        <option value="not-checked">Not Checked</option>
-                    </select>
-                    <input type="text" class="form-control" name="comments-pulsator-airline" placeholder="Comments">
-                    <input type="file" class="form-control image-upload" name="image-pulsator-airline">
+                <div id="checklist-items">
+                    <!-- Checklist items will be dynamically added here -->
                 </div>
-
-                <!-- Repeat similar checklist items for other components -->
-                <div class="checklist-item">
-                    <label>Long Bend Elbows</label>
-                    <select class="form-select" name="status-long-bend-elbows">
-                        <option value="ok">OK</option>
-                        <option value="attention-required">Attention Required</option>
-                        <option value="na">N/A</option>
-                        <option value="not-checked">Not Checked</option>
-                    </select>
-                    <input type="text" class="form-control" name="comments-long-bend-elbows" placeholder="Comments">
-                    <input type="file" class="form-control image-upload" name="image-long-bend-elbows">
-                </div>
-
-                <!-- Continue for all checklist items -->
             </div>
 
             <!-- Special Checklist Items: Hot Water Temp and Milk Temp -->
@@ -194,15 +169,93 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.4</div>
+        <div class="version">Version 4.1</div>
     </div>
 
     <script>
         const { jsPDF } = window.jspdf;
+        const checklistItems = [
+            "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
+            "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
+            "Liner", "Cluster", "Cluster Seal", "Cluster Button", "Non Return Valve at Milk Pump", "Milk Pump",
+            "Filter Housing", "Plate Cooler", "Interceptor", "Receiver Airline", "Flushing Pulsator", "Air Purge Valve",
+            "Vacuum Level", "Main Airline", "Plant Drainage - Milk Pump", "Plant Drainage - Filter/s", "Plant Drainage - Plate Cooler",
+            "Plant Drainage - Vat Entry", "Plant Wash Tap", "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
+            "Non-Return Valve", "Spray Ball", "Agitator", "Silo Door", "Manhole Seal", "Vat Outlet", "Walls in Silo"
+        ];
+
+        let customerData = {}; // To store customer details for auto-population
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('visit-date').value = today;
+
+            const checklistContainer = document.getElementById('checklist-items');
+            checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
+            checklistItems.forEach(item => {
+                const itemContainer = document.createElement('div');
+                itemContainer.classList.add('checklist-item');
+
+                const label = document.createElement('label');
+                label.textContent = item;
+                itemContainer.appendChild(label);
+
+                const statusSelect = document.createElement('select');
+                statusSelect.classList.add('form-select');
+                statusSelect.innerHTML = `
+                    <option value="ok">OK</option>
+                    <option value="attention-required">Attention Required</option>
+                    <option value="na">N/A</option>
+                    <option value="not-checked">Not Checked</option>
+                `;
+                itemContainer.appendChild(statusSelect);
+
+                const commentsInput = document.createElement('input');
+                commentsInput.type = 'text';
+                commentsInput.classList.add('form-control');
+                commentsInput.placeholder = 'Comments';
+                itemContainer.appendChild(commentsInput);
+
+                const imageUpload = document.createElement('input');
+                imageUpload.type = 'file';
+                imageUpload.classList.add('form-control', 'image-upload');
+                imageUpload.style.display = 'none';
+                itemContainer.appendChild(imageUpload);
+
+                statusSelect.addEventListener('change', () => {
+                    if (statusSelect.value === 'attention-required') {
+                        imageUpload.style.display = 'block';
+                    } else {
+                        imageUpload.style.display = 'none';
+                    }
+
+                    if (statusSelect.value === 'not-checked') {
+                        commentsInput.value = "Milk in Vat";
+                    } else {
+                        if (commentsInput.value === "Milk in Vat") {
+                            commentsInput.value = ""; // Clear the field if it was auto-filled by 'Not Checked'
+                        }
+                    }
+                });
+
+                checklistContainer.appendChild(itemContainer);
+            });
+        });
 
         async function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
+            const dairyNumber = formData.get('dairy-number');
+
+            // Save customer data for future auto-population
+            customerData[dairyNumber] = {
+                dairyCompany: formData.get('dairy-company'),
+                address: formData.get('address'),
+                customerName: formData.get('customer-name'),
+                region: formData.get('region'),
+                farmName: formData.get('farm-name'),
+                island: formData.get('island')
+            };
 
             let pdf = new jsPDF('p', 'pt', 'a4');
             pdf.setFontSize(22);
@@ -229,17 +282,18 @@
             pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 265);
             pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 280);
 
+            const checklistItemsDiv = document.getElementById('checklist-items').children;
+
             const checklistTable = [];
             const images = [];
 
-            const checklistItems = document.querySelectorAll(".checklist-item");
-            checklistItems.forEach((item) => {
-                const itemName = item.querySelector("label").innerText;
-                const status = item.querySelector("select") ? item.querySelector("select").value : "N/A";
-                const comments = item.querySelector('input[type="text"]') ? item.querySelector('input[type="text"]').value : "";
+            for (let item of checklistItemsDiv) {
+                const itemName = item.querySelector('label').textContent;
+                const status = item.querySelector('select').value;
+                const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                checklistTable.push([itemName, status, comments]);
+                const row = [itemName, status, comments];
 
                 if (imageFile) {
                     const reader = new FileReader();
@@ -247,9 +301,13 @@
                         images.push({ image: event.target.result, itemName: itemName });
                     };
                     reader.readAsDataURL(imageFile);
+                    await new Promise((resolve) => reader.onloadend = resolve);
                 }
-            });
 
+                checklistTable.push(row);
+            }
+
+            // Generate checklist items table
             pdf.autoTable({
                 startY: 300,
                 head: [['Item', 'Status', 'Comments']],
@@ -264,7 +322,9 @@
                 }
             });
 
+            // Add temperature data
             let currentY = pdf.lastAutoTable.finalY + 20;
+
             pdf.setFont('helvetica', 'bold');
             pdf.text('Temperature Measurements:', 40, currentY);
             currentY += 20;
@@ -280,6 +340,7 @@
             pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
             currentY += 20;
 
+            // Add images below the table with proper alignment
             if (images.length > 0) {
                 pdf.setFont('helvetica', 'bold');
                 pdf.text('Photos:', 40, currentY);
@@ -292,13 +353,14 @@
 
                     const pageHeight = pdf.internal.pageSize.height;
 
+                    // Check if adding the image exceeds the page height
                     if (currentY + 160 > pageHeight) {
                         pdf.addPage();
-                        currentY = 50;
+                        currentY = 50; // Reset Y position for new page
                     }
 
                     pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
-                    currentY += 160;
+                    currentY += 160; // Spacing for the next image
                 });
             }
 
