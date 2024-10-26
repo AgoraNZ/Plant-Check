@@ -55,6 +55,7 @@
             margin-bottom: 15px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -129,6 +130,8 @@
     </div>
 
     <script>
+        const { jsPDF } = window.jspdf;
+
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
             "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
@@ -185,60 +188,116 @@
         function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
-            let pdfContent = "Dairy Shed Hygiene Checklist\n\n";
+            let pdf = new jsPDF();
+            let y = 10;
 
-            pdfContent += "Farm Details:\n";
-            pdfContent += `Dairy Company: ${formData.get('dairy-company')}\n`;
-            pdfContent += `Dairy Number: ${formData.get('dairy-number')}\n`;
-            pdfContent += `Address: ${formData.get('address')}\n`;
-            pdfContent += `Customer Name: ${formData.get('customer-name')}\n`;
-            pdfContent += `Region: ${formData.get('region')}\n`;
-            pdfContent += `Farm Name: ${formData.get('farm-name')}\n`;
-            pdfContent += `Island: ${formData.get('island')}\n`;
-            pdfContent += `Visit Date: ${formData.get('visit-date')}\n`;
-            pdfContent += `Visit Type: ${formData.get('visit-type')}\n`;
-            pdfContent += `Inspection Start Time: ${formData.get('inspection-start-time')}\n`;
-            pdfContent += `Inspection End Time: ${formData.get('inspection-end-time')}\n`;
-            pdfContent += `Inspection Completed By: ${formData.get('inspection-completed-by')}\n`;
-            pdfContent += `Call Type: ${formData.get('call-type')}\n\n`;
+            pdf.setFontSize(16);
+            pdf.text("Dairy Shed Hygiene Checklist", 105, y, { align: "center" });
+            y += 10;
 
-            pdfContent += "Checklist Items:\n";
+            pdf.setFontSize(12);
+            pdf.text("Farm Details:", 10, y);
+            y += 10;
+            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 10, y);
+            y += 10;
+            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 10, y);
+            y += 10;
+            pdf.text(`Address: ${formData.get('address')}`, 10, y);
+            y += 10;
+            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 10, y);
+            y += 10;
+            pdf.text(`Region: ${formData.get('region')}`, 10, y);
+            y += 10;
+            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 10, y);
+            y += 10;
+            pdf.text(`Island: ${formData.get('island')}`, 10, y);
+            y += 10;
+            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 10, y);
+            y += 10;
+            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 10, y);
+            y += 10;
+            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 10, y);
+            y += 10;
+            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 10, y);
+            y += 10;
+            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 10, y);
+            y += 10;
+            pdf.text(`Call Type: ${formData.get('call-type')}`, 10, y);
+            y += 20;
+
+            pdf.text("Checklist Items:", 10, y);
+            y += 10;
             const checklistItemsDiv = document.getElementById('checklist-items').children;
             let allOk = true;
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
-                pdfContent += `${itemName}: ${status}\n`;
+                const imageUpload = item.querySelector('input[type="file"]');
+
+                pdf.text(`${itemName}: ${status}`, 10, y);
+                y += 10;
                 if (comments) {
-                    pdfContent += `Comments: ${comments}\n`;
+                    pdf.text(`Comments: ${comments}`, 10, y);
+                    y += 10;
                 }
-                if (status === 'attention-required') {
+                if (status === 'attention-required' && imageUpload.files.length > 0) {
                     allOk = false;
+                    const file = imageUpload.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const img = new Image();
+                        img.src = event.target.result;
+                        img.onload = function () {
+                            pdf.addImage(img, 'JPEG', 10, y, 50, 50);
+                            y += 60;
+                            if (y > 270) {
+                                pdf.addPage();
+                                y = 10;
+                            }
+                            savePDF(pdf);
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    y += 10;
                 }
-                pdfContent += "\n";
+                if (y > 270) {
+                    pdf.addPage();
+                    y = 10;
+                }
             }
 
             if (allOk) {
-                pdfContent += `Shed Inspection completed on ${formData.get('visit-date')} with no issues found.\n`;
+                pdf.text(`Shed Inspection completed on ${formData.get('visit-date')} with no issues found.`, 10, y);
             } else {
-                pdfContent += "Summary of Issues:\n";
+                y += 10;
+                pdf.text("Summary of Issues:", 10, y);
+                y += 10;
                 for (let item of checklistItemsDiv) {
                     const itemName = item.querySelector('label').textContent;
                     const status = item.querySelector('select').value;
                     if (status === 'attention-required') {
                         const comments = item.querySelector('input[type="text"]').value;
-                        pdfContent += `${itemName}: Attention Required\n`;
+                        pdf.text(`${itemName}: Attention Required`, 10, y);
+                        y += 10;
                         if (comments) {
-                            pdfContent += `Comments: ${comments}\n`;
+                            pdf.text(`Comments: ${comments}`, 10, y);
+                            y += 10;
                         }
-                        pdfContent += "\n";
+                    }
+                    if (y > 270) {
+                        pdf.addPage();
+                        y = 10;
                     }
                 }
             }
 
-            // Placeholder for PDF generation logic
-            alert(pdfContent);
+            savePDF(pdf);
+        }
+
+        function savePDF(pdf) {
+            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
     </script>
 </body>
