@@ -60,6 +60,7 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=places"></script> <!-- Replace YOUR_GOOGLE_API_KEY with your Google Maps API Key -->
 </head>
 <body>
     <div class="container">
@@ -149,7 +150,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.3</div>
+        <div class="version">Version 3.4</div>
     </div>
 
     <script>
@@ -225,6 +226,10 @@
                     document.getElementById('island').value = customer.island;
                 }
             });
+
+            // Address autocomplete setup
+            const addressInput = document.getElementById('address');
+            const autocomplete = new google.maps.places.Autocomplete(addressInput);
         });
 
         async function generatePDF() {
@@ -270,64 +275,39 @@
             pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, 310);
 
-            const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
+            let currentY = 330; // Set the initial Y position for the checklist items
 
-            // Iterate over checklist items to populate table and images
+            // Iterate over each checklist item and add content to PDF
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                const row = [itemName, status, comments];
+                // Add item name, status, and comments
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`Item: ${itemName}`, 40, currentY);
+                currentY += 15;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Status: ${status}`, 40, currentY);
+                currentY += 15;
+                pdf.text(`Comments: ${comments}`, 40, currentY);
+                currentY += 20;
 
-                // Check if there's an image associated with the checklist item
+                // Add image if available
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        row.push({ image: event.target.result, itemName: itemName });
+                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 180, 180); // Increased image size for better visibility
+                        currentY += 200; // Adjust the Y position for the next content
                     };
                     reader.readAsDataURL(imageFile);
+                    await new Promise((resolve) => reader.onloadend = resolve); // Wait for the image to be loaded
                 } else {
-                    row.push(null); // No image
+                    currentY += 20; // Space for the next item if no image is available
                 }
-
-                checklistTable.push(row);
             }
-
-            // Generate table with images
-            pdf.autoTable({
-                startY: 330,
-                head: [['Item', 'Status', 'Comments', 'Photo']],
-                body: checklistTable.map(row => {
-                    const [item, status, comments, photo] = row;
-
-                    return [
-                        item,
-                        status,
-                        comments,
-                        photo ? {
-                            content: photo.image,
-                            width: 40,
-                            height: 40
-                        } : ""
-                    ];
-                }),
-                styles: {
-                    fontSize: 10,
-                    cellPadding: 5,
-                    valign: 'middle',
-                    halign: 'left'
-                },
-                columnStyles: {
-                    3: { halign: 'center', valign: 'middle', minCellHeight: 50 }
-                },
-                headStyles: {
-                    fillColor: '#002B5C',
-                    textColor: '#FFFFFF'
-                }
-            });
 
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
