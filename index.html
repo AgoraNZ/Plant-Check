@@ -128,7 +128,6 @@
 
     <script>
         const { jsPDF } = window.jspdf;
-
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
             "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
@@ -138,6 +137,8 @@
             "Plant Drainage - Vat Entry", "Plant Wash Tap", "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
             "Non-Return Valve", "Spray Ball", "Agitator", "Silo Door", "Manhole Seal", "Vat Outlet", "Walls in Silo"
         ];
+
+        let customerData = {}; // To store customer details for auto-population
 
         window.onload = () => {
             const today = new Date().toISOString().split('T')[0];
@@ -182,11 +183,37 @@
 
                 checklistContainer.appendChild(itemContainer);
             });
+
+            // Auto-fill customer details based on dairy number
+            document.getElementById('dairy-number').addEventListener('input', function() {
+                const dairyNumber = this.value;
+                if (customerData[dairyNumber]) {
+                    const customer = customerData[dairyNumber];
+                    document.getElementById('dairy-company').value = customer.dairyCompany;
+                    document.getElementById('address').value = customer.address;
+                    document.getElementById('customer-name').value = customer.customerName;
+                    document.getElementById('region').value = customer.region;
+                    document.getElementById('farm-name').value = customer.farmName;
+                    document.getElementById('island').value = customer.island;
+                }
+            });
         };
 
         function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
+            const dairyNumber = formData.get('dairy-number');
+
+            // Save customer data for future auto-population
+            customerData[dairyNumber] = {
+                dairyCompany: formData.get('dairy-company'),
+                address: formData.get('address'),
+                customerName: formData.get('customer-name'),
+                region: formData.get('region'),
+                farmName: formData.get('farm-name'),
+                island: formData.get('island')
+            };
+
             let pdf = new jsPDF('p', 'pt', 'a4');
             pdf.html(document.body, {
                 callback: function (pdf) {
