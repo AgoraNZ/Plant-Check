@@ -171,6 +171,7 @@
                 const imageUpload = document.createElement('input');
                 imageUpload.type = 'file';
                 imageUpload.classList.add('form-control', 'image-upload');
+                imageUpload.style.display = 'none';
                 itemContainer.appendChild(imageUpload);
 
                 statusSelect.addEventListener('change', () => {
@@ -199,7 +200,7 @@
             });
         };
 
-        function generatePDF() {
+        async function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
             const dairyNumber = formData.get('dairy-number');
@@ -259,6 +260,7 @@
             pdf.setFontSize(12);
             pdf.setTextColor('#000000');
             const checklistItemsDiv = document.getElementById('checklist-items').children;
+
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
@@ -273,22 +275,24 @@
 
                 const imageUpload = item.querySelector('input[type="file"]');
                 if (status === 'attention-required' && imageUpload.files.length > 0) {
-                    const file = imageUpload.files[0];
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        const img = new Image();
-                        img.src = event.target.result;
-                        img.onload = function () {
-                            pdf.addImage(img, 'JPEG', 40, y, 100, 100);
-                            y += 110;
-                            if (y > 720) {
-                                pdf.addPage();
-                                y = 20;
-                            }
-                            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+                    await new Promise((resolve) => {
+                        const file = imageUpload.files[0];
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            const img = new Image();
+                            img.src = event.target.result;
+                            img.onload = function () {
+                                pdf.addImage(img, 'JPEG', 40, y, 100, 100);
+                                y += 110;
+                                if (y > 720) {
+                                    pdf.addPage();
+                                    y = 20;
+                                }
+                                resolve();
+                            };
                         };
-                    };
-                    reader.readAsDataURL(file);
+                        reader.readAsDataURL(file);
+                    });
                 } else {
                     y += 10;
                 }
@@ -299,9 +303,7 @@
                 }
             }
 
-            if (y <= 720) {
-                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-            }
+            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
     </script>
 </body>
