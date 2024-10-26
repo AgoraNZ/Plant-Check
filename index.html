@@ -130,7 +130,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.0</div>
+        <div class="version">Version 2.1</div>
     </div>
 
     <script>
@@ -147,11 +147,13 @@
 
         let customerData = {}; // To store customer details for auto-population
 
-        window.onload = () => {
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("Document loaded");
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('visit-date').value = today;
 
             const checklistContainer = document.getElementById('checklist-items');
+            console.log("Adding checklist items");
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
@@ -205,7 +207,7 @@
                     document.getElementById('island').value = customer.island;
                 }
             });
-        };
+        });
 
         async function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
@@ -240,3 +242,7 @@
             pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, y);
             y += 15;
             pdf
+        }
+    </script>
+</body>
+</html>
