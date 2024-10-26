@@ -46,7 +46,7 @@
             background-color: #FF4136;
         }
         .checklist-item {
-            margin-bottom: 15px;
+            margin-bottom: 30px; /* Increased spacing for better alignment */
         }
         .form-control, .form-select {
             margin-top: 5px;
@@ -270,8 +270,10 @@
             pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, 310);
 
+            const checklistTable = [];
             const checklistItemsDiv = document.getElementById('checklist-items').children;
-            let currentY = 320; // Initial Y position for checklist items
+
+            let imageYPosition = 320; // Set the initial Y position for images
 
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
@@ -279,27 +281,34 @@
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                // Draw checklist item data
-                pdf.setFont('helvetica', 'bold');
-                pdf.text(`Item: ${itemName}`, 40, currentY);
-                pdf.setFont('helvetica', 'normal');
-                pdf.text(`Status: ${status}`, 40, currentY + 15);
-                pdf.text(`Comments: ${comments}`, 40, currentY + 30);
-                currentY += 45;
+                checklistTable.push([itemName, status, comments]);
 
-                // Draw the image if available
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 150, 100);
-                        pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+                        pdf.addImage(event.target.result, 'JPEG', 40, imageYPosition, 100, 100);
+                        imageYPosition += 120; // Adjust the Y position for the next image
                     };
                     reader.readAsDataURL(imageFile);
-                    currentY += 120; // Space for the image
                 }
             }
-            
-            // Save the PDF once all elements are added
+
+            pdf.autoTable({
+                startY: 320,
+                head: [['Item', 'Status', 'Comments']],
+                body: checklistTable,
+                styles: {
+                    halign: 'left',
+                    valign: 'middle',
+                    fontSize: 10,
+                    cellPadding: 5
+                },
+                headStyles: {
+                    fillColor: '#002B5C'
+                }
+            });
+
+            // Ensure all images are loaded before saving the PDF
             setTimeout(() => {
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
             }, 1000);
