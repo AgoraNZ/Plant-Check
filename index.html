@@ -150,7 +150,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 3.4</div>
+        <div class="version">Version 3.6</div>
     </div>
 
     <script>
@@ -272,40 +272,60 @@
             pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 265);
             pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 280);
 
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Checklist Items:', 40, 310);
-
             const checklistItemsDiv = document.getElementById('checklist-items').children;
-            let currentY = 330; // Set the initial Y position for the checklist items
 
-            // Iterate over each checklist item and add content to PDF
+            const checklistTable = [];
+            const images = [];
+
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                // Add item name, status, and comments
-                pdf.setFont('helvetica', 'bold');
-                pdf.text(`Item: ${itemName}`, 40, currentY);
-                currentY += 15;
-                pdf.setFont('helvetica', 'normal');
-                pdf.text(`Status: ${status}`, 40, currentY);
-                currentY += 15;
-                pdf.text(`Comments: ${comments}`, 40, currentY);
-                currentY += 20;
+                const row = [itemName, status, comments];
 
-                // Add image if available
                 if (imageFile) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pdf.addImage(event.target.result, 'JPEG', 40, currentY, 180, 180); // Increased image size for better visibility
-                        currentY += 200; // Adjust the Y position for the next content
+                        images.push({ image: event.target.result, itemName: itemName });
                     };
                     reader.readAsDataURL(imageFile);
-                    await new Promise((resolve) => reader.onloadend = resolve); // Wait for the image to be loaded
-                } else {
-                    currentY += 20; // Space for the next item if no image is available
+                    await new Promise((resolve) => reader.onloadend = resolve);
+                }
+
+                checklistTable.push(row);
+            }
+
+            // Generate checklist items table
+            pdf.autoTable({
+                startY: 300,
+                head: [['Item', 'Status', 'Comments']],
+                body: checklistTable,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 5,
+                },
+                headStyles: {
+                    fillColor: '#002B5C',
+                    textColor: '#FFFFFF'
+                }
+            });
+
+            // Add images below the table with proper alignment
+            let currentY = pdf.lastAutoTable.finalY + 20;
+
+            if (images.length > 0) {
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Photos:', 40, currentY);
+                currentY += 20;
+
+                for (let imgDetail of images) {
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
+                    currentY += 10;
+                    pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
+                    currentY += 160; // Spacing for the next image
                 }
             }
 
