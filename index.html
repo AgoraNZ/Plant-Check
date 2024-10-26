@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         body {
             background-color: #001F3F;
             color: #FFFFFF;
             font-family: Arial, sans-serif;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            justify-content: center;
+            padding: 20px;
             margin: 0;
         }
         .container {
             background-color: #002B5C;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             max-width: 800px;
             width: 100%;
         }
@@ -28,13 +30,7 @@
             text-align: center;
         }
         label {
-            display: block;
             margin-top: 10px;
-        }
-        .section {
-            border-bottom: 2px solid #FF851B;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
         }
         button {
             background-color: #FF851B;
@@ -44,15 +40,16 @@
             cursor: pointer;
             display: block;
             margin: 20px auto;
+            border-radius: 5px;
         }
         button:hover {
             background-color: #FF4136;
         }
-        .image-upload {
-            display: none;
-        }
         .checklist-item {
             margin-bottom: 15px;
+        }
+        .form-control, .form-select {
+            margin-top: 5px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -62,22 +59,22 @@
         <h1>Dairy Shed Hygiene Checklist</h1>
         
         <form id="hygiene-checklist-form">
-            <div class="section">
+            <div class="section mb-4">
                 <h2>Farm Details</h2>
                 <label for="dairy-company">Dairy Company:</label>
-                <input type="text" id="dairy-company" name="dairy-company">
+                <input type="text" class="form-control" id="dairy-company" name="dairy-company">
 
                 <label for="dairy-number">Dairy Number:</label>
-                <input type="text" id="dairy-number" name="dairy-number">
+                <input type="text" class="form-control" id="dairy-number" name="dairy-number">
 
                 <label for="address">Address:</label>
-                <input type="text" id="address" name="address">
+                <input type="text" class="form-control" id="address" name="address">
 
                 <label for="customer-name">Customer Name:</label>
-                <input type="text" id="customer-name" name="customer-name">
+                <input type="text" class="form-control" id="customer-name" name="customer-name">
 
                 <label for="region">Region:</label>
-                <select id="region" name="region">
+                <select id="region" name="region" class="form-select">
                     <option value="northland">Northland</option>
                     <option value="auckland">Auckland</option>
                     <option value="waikato">Waikato</option>
@@ -91,34 +88,34 @@
                 </select>
 
                 <label for="farm-name">Farm Name:</label>
-                <input type="text" id="farm-name" name="farm-name">
+                <input type="text" class="form-control" id="farm-name" name="farm-name">
 
                 <label for="island">Island:</label>
-                <select id="island" name="island">
+                <select id="island" name="island" class="form-select">
                     <option value="north-island">North Island</option>
                     <option value="south-island">South Island</option>
                 </select>
 
                 <label for="visit-date">Visit Date:</label>
-                <input type="date" id="visit-date" name="visit-date">
+                <input type="date" class="form-control" id="visit-date" name="visit-date">
 
                 <label for="visit-type">Visit Type:</label>
-                <input type="text" id="visit-type" name="visit-type">
+                <input type="text" class="form-control" id="visit-type" name="visit-type">
 
                 <label for="inspection-start-time">Inspection Start Time:</label>
-                <input type="time" id="inspection-start-time" name="inspection-start-time">
+                <input type="time" class="form-control" id="inspection-start-time" name="inspection-start-time">
 
                 <label for="inspection-end-time">Inspection End Time:</label>
-                <input type="time" id="inspection-end-time" name="inspection-end-time">
+                <input type="time" class="form-control" id="inspection-end-time" name="inspection-end-time">
 
                 <label for="inspection-completed-by">Inspection Completed By:</label>
-                <input type="text" id="inspection-completed-by" name="inspection-completed-by">
+                <input type="text" class="form-control" id="inspection-completed-by" name="inspection-completed-by">
 
                 <label for="call-type">Call Type:</label>
-                <input type="text" id="call-type" name="call-type">
+                <input type="text" class="form-control" id="call-type" name="call-type">
             </div>
 
-            <div class="section">
+            <div class="section mb-4">
                 <h2>Checklist Items</h2>
                 <div id="checklist-items">
                     <!-- Checklist items will be dynamically added here -->
@@ -156,6 +153,7 @@
                 itemContainer.appendChild(label);
 
                 const statusSelect = document.createElement('select');
+                statusSelect.classList.add('form-select');
                 statusSelect.innerHTML = `
                     <option value="ok">OK</option>
                     <option value="attention-required">Attention Required</option>
@@ -165,12 +163,13 @@
 
                 const commentsInput = document.createElement('input');
                 commentsInput.type = 'text';
+                commentsInput.classList.add('form-control');
                 commentsInput.placeholder = 'Comments';
                 itemContainer.appendChild(commentsInput);
 
                 const imageUpload = document.createElement('input');
                 imageUpload.type = 'file';
-                imageUpload.classList.add('image-upload');
+                imageUpload.classList.add('form-control', 'image-upload');
                 itemContainer.appendChild(imageUpload);
 
                 statusSelect.addEventListener('change', () => {
@@ -188,116 +187,14 @@
         function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
-            let pdf = new jsPDF();
-            let y = 10;
-
-            pdf.setFontSize(16);
-            pdf.text("Dairy Shed Hygiene Checklist", 105, y, { align: "center" });
-            y += 10;
-
-            pdf.setFontSize(12);
-            pdf.text("Farm Details:", 10, y);
-            y += 10;
-            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 10, y);
-            y += 10;
-            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 10, y);
-            y += 10;
-            pdf.text(`Address: ${formData.get('address')}`, 10, y);
-            y += 10;
-            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 10, y);
-            y += 10;
-            pdf.text(`Region: ${formData.get('region')}`, 10, y);
-            y += 10;
-            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 10, y);
-            y += 10;
-            pdf.text(`Island: ${formData.get('island')}`, 10, y);
-            y += 10;
-            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 10, y);
-            y += 10;
-            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 10, y);
-            y += 10;
-            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 10, y);
-            y += 10;
-            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 10, y);
-            y += 10;
-            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 10, y);
-            y += 10;
-            pdf.text(`Call Type: ${formData.get('call-type')}`, 10, y);
-            y += 20;
-
-            pdf.text("Checklist Items:", 10, y);
-            y += 10;
-            const checklistItemsDiv = document.getElementById('checklist-items').children;
-            let allOk = true;
-            for (let item of checklistItemsDiv) {
-                const itemName = item.querySelector('label').textContent;
-                const status = item.querySelector('select').value;
-                const comments = item.querySelector('input[type="text"]').value;
-                const imageUpload = item.querySelector('input[type="file"]');
-
-                pdf.text(`${itemName}: ${status}`, 10, y);
-                y += 10;
-                if (comments) {
-                    pdf.text(`Comments: ${comments}`, 10, y);
-                    y += 10;
-                }
-                if (status === 'attention-required' && imageUpload.files.length > 0) {
-                    allOk = false;
-                    const file = imageUpload.files[0];
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        const img = new Image();
-                        img.src = event.target.result;
-                        img.onload = function () {
-                            pdf.addImage(img, 'JPEG', 10, y, 50, 50);
-                            y += 60;
-                            if (y > 270) {
-                                pdf.addPage();
-                                y = 10;
-                            }
-                            savePDF(pdf);
-                        };
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    y += 10;
-                }
-                if (y > 270) {
-                    pdf.addPage();
-                    y = 10;
-                }
-            }
-
-            if (allOk) {
-                pdf.text(`Shed Inspection completed on ${formData.get('visit-date')} with no issues found.`, 10, y);
-            } else {
-                y += 10;
-                pdf.text("Summary of Issues:", 10, y);
-                y += 10;
-                for (let item of checklistItemsDiv) {
-                    const itemName = item.querySelector('label').textContent;
-                    const status = item.querySelector('select').value;
-                    if (status === 'attention-required') {
-                        const comments = item.querySelector('input[type="text"]').value;
-                        pdf.text(`${itemName}: Attention Required`, 10, y);
-                        y += 10;
-                        if (comments) {
-                            pdf.text(`Comments: ${comments}`, 10, y);
-                            y += 10;
-                        }
-                    }
-                    if (y > 270) {
-                        pdf.addPage();
-                        y = 10;
-                    }
-                }
-            }
-
-            savePDF(pdf);
-        }
-
-        function savePDF(pdf) {
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            let pdf = new jsPDF('p', 'pt', 'a4');
+            pdf.html(document.body, {
+                callback: function (pdf) {
+                    pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+                },
+                x: 10,
+                y: 10
+            });
         }
     </script>
 </body>
