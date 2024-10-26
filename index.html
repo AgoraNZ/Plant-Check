@@ -130,7 +130,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 1.7</div>
+        <div class="version">Version 1.8</div>
     </div>
 
     <script>
@@ -232,6 +232,11 @@
 
             pdf.setFontSize(12);
             pdf.setTextColor('#000000');
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Farm Details', 40, y);
+            y += 20;
+
+            pdf.setFont('helvetica', 'normal');
             pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, y);
             y += 15;
             pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, y);
@@ -261,6 +266,7 @@
 
             pdf.setFontSize(16);
             pdf.setTextColor('#FF851B');
+            pdf.setFont('helvetica', 'bold');
             pdf.text('Checklist Items:', 40, y);
             y += 20;
 
@@ -273,7 +279,11 @@
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
 
-                pdf.text(`${itemName}: ${status}`, 40, y);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`${itemName}:`, 40, y);
+                y += 15;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Status: ${status}`, 60, y);
                 y += 15;
                 if (comments) {
                     pdf.text(`Comments: ${comments}`, 60, y);
@@ -285,33 +295,4 @@
                     await new Promise((resolve) => {
                         const file = imageUpload.files[0];
                         const reader = new FileReader();
-                        reader.onload = function (event) {
-                            const img = new Image();
-                            img.src = event.target.result;
-                            img.onload = function () {
-                                pdf.addImage(img, 'JPEG', 40, y, 100, 100);
-                                y += 110;
-                                if (y > 720) {
-                                    pdf.addPage();
-                                    y = 20;
-                                }
-                                resolve();
-                            };
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                } else {
-                    y += 10;
-                }
-
-                if (y > 720) {
-                    pdf.addPage();
-                    y = 20;
-                }
-            }
-
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        }
-    </script>
-</body>
-</html>
+                        reader.onload = function
