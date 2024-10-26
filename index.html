@@ -59,7 +59,6 @@
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -131,7 +130,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 2.7</div>
+        <div class="version">Version 2.8</div>
     </div>
 
     <script>
@@ -221,4 +220,65 @@
                 customerName: formData.get('customer-name'),
                 region: formData.get('region'),
                 farmName: formData.get('farm-name'),
-                island:
+                island: formData.get('island')
+            };
+
+            let pdf = new jsPDF('p', 'pt', 'a4');
+            pdf.setFontSize(22);
+            pdf.setTextColor('#FF851B');
+            pdf.text('Dairy Shed Hygiene Checklist', 40, 50);
+
+            pdf.setFontSize(12);
+            pdf.setTextColor('#000000');
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Farm Details:', 40, 80);
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, 100);
+            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, 115);
+            pdf.text(`Address: ${formData.get('address')}`, 40, 130);
+            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, 145);
+            pdf.text(`Region: ${formData.get('region')}`, 40, 160);
+            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, 175);
+            pdf.text(`Island: ${formData.get('island')}`, 40, 190);
+            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, 205);
+            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, 220);
+            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, 235);
+            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, 250);
+            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 265);
+            pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 280);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Checklist Items:', 40, 310);
+
+            const checklistTable = [];
+            const checklistItemsDiv = document.getElementById('checklist-items').children;
+
+            for (let item of checklistItemsDiv) {
+                const itemName = item.querySelector('label').textContent;
+                const status = item.querySelector('select').value;
+                const comments = item.querySelector('input[type="text"]').value;
+
+                checklistTable.push([itemName, status, comments]);
+            }
+
+            pdf.autoTable({
+                startY: 320,
+                head: [['Item', 'Status', 'Comments']],
+                body: checklistTable,
+                styles: {
+                    halign: 'left',
+                    valign: 'middle',
+                    fontSize: 10,
+                    cellPadding: 5
+                },
+                headStyles: {
+                    fillColor: '#FF851B'
+                }
+            });
+
+            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+        }
+    </script>
+</body>
+</html>
