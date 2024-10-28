@@ -240,9 +240,9 @@
 
             // Adding the logo
             const logoBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBSgFKAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT...'; // Full Base64 data from your file
-            pdf.addImage(logoBase64, 'JPEG', 40, 30, 100, 100); // Adjust the size and position as needed
+            pdf.addImage(logoBase64, 'JPEG', 40, 30, 150, 75); // Adjust the size and position as needed
 
-            pdf.text('Dairy Shed Hygiene Checklist', 160, 50);
+            pdf.text('Dairy Shed Hygiene Checklist', 200, 50);
 
             pdf.setFontSize(12);
             pdf.setTextColor('#000000');
@@ -263,6 +263,32 @@
             pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, 320);
             pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 335);
             pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 350);
+
+            // Generate checklist items table
+            const checklistItemsDiv = document.getElementById('checklist-items').children;
+            const checklistTable = [];
+
+            for (let item of checklistItemsDiv) {
+                const itemName = item.querySelector('label').textContent;
+                const status = item.querySelector('select').value;
+                const comments = item.querySelector('input[type="text"]').value;
+
+                checklistTable.push([itemName, status, comments]);
+            }
+
+            pdf.autoTable({
+                startY: 370,
+                head: [['Item', 'Status', 'Comments']],
+                body: checklistTable,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 5,
+                },
+                headStyles: {
+                    fillColor: '#002B5C',
+                    textColor: '#FFFFFF'
+                }
+            });
 
             // Save PDF
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
