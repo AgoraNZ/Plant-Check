@@ -3,27 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Image Embed Example</title>
+    <title>Dairy Shed Hygiene Checklist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         body {
+            background-color: #002B5C;
+            color: #FFFFFF;
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            background-color: #f0f0f0;
+            margin: 0;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        .container {
+            background-color: #002B5C;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1, h2 {
+            color: #FF851B;
+            text-align: center;
+        }
+        label {
+            margin-top: 10px;
+        }
+        button {
+            background-color: #FF851B;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #FF4136;
+        }
+        .checklist-item {
+            margin-bottom: 30px;
+        }
+        .form-control, .form-select {
+            margin-top: 5px;
+        }
+        .version {
+            text-align: center;
+            margin-top: 20px;
+            color: #FFFFFF;
+            font-size: 12px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <!-- Updated Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-    <h1>Firebase Image Embed</h1>
-    <p>The following image is embedded using a URL from Firebase:</p>
-    <img src="https://firebasestorage.googleapis.com/v0/b/dairy-farm-record-system.appspot.com/o/Picture2.jpg?alt=media&token=d867f2d8-6a3f-43b1-b1cb-8426ed67dfaf">
-    <p>The image above is loaded directly from Firebase, making it easy to display without needing to store the image locally.</p>
+    <div class="container">
+        <h1>Dairy Shed Hygiene Checklist</h1>
+        
+        <form id="hygiene-checklist-form">
+            <!-- Farm Details Section -->
+            <div class="section mb-4">
+                <h2>Farm Details</h2>
+                <label for="dairy-company">Dairy Company:</label>
+                <select id="dairy-company" name="dairy-company" class="form-select">
+                    <option value="fonterra">Fonterra</option>
+                    <option value="dairy-goat-coop">Dairy Goat Co-op</option>
+                    <option value="green-valley">Green Valley Dairies</option>
+                    <option value="maui-milk">Maui Milk</option>
+                    <option value="oceania">Oceania</option>
+                    <option value="ofi">OFI</option>
+                    <option value="synlait">Synlait Milk LTD</option>
+                    <option value="tatua">Tatua</option>
+                </select>
+                <label for="dairy-number">Dairy Number:</label>
+                <input type="text" class="form-control" id="dairy-number" name="dairy-number">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" name="address">
+                <label for="customer-name">Customer Name:</label>
+                <input type="text" class="form-control" id="customer-name" name="customer-name">
+                <label for="region">Region:</label>
+                <select id="region" name="region" class="form-select">
+                    <option value="northland">Northland</option>
+                    <option value="auckland">Auckland</option>
+                    <option value="waikato">Waikato</option>
+                    <option value="bay-of-plenty">Bay of Plenty</option>
+                    <option value="gisborne">Gisborne</option>
+                    <option value="hawkes-bay">Hawke's Bay</option>
+                    <option value="taranaki">Taranaki</option>
+                    <option value="manawatu-wanganui">Manawatu-Wanganui</option>
+                    <option value="wellington">Wellington</option>
+                    <option value="nelson">Nelson</option>
+                    <option value="marlborough">Marlborough</option>
+                    <option value="west-coast">West Coast</option>
+                    <option value="canterbury">Canterbury</option>
+                    <option value="otago">Otago</option>
+                    <option value="southland">Southland</option>
+                </select>
+                <label for="farm-name">Farm Name:</label>
+                <input type="text" class="form-control" id="farm-name" name="farm-name">
+                <label for="island">Island:</label>
+                <select id="island" name="island" class="form-select">
+                    <option value="north-island">North Island</option>
+                    <option value="south-island">South Island</option>
+                </select>
+                <label for="visit-date">Visit Date:</label>
+                <input type="date" class="form-control" id="visit-date" name="visit-date">
+                <label for="visit-type">Visit Type:</label>
+                <input type="text" class="form-control" id="visit-type" name="visit-type" value="Milking Plant & Milk Vat Check" readonly>
+                <label for="inspection-start-time">Inspection Start Time:</label>
+                <input type="time" class="form-control" id="inspection-start-time" name="inspection-start-time">
+                <label for="inspection-end-time">Inspection End Time:</label>
+                <input type="time" class="form-control" id="inspection-end-time" name="inspection-end-time">
+                <label for="inspection-completed-by">Inspection Completed By:</label>
+                <input type="text" class="form-control" id="inspection-completed-by" name="inspection-completed-by">
+                <label for="call-type">Call Type:</label>
+                <select id="call-type" name="call-type" class="form-select">
+                    <option value="alert">Alert</option>
+                    <option value="grade-call">Grade Call</option>
+                    <option value="regular-scheduled-visit" selected>Regular Scheduled Visit</option>
+                </select>
+            </div>
+
+            <!-- Checklist Items Section -->
+            <div class="section mb-4">
+                <h2>Checklist Items</h2>
+                <div id="checklist-items">
+                    <!-- Checklist items will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Temperature Measurements Section -->
+            <div class="section mb-4">
+                <h2>Temperature Measurements</h2>
+                <div class="checklist-item">
+                    <label for="hot-water-temp">Hot Water Temp (°C):</label>
+                    <input type="number" class="form-control" id="hot-water-temp" name="hot-water-temp" step="0.1">
+                    <label for="hot-water-time">Time Taken:</label>
+                    <input type="time" class="form-control" id="hot-water-time" name="hot-water-time">
+                </div>
+                <div class="checklist-item">
+                    <label for="milk-temp">Milk Temp (°C):</label>
+                    <input type="number" class="form-control" id="milk-temp" name="milk-temp" step="0.1">
+                    <label for="milk-time">Time Taken:</label>
+                    <input type="time" class="form-control" id="milk-time" name="milk-time">
+                </div>
+            </div>
+
+            <button type="button" onclick="generatePDF()">Generate PDF</button>
+        </form>
+        <div class="version">Version 4.5</div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
+            authDomain: "dairy-farm-record-system.firebaseapp.com",
+            projectId: "dairy-farm-record-system",
+            storageBucket: "dairy-farm-record-system.appspot.com",
+            messagingSenderId: "422124188212",
+            appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        const { jsPDF } = window.jspdf;
+        const checklistItems = [
+            "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
+            "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
+            "Liner", "Cluster", "Cluster Seal", "Cluster Button", "Non Return Valve at Milk Pump", "Milk Pump",
+            "Filter Housing", "Plate Cooler", "Interceptor", "Receiver Airline", "Flushing Pulsator", "Air Purge Valve",
+            "Vacuum Level", "Main Airline", "Plant Drainage - Milk Pump", "Plant Drainage - Filter/s", "Plant Drainage - Plate Cooler",
+            "Plant Drainage - Vat Entry", "Plant Wash Tap", "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
+            "Non-Return Valve", "Spray Ball", "Agitator", "Silo Door", "Manhole Seal", "Vat Outlet", "Walls in Silo"
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            createChecklistItems();
+        });
+
+        function createChecklistItems() {
+            const checklistContainer = document.getElementById('checklist-items');
+            checklistContainer.innerHTML = '';
+
+            checklistItems.forEach(item => {
+                const itemContainer = document.createElement('div');
+                itemContainer.classList.add('checklist-item');
+
+                const label = document.createElement('label');
+                label.textContent = item;
+                itemContainer.appendChild(label);
+
+                const statusSelect = document.createElement('select');
+                statusSelect.classList.add('form-select');
+                statusSelect.innerHTML = `
+                    <option value="ok">OK</option>
+                    <option value="attention-required">Attention Required</option>
+                    <option value="na">N/A</option>
+                    <option value="not-checked">Not Checked</option>
+                `;
+                itemContainer.appendChild(statusSelect);
+
+                const commentsInput = document.createElement('input');
+                commentsInput.type = 'text';
+                commentsInput.classList.add('form-control');
+                commentsInput.placeholder = 'Comments';
+                itemContainer.appendChild(commentsInput);
+
+                const imageUpload = document.createElement('input');
+                imageUpload.type = 'file';
+                imageUpload.classList.add('form-control', 'image-upload');
+                imageUpload.style.display = 'none';
+                itemContainer.appendChild(imageUpload);
+
+                statusSelect.addEventListener('change', () => {
+                    if (statusSelect.value === 'attention-required') {
+                        imageUpload.style.display = 'block';
+                    } else {
+                        imageUpload.style.display = 'none';
+                    }
+
+                    if (statusSelect.value === 'not-checked') {
+                        commentsInput.value = "Milk in Vat";
+                    } else {
+                        if (commentsInput.value === "Milk in Vat") {
+                            commentsInput.value = ""; // Clear the field if it was auto-filled by 'Not Checked'
+                        }
+                    }
+                });
+
+                checklistContainer.appendChild(itemContainer);
+            });
+        }
+
+        async function generatePDF() {
+            const form = document.getElementById('hygiene-checklist-form');
+            let formData = new FormData(form);
+            const dairyNumber = formData.get('dairy-number');
+            const customerName = formData.get('customer-name');
+            const address = formData.get('address');
+            const farmName = formData.get('farm-name');
+            const region = formData.get('region');
+            const island = formData.get('island');
+
+            let pdf = new jsPDF('p', 'pt', 'a4');
+
+            // Add logo using Firebase URL
+            const logoImgUrl = 'https://firebasestorage.googleapis.com/v0/b/dairy-farm-record-system.appspot.com/o/Picture2.jpg?alt=media&token=d867f2d8-6a3f-43b1-b1cb-8426ed67dfaf';
+
+            const logo = new Image();
+            logo.crossOrigin = 'Anonymous';
+            logo.onload = function () {
+                pdf.addImage(logo, 'JPEG', 40, 20, 100, 50);
+                addContentToPDF();
+                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            };
+            logo.onerror = function () {
+                console.error('Failed to load logo image');
+                addContentToPDF(); // Generate PDF even if logo fails to load
+                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            };
+            logo.src = logoImgUrl;
+
+            function addContentToPDF() {
+                pdf.setFontSize(22);
+                pdf.setTextColor('#002B5C');
+                pdf.text('Dairy Shed Hygiene Checklist', 40, 100);
+
+                // Add farm details to the PDF
+                pdf.setFontSize(12);
+                pdf.setTextColor('#000000');
+                pdf.text(`Dairy Number: ${dairyNumber}`, 40, 130);
+                pdf.text(`Customer Name: ${customerName}`, 40, 145);
+                pdf.text(`Address: ${address}`, 40, 160);
+                pdf.text(`Farm Name: ${farmName}`, 40, 175);
+                pdf.text(`Region: ${region}`, 40, 190);
+                pdf.text(`Island: ${island}`, 40, 205);
+
+                // Generate checklist items table
+                const checklistItemsDiv = document.getElementById('checklist-items').children;
+                const checklistTable = [];
+
+                for (let item of checklistItemsDiv) {
+                    const itemName = item.querySelector('label').textContent;
+                    const status = item.querySelector('select').value;
+                    const comments = item.querySelector('input[type="text"]').value;
+
+                    checklistTable.push([itemName, status, comments]);
+                }
+
+                pdf.autoTable({
+                    startY: 220,
+                    head: [['Item', 'Status', 'Comments']],
+                    body: checklistTable,
+                    styles: {
+                        fontSize: 10,
+                        cellPadding: 5,
+                    },
+                    headStyles: {
+                        fillColor: '#002B5C',
+                        textColor: '#FFFFFF'
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
