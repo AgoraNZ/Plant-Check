@@ -165,10 +165,10 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
+            apiKey: "AIzaSyDr9nA44Kkej*****GUzbMDECI8cTFI",
             authDomain: "dairy-farm-record-system.firebaseapp.com",
             projectId: "dairy-farm-record-system",
-            storageBucket: "gs://dairy-farm-record-system.appspot.com/Deosan Hygiene Reports",
+            storageBucket: "dairy-farm-record-system.appspot.com",
             messagingSenderId: "422124188212",
             appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
         };
@@ -177,7 +177,9 @@
         firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
 
-        const { jsPDF } = window.jspdf;
+        // Correct jsPDF reference
+        const jsPDF = window.jspdf.jsPDF;
+
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
             "Sanitary Trap", "Main Milk Line", "Milk Line Seals in Good Condition", "Stainless Droppers", "Long Milk Rubber",
