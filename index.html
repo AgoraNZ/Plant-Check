@@ -156,7 +156,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 5.1</div>
+        <div class="version">Version 5.2</div>
     </div>
 
     <script>
@@ -238,12 +238,32 @@
             pdf.setFontSize(22);
             pdf.setTextColor('#002B5C');
 
-            // Adding the logo
             try {
-                const logoBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBSgFKAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT...'; // Full Base64 data
-                pdf.addImage(logoBase64, 'JPEG', 40, 30, 120, 60);
+                // Base64 JPEG Image
+                const logoBase64JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT...'; // Truncated for brevity
+                pdf.addImage(logoBase64JPEG, 'JPEG', 40, 30, 120, 60);
             } catch (error) {
-                console.error("Failed to add image:", error);
+                console.error("Failed to add JPEG logo:", error);
+            }
+
+            try {
+                // URL PNG Image
+                const pngImageURL = 'https://via.placeholder.com/150';
+                const img = new Image();
+                img.src = pngImageURL;
+                img.onload = () => {
+                    pdf.addImage(img, 'PNG', 40, 100, 120, 60);
+                };
+            } catch (error) {
+                console.error("Failed to add PNG logo from URL:", error);
+            }
+
+            try {
+                // SVG Image Example
+                const svgImageBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iNTAiPjx0ZXh0IHg9IjUwJSIgeT0iNTAiIGZpbGw9ImJsYWNrIiBmb250LXNpemU9IjIwIj5Mb2dvPC90ZXh0Pjwvc3ZnPg=='; // Simple SVG text image
+                pdf.addImage(svgImageBase64, 'SVG', 200, 30, 100, 50);
+            } catch (error) {
+                console.error("Failed to add SVG logo:", error);
             }
 
             pdf.text('Dairy Shed Hygiene Checklist', 160, 50);
