@@ -63,6 +63,21 @@
     <!-- Add Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
+            authDomain: "dairy-farm-record-system.firebaseapp.com",
+            projectId: "dairy-farm-record-system",
+            storageBucket: "dairy-farm-record-system.appspot.com",
+            messagingSenderId: "422124188212",
+            appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+    </script>
 </head>
 <body>
     <div class="container">
@@ -172,24 +187,10 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.1</div>
+        <div class="version">Version 4.2</div>
     </div>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
-            authDomain: "dairy-farm-record-system.firebaseapp.com",
-            projectId: "dairy-farm-record-system",
-            storageBucket: "dairy-farm-record-system.appspot.com",
-            messagingSenderId: "422124188212",
-            appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-
         const { jsPDF } = window.jspdf;
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
@@ -208,7 +209,7 @@
             const checklistContainer = document.getElementById('checklist-items');
             checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
 
-            // Adding checklist items dynamically to the DOM
+            // Corrected the placement of the checklist item generation code to ensure it runs
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
