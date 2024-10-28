@@ -79,7 +79,7 @@
 <body>
     <div class="container">
         <div id="logo-container">
-            <img src="Picture2.jpg" alt="DEOSAN Logo">
+            <img src="/mnt/data/Picture2.jpg" alt="DEOSAN Logo">
         </div>
         <h1>Dairy Shed Hygiene Checklist</h1>
         
@@ -275,13 +275,10 @@
             pdf.text('Dairy Shed Hygiene Checklist', 40, 50);
 
             const logo = document.getElementById('logo-container').querySelector('img');
-            if (logo) {
-                const logoUrl = logo.src;
+            if (logo && logo.complete) {
                 const img = new Image();
-                img.src = logoUrl;
-                img.onload = function() {
-                    pdf.addImage(img, 'JPEG', 40, 70, 100, 40);
-                };
+                img.src = logo.src;
+                pdf.addImage(img, 'JPEG', 40, 70, 100, 40);
             }
 
             pdf.setFontSize(12);
