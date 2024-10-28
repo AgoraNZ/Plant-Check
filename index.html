@@ -1,27 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
-  authDomain: "dairy-farm-record-system.firebaseapp.com",
-  projectId: "dairy-farm-record-system",
-  storageBucket: "dairy-farm-record-system.appspot.com",
-  messagingSenderId: "422124188212",
-  appId: "1:422124188212:web:1bd31bee8d6e91e301d061",
-  measurementId: "G-7GFHEQWW06"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dairy Shed Hygiene Checklist</title>
@@ -81,115 +60,49 @@ const analytics = getAnalytics(app);
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY"></script> <!-- Replace YOUR_GOOGLE_API_KEY with your Google Maps API Key -->
 </head>
 <body>
     <div class="container">
-        <h1>Dairy Shed Hygiene Checklist</h1>
-        
-        <form id="hygiene-checklist-form">
-            <div class="section mb-4">
-                <h2>Farm Details</h2>
-                <label for="dairy-company">Dairy Company:</label>
-                <select id="dairy-company" name="dairy-company" class="form-select">
-                    <option value="fonterra">Fonterra</option>
-                    <option value="dairy-goat-coop">Dairy Goat Co-op</option>
-                    <option value="green-valley">Green Valley Dairies</option>
-                    <option value="maui-milk">Maui Milk</option>
-                    <option value="oceania">Oceania</option>
-                    <option value="ofi">OFI</option>
-                    <option value="synlait">Synlait Milk LTD</option>
-                    <option value="tatua">Tatua</option>
-                </select>
-
-                <label for="dairy-number">Dairy Number:</label>
-                <input type="text" class="form-control" id="dairy-number" name="dairy-number">
-
-                <label for="address">Address:</label>
-                <input type="text" class="form-control" id="address" name="address">
-
-                <label for="customer-name">Customer Name:</label>
-                <input type="text" class="form-control" id="customer-name" name="customer-name">
-
-                <label for="region">Region:</label>
-                <select id="region" name="region" class="form-select">
-                    <option value="northland">Northland</option>
-                    <option value="auckland">Auckland</option>
-                    <option value="waikato">Waikato</option>
-                    <option value="bay-of-plenty">Bay of Plenty</option>
-                    <option value="gisborne">Gisborne</option>
-                    <option value="hawkes-bay">Hawke's Bay</option>
-                    <option value="taranaki">Taranaki</option>
-                    <option value="manawatu-wanganui">Manawatu-Wanganui</option>
-                    <option value="wellington">Wellington</option>
-                    <option value="nelson">Nelson</option>
-                    <option value="marlborough">Marlborough</option>
-                    <option value="west-coast">West Coast</option>
-                    <option value="canterbury">Canterbury</option>
-                    <option value="otago">Otago</option>
-                    <option value="southland">Southland</option>
-                </select>
-
-                <label for="farm-name">Farm Name:</label>
-                <input type="text" class="form-control" id="farm-name" name="farm-name">
-
-                <label for="island">Island:</label>
-                <select id="island" name="island" class="form-select">
-                    <option value="north-island">North Island</option>
-                    <option value="south-island">South Island</option>
-                </select>
-
-                <label for="visit-date">Visit Date:</label>
-                <input type="date" class="form-control" id="visit-date" name="visit-date">
-
-                <label for="visit-type">Visit Type:</label>
-                <input type="text" class="form-control" id="visit-type" name="visit-type" value="Milking Plant & Milk Vat Check" readonly>
-
-                <label for="inspection-start-time">Inspection Start Time:</label>
-                <input type="time" class="form-control" id="inspection-start-time" name="inspection-start-time">
-
-                <label for="inspection-end-time">Inspection End Time:</label>
-                <input type="time" class="form-control" id="inspection-end-time" name="inspection-end-time">
-
-                <label for="inspection-completed-by">Inspection Completed By:</label>
-                <input type="text" class="form-control" id="inspection-completed-by" name="inspection-completed-by">
-
-                <label for="call-type">Call Type:</label>
-                <select id="call-type" name="call-type" class="form-select">
-                    <option value="alert">Alert</option>
-                    <option value="grade-call">Grade Call</option>
-                    <option value="regular-scheduled-visit" selected>Regular Scheduled Visit</option>
-                </select>
-            </div>
+@@ -143,33 +142,9 @@
 
             <div class="section mb-4">
                 <h2>Checklist Items</h2>
+                <!-- Statically Define Checklist Items -->
+                <div class="checklist-item">
+                    <label>Pulsator Airline</label>
+                    <select class="form-select" name="status-pulsator-airline">
+                        <option value="ok">OK</option>
+                        <option value="attention-required">Attention Required</option>
+                        <option value="na">N/A</option>
+                        <option value="not-checked">Not Checked</option>
+                    </select>
+                    <input type="text" class="form-control" name="comments-pulsator-airline" placeholder="Comments">
+                    <input type="file" class="form-control image-upload" name="image-pulsator-airline">
+                </div>
+                <!-- Repeat similar checklist items for other components -->
+                <div class="checklist-item">
+                    <label>Long Bend Elbows</label>
+                    <select class="form-select" name="status-long-bend-elbows">
+                        <option value="ok">OK</option>
+                        <option value="attention-required">Attention Required</option>
+                        <option value="na">N/A</option>
+                        <option value="not-checked">Not Checked</option>
+                    </select>
+                    <input type="text" class="form-control" name="comments-long-bend-elbows" placeholder="Comments">
+                    <input type="file" class="form-control image-upload" name="image-long-bend-elbows">
                 <div id="checklist-items">
                     <!-- Checklist items will be dynamically added here -->
                 </div>
+                <!-- Continue for all checklist items -->
             </div>
 
             <!-- Special Checklist Items: Hot Water Temp and Milk Temp -->
-            <div class="section mb-4">
-                <h2>Temperature Measurements</h2>
-                <div class="checklist-item">
-                    <label for="hot-water-temp">Hot Water Temp (°C):</label>
-                    <input type="number" class="form-control" id="hot-water-temp" name="hot-water-temp" step="0.1">
-                    
-                    <label for="hot-water-time">Time Taken:</label>
-                    <input type="time" class="form-control" id="hot-water-time" name="hot-water-time">
-                </div>
-                
-                <div class="checklist-item">
-                    <label for="milk-temp">Milk Temp (°C):</label>
-                    <input type="number" class="form-control" id="milk-temp" name="milk-temp" step="0.1">
-                    
-                    <label for="milk-time">Time Taken:</label>
-                    <input type="time" class="form-control" id="milk-time" name="milk-time">
-                </div>
-            </div>
+@@ -194,15 +169,93 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
+        <div class="version">Version 4.4</div>
         <div class="version">Version 4.1</div>
     </div>
 
@@ -204,23 +117,18 @@ const analytics = getAnalytics(app);
             "Plant Drainage - Vat Entry", "Plant Wash Tap", "Wash Jetters", "Centre Gland", "Test Bucket", "Inlet Valve",
             "Non-Return Valve", "Spray Ball", "Agitator", "Silo Door", "Manhole Seal", "Vat Outlet", "Walls in Silo"
         ];
-
         let customerData = {}; // To store customer details for auto-population
-
         document.addEventListener("DOMContentLoaded", () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('visit-date').value = today;
-
             const checklistContainer = document.getElementById('checklist-items');
             checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
-
                 const label = document.createElement('label');
                 label.textContent = item;
                 itemContainer.appendChild(label);
-
                 const statusSelect = document.createElement('select');
                 statusSelect.classList.add('form-select');
                 statusSelect.innerHTML = `
@@ -230,26 +138,22 @@ const analytics = getAnalytics(app);
                     <option value="not-checked">Not Checked</option>
                 `;
                 itemContainer.appendChild(statusSelect);
-
                 const commentsInput = document.createElement('input');
                 commentsInput.type = 'text';
                 commentsInput.classList.add('form-control');
                 commentsInput.placeholder = 'Comments';
                 itemContainer.appendChild(commentsInput);
-
                 const imageUpload = document.createElement('input');
                 imageUpload.type = 'file';
                 imageUpload.classList.add('form-control', 'image-upload');
                 imageUpload.style.display = 'none';
                 itemContainer.appendChild(imageUpload);
-
                 statusSelect.addEventListener('change', () => {
                     if (statusSelect.value === 'attention-required') {
                         imageUpload.style.display = 'block';
                     } else {
                         imageUpload.style.display = 'none';
                     }
-
                     if (statusSelect.value === 'not-checked') {
                         commentsInput.value = "Milk in Vat";
                     } else {
@@ -258,7 +162,6 @@ const analytics = getAnalytics(app);
                         }
                     }
                 });
-
                 checklistContainer.appendChild(itemContainer);
             });
         });
@@ -267,7 +170,6 @@ const analytics = getAnalytics(app);
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
             const dairyNumber = formData.get('dairy-number');
-
             // Save customer data for future auto-population
             customerData[dairyNumber] = {
                 dairyCompany: formData.get('dairy-company'),
@@ -280,40 +182,26 @@ const analytics = getAnalytics(app);
 
             let pdf = new jsPDF('p', 'pt', 'a4');
             pdf.setFontSize(22);
-            pdf.setTextColor('#002B5C');
-            pdf.text('Dairy Shed Hygiene Checklist', 40, 50);
-
-            pdf.setFontSize(12);
-            pdf.setTextColor('#000000');
-            pdf.setFont('helvetica', 'bold');
-            pdf.text('Farm Details:', 40, 80);
-
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, 100);
-            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, 115);
-            pdf.text(`Address: ${formData.get('address')}`, 40, 130);
-            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, 145);
-            pdf.text(`Region: ${formData.get('region')}`, 40, 160);
-            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, 175);
-            pdf.text(`Island: ${formData.get('island')}`, 40, 190);
-            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, 205);
-            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, 220);
-            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, 235);
-            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, 250);
+@@ -229,27 +282,32 @@
             pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 265);
             pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 280);
 
             const checklistItemsDiv = document.getElementById('checklist-items').children;
-
             const checklistTable = [];
             const images = [];
 
+            const checklistItems = document.querySelectorAll(".checklist-item");
+            checklistItems.forEach((item) => {
+                const itemName = item.querySelector("label").innerText;
+                const status = item.querySelector("select") ? item.querySelector("select").value : "N/A";
+                const comments = item.querySelector('input[type="text"]') ? item.querySelector('input[type="text"]').value : "";
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
                 const imageFile = item.querySelector('input[type="file"]').files[0];
 
+                checklistTable.push([itemName, status, comments]);
                 const row = [itemName, status, comments];
 
                 if (imageFile) {
@@ -324,40 +212,24 @@ const analytics = getAnalytics(app);
                     reader.readAsDataURL(imageFile);
                     await new Promise((resolve) => reader.onloadend = resolve);
                 }
+            });
 
                 checklistTable.push(row);
             }
-
             // Generate checklist items table
             pdf.autoTable({
                 startY: 300,
                 head: [['Item', 'Status', 'Comments']],
-                body: checklistTable,
-                styles: {
-                    fontSize: 10,
-                    cellPadding: 5,
-                },
-                headStyles: {
-                    fillColor: '#002B5C',
-                    textColor: '#FFFFFF'
+@@ -264,7 +322,9 @@
                 }
             });
 
             // Add temperature data
             let currentY = pdf.lastAutoTable.finalY + 20;
-
             pdf.setFont('helvetica', 'bold');
             pdf.text('Temperature Measurements:', 40, currentY);
             currentY += 20;
-
-            pdf.setFont('helvetica', 'normal');
-            pdf.text(`Hot Water Temp: ${formData.get('hot-water-temp')}°C`, 40, currentY);
-            currentY += 15;
-            pdf.text(`Time Taken: ${formData.get('hot-water-time')}`, 40, currentY);
-            currentY += 20;
-
-            pdf.text(`Milk Temp: ${formData.get('milk-temp')}°C`, 40, currentY);
-            currentY += 15;
+@@ -280,6 +340,7 @@
             pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
             currentY += 20;
 
@@ -365,28 +237,20 @@ const analytics = getAnalytics(app);
             if (images.length > 0) {
                 pdf.setFont('helvetica', 'bold');
                 pdf.text('Photos:', 40, currentY);
-                currentY += 20;
-
-                images.forEach((imgDetail, index) => {
-                    pdf.setFont('helvetica', 'normal');
-                    pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
-                    currentY += 10;
+@@ -292,13 +353,14 @@
 
                     const pageHeight = pdf.internal.pageSize.height;
 
                     // Check if adding the image exceeds the page height
                     if (currentY + 160 > pageHeight) {
                         pdf.addPage();
+                        currentY = 50;
                         currentY = 50; // Reset Y position for new page
                     }
 
                     pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
+                    currentY += 160;
                     currentY += 160; // Spacing for the next image
                 });
             }
 
-            pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-        }
-    </script>
-</body>
-</html>
