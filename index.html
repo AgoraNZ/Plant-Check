@@ -57,6 +57,9 @@
             color: #FFFFFF;
             font-size: 12px;
         }
+        #logo-img {
+            display: none;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -67,7 +70,10 @@
 <body>
     <div class="container">
         <h1>Dairy Shed Hygiene Checklist</h1>
-        
+
+        <!-- Hidden Image for Logo -->
+        <img id="logo-img" src="https://firebasestorage.googleapis.com/v0/b/dairy-farm-record-system.appspot.com/o/Picture2.jpg?alt=media&token=d867f2d8-6a3f-43b1-b1cb-8426ed67dfaf" alt="Logo">
+
         <form id="hygiene-checklist-form">
             <!-- Farm Details Section -->
             <div class="section mb-4">
@@ -163,20 +169,6 @@
     </div>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
-            authDomain: "dairy-farm-record-system.firebaseapp.com",
-            projectId: "dairy-farm-record-system",
-            storageBucket: "dairy-farm-record-system.appspot.com",
-            messagingSenderId: "422124188212",
-            appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-
         const { jsPDF } = window.jspdf;
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
@@ -246,7 +238,7 @@
             });
         }
 
-        async function generatePDF() {
+        function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
             const dairyNumber = formData.get('dairy-number');
@@ -258,27 +250,26 @@
 
             let pdf = new jsPDF('p', 'pt', 'a4');
 
-            // Firebase logo image URL
-            const logoImgUrl = 'https://firebasestorage.googleapis.com/v0/b/dairy-farm-record-system.appspot.com/o/Picture2.jpg?alt=media&token=d867f2d8-6a3f-43b1-b1cb-8426ed67dfaf';
+            const logoImg = document.getElementById('logo-img');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
 
-            try {
-                const response = await fetch(logoImgUrl);
-                const blob = await response.blob();
-                const reader = new FileReader();
+            logoImg.onload = function () {
+                canvas.width = logoImg.width;
+                canvas.height = logoImg.height;
+                context.drawImage(logoImg, 0, 0);
+                const logoBase64 = canvas.toDataURL('image/jpeg');
 
-                reader.onloadend = function () {
-                    const base64data = reader.result;
-                    pdf.addImage(base64data, 'JPEG', 40, 20, 100, 50);
-                    addContentToPDF();
-                    pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-                };
-                
-                reader.readAsDataURL(blob);
-            } catch (error) {
-                console.error('Failed to load logo image:', error);
+                pdf.addImage(logoBase64, 'JPEG', 40, 20, 100, 50);
+                addContentToPDF();
+                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+            };
+
+            logoImg.onerror = function () {
+                console.error('Failed to load logo image');
                 addContentToPDF(); // Generate PDF even if logo fails to load
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-            }
+            };
 
             function addContentToPDF() {
                 pdf.setFontSize(22);
