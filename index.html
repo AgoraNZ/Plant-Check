@@ -85,13 +85,12 @@
                     <option value="tatua">Tatua</option>
                 </select>
 
-                <!-- Other form inputs remain unchanged -->
                 <label for="dairy-number">Dairy Number:</label>
                 <input type="text" class="form-control" id="dairy-number" name="dairy-number">
 
-                <!-- Additional inputs for farm details -->
-                <!-- Your other form elements go here -->
-
+                <!-- Added visit-date field -->
+                <label for="visit-date">Visit Date:</label>
+                <input type="date" class="form-control" id="visit-date" name="visit-date">
             </div>
             
             <div class="section mb-4">
@@ -127,7 +126,7 @@
     </div>
 
     <script>
-        // Firebase configuration
+        // Firebase configuration (provided by you)
         const firebaseConfig = {
             apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
             authDomain: "dairy-farm-record-system.firebaseapp.com",
@@ -135,7 +134,7 @@
             storageBucket: "dairy-farm-record-system.appspot.com",
             messagingSenderId: "422124188212",
             appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
-               };
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -153,11 +152,17 @@
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
+            // Set today's date in the visit-date field
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('visit-date').value = today;
+            const visitDateField = document.getElementById('visit-date');
+            if (visitDateField) {
+                visitDateField.value = today;
+            }
 
             const checklistContainer = document.getElementById('checklist-items');
             checklistContainer.innerHTML = '';
+
+            // Adding checklist items to the DOM
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('checklist-item');
