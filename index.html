@@ -252,4 +252,16 @@
             // Save PDF and upload to Firebase
             const pdfBlob = pdf.output('blob');
             const timestamp = new Date().toISOString().split('T')[0];
-            const fileName = `${dairy
+            const fileName = `${dairyNumber}-form-${timestamp}.pdf`;
+            const storageRef = storage.ref().child(`customers/${dairyNumber}/${fileName}`);
+
+            try {
+                await storageRef.put(pdfBlob);
+                console.log("PDF uploaded successfully.");
+            } catch (error) {
+                console.error("Error uploading PDF:", error);
+            }
+        }
+    </script>
+</body>
+</html>
