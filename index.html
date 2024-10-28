@@ -156,7 +156,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 5.0</div>
+        <div class="version">Version 5.1</div>
     </div>
 
     <script>
@@ -239,10 +239,14 @@
             pdf.setTextColor('#002B5C');
 
             // Adding the logo
-            const logoBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBSgFKAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT...'; // Full Base64 data from your file
-            pdf.addImage(logoBase64, 'JPEG', 40, 30, 150, 75); // Adjust the size and position as needed
+            try {
+                const logoBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBSgFKAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT...'; // Full Base64 data
+                pdf.addImage(logoBase64, 'JPEG', 40, 30, 120, 60);
+            } catch (error) {
+                console.error("Failed to add image:", error);
+            }
 
-            pdf.text('Dairy Shed Hygiene Checklist', 200, 50);
+            pdf.text('Dairy Shed Hygiene Checklist', 160, 50);
 
             pdf.setFontSize(12);
             pdf.setTextColor('#000000');
