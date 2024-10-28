@@ -57,19 +57,15 @@
             color: #FFFFFF;
             font-size: 12px;
         }
-        #logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <!-- Updated Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <div class="container">
-        <div id="logo-container">
-            <img src="https://via.placeholder.com/150.png" id="logo-image" alt="Company Logo">
-        </div>
         <h1>Dairy Shed Hygiene Checklist</h1>
         
         <form id="hygiene-checklist-form">
@@ -163,10 +159,24 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 5.7</div>
+        <div class="version">Version 4.4</div>
     </div>
 
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr9nA44Kjejzeyg9E7nGUzbMDECI8cTFI",
+            authDomain: "dairy-farm-record-system.firebaseapp.com",
+            projectId: "dairy-farm-record-system",
+            storageBucket: "dairy-farm-record-system.appspot.com",
+            messagingSenderId: "422124188212",
+            appId: "1:422124188212:web:1bd31bee8d6e91e301d061"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
         const { jsPDF } = window.jspdf;
         const checklistItems = [
             "Pulsator Airline", "Long Bend Elbows", "Automatic Cup and Remover", "Diaphragm", "Receiving Can",
@@ -179,6 +189,7 @@
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
+            console.log("Document loaded. Creating checklist items...");
             createChecklistItems();
         });
 
@@ -210,6 +221,28 @@
                 commentsInput.placeholder = 'Comments';
                 itemContainer.appendChild(commentsInput);
 
+                const imageUpload = document.createElement('input');
+                imageUpload.type = 'file';
+                imageUpload.classList.add('form-control', 'image-upload');
+                imageUpload.style.display = 'none';
+                itemContainer.appendChild(imageUpload);
+
+                statusSelect.addEventListener('change', () => {
+                    if (statusSelect.value === 'attention-required') {
+                        imageUpload.style.display = 'block';
+                    } else {
+                        imageUpload.style.display = 'none';
+                    }
+
+                    if (statusSelect.value === 'not-checked') {
+                        commentsInput.value = "Milk in Vat";
+                    } else {
+                        if (commentsInput.value === "Milk in Vat") {
+                            commentsInput.value = ""; // Clear the field if it was auto-filled by 'Not Checked'
+                        }
+                    }
+                });
+
                 checklistContainer.appendChild(itemContainer);
             });
         }
@@ -217,61 +250,61 @@
         async function generatePDF() {
             const form = document.getElementById('hygiene-checklist-form');
             let formData = new FormData(form);
+            const dairyNumber = formData.get('dairy-number');
 
             let pdf = new jsPDF('p', 'pt', 'a4');
             pdf.setFontSize(22);
             pdf.setTextColor('#002B5C');
-
-            const img = document.getElementById('logo-image');
-            const imgUrl = img.src;
-
-            const logoImage = new Image();
-            logoImage.src = imgUrl;
-
-            // Wait for the image to load before adding to PDF
-            logoImage.onload = function() {
-                pdf.addImage(logoImage, 'PNG', 40, 30, 100, 50);
-                completePDFCreation(formData, pdf);
-            };
-        }
-
-        function completePDFCreation(formData, pdf) {
-            pdf.text('Dairy Shed Hygiene Checklist', 200, 50);
+            pdf.text('Dairy Shed Hygiene Checklist', 40, 50);
 
             pdf.setFontSize(12);
             pdf.setTextColor('#000000');
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Farm Details:', 40, 150);
+            pdf.text('Farm Details:', 40, 80);
 
             pdf.setFont('helvetica', 'normal');
-            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, 170);
-            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, 185);
-            pdf.text(`Address: ${formData.get('address')}`, 40, 200);
-            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, 215);
-            pdf.text(`Region: ${formData.get('region')}`, 40, 230);
-            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, 245);
-            pdf.text(`Island: ${formData.get('island')}`, 40, 260);
-            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, 275);
-            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, 290);
-            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, 305);
-            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, 320);
-            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 335);
-            pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 350);
+            pdf.text(`Dairy Company: ${formData.get('dairy-company')}`, 40, 100);
+            pdf.text(`Dairy Number: ${formData.get('dairy-number')}`, 40, 115);
+            pdf.text(`Address: ${formData.get('address')}`, 40, 130);
+            pdf.text(`Customer Name: ${formData.get('customer-name')}`, 40, 145);
+            pdf.text(`Region: ${formData.get('region')}`, 40, 160);
+            pdf.text(`Farm Name: ${formData.get('farm-name')}`, 40, 175);
+            pdf.text(`Island: ${formData.get('island')}`, 40, 190);
+            pdf.text(`Visit Date: ${formData.get('visit-date')}`, 40, 205);
+            pdf.text(`Visit Type: ${formData.get('visit-type')}`, 40, 220);
+            pdf.text(`Inspection Start Time: ${formData.get('inspection-start-time')}`, 40, 235);
+            pdf.text(`Inspection End Time: ${formData.get('inspection-end-time')}`, 40, 250);
+            pdf.text(`Inspection Completed By: ${formData.get('inspection-completed-by')}`, 40, 265);
+            pdf.text(`Call Type: ${formData.get('call-type')}`, 40, 280);
 
-            // Checklist items table
             const checklistItemsDiv = document.getElementById('checklist-items').children;
+
             const checklistTable = [];
+            const images = [];
 
             for (let item of checklistItemsDiv) {
                 const itemName = item.querySelector('label').textContent;
                 const status = item.querySelector('select').value;
                 const comments = item.querySelector('input[type="text"]').value;
+                const imageFile = item.querySelector('input[type="file"]').files[0];
 
-                checklistTable.push([itemName, status, comments]);
+                const row = [itemName, status, comments];
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        images.push({ image: event.target.result, itemName: itemName });
+                    };
+                    reader.readAsDataURL(imageFile);
+                    await new Promise((resolve) => reader.onloadend = resolve);
+                }
+
+                checklistTable.push(row);
             }
 
+            // Generate checklist items table
             pdf.autoTable({
-                startY: 370,
+                startY: 300,
                 head: [['Item', 'Status', 'Comments']],
                 body: checklistTable,
                 styles: {
@@ -284,7 +317,7 @@
                 }
             });
 
-            // Temperature Measurements
+            // Add temperature data
             let currentY = pdf.lastAutoTable.finalY + 20;
 
             pdf.setFont('helvetica', 'bold');
@@ -300,8 +333,45 @@
             pdf.text(`Milk Temp: ${formData.get('milk-temp')} °C`, 40, currentY);
             currentY += 15;
             pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
+            currentY += 20;
 
-            // Save PDF
+            // Add images below the table with proper alignment
+            if (images.length > 0) {
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Photos:', 40, currentY);
+                currentY += 20;
+
+                images.forEach((imgDetail, index) => {
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
+                    currentY += 10;
+
+                    const pageHeight = pdf.internal.pageSize.height;
+
+                    // Check if adding the image exceeds the page height
+                    if (currentY + 160 > pageHeight) {
+                        pdf.addPage();
+                        currentY = 50; // Reset Y position for new page
+                    }
+
+                    pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
+                    currentY += 160; // Spacing for the next image
+                });
+            }
+
+            // Save PDF and upload to Firebase
+            const pdfBlob = pdf.output('blob');
+            const timestamp = new Date().toISOString().split('T')[0];
+            const fileName = `${dairyNumber}-form-${timestamp}.pdf`;
+            const storageRef = storage.ref(`customers/${dairyNumber}/${fileName}`);
+
+            try {
+                await storageRef.put(pdfBlob);
+                console.log('PDF uploaded successfully');
+            } catch (error) {
+                console.error('Error uploading PDF:', error);
+            }
+
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
     </script>
