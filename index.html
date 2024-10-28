@@ -158,7 +158,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.7</div>
+        <div class="version">Version 4.8</div>
     </div>
 
     <script>
@@ -188,9 +188,10 @@
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('visit-date').value = today;
+            createChecklistItems();
+        });
 
+        function createChecklistItems() {
             const checklistContainer = document.getElementById('checklist-items');
             checklistContainer.innerHTML = '';
 
@@ -242,7 +243,7 @@
 
                 checklistContainer.appendChild(itemContainer);
             });
-        });
+        }
 
         async function generatePDF() {
             try {
