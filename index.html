@@ -132,6 +132,24 @@
                 </select>
             </div>
 
+            <!-- Health & Safety Section -->
+            <div class="section mb-4">
+                <h2>Health & Safety</h2>
+                <div class="checklist-item">
+                    <label for="health-safety-status">Health & Safety Status:</label>
+                    <select id="health-safety-status" name="health-safety-status" class="form-select">
+                        <option value="ok">OK</option>
+                        <option value="attention-required">Attention Required</option>
+                        <option value="na">N/A</option>
+                        <option value="not-checked">Not Checked</option>
+                    </select>
+                    <label for="health-safety-comments">Comments:</label>
+                    <input type="text" class="form-control" id="health-safety-comments" name="health-safety-comments" placeholder="Comments">
+                    <label for="health-safety-photo" class="mt-2">Upload Photo:</label>
+                    <input type="file" class="form-control image-upload" id="health-safety-photo" name="health-safety-photo" style="display: none;">
+                </div>
+            </div>
+
             <!-- Checklist Items Section -->
             <div class="section mb-4">
                 <h2>Checklist Items</h2>
@@ -364,7 +382,8 @@
             // Save PDF and upload to Firebase
             const pdfBlob = pdf.output('blob');
             const timestamp = new Date().toISOString().split('T')[0];
-            const fileName = `${dairyNumber}-form-${timestamp}.pdf`;
+            const uniqueId = new Date().getTime();
+            const fileName = `${dairyNumber}-form-${timestamp}-${uniqueId}.pdf`;
             const storageRef = storage.ref(`customers/${dairyNumber}/${fileName}`);
 
             try {
