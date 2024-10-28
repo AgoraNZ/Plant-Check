@@ -65,6 +65,10 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        #logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -75,7 +79,7 @@
 <body>
     <div class="container">
         <div id="logo-container">
-            <img src="DEOSAN_ON_BLUE.pdf" alt="DEOSAN Logo" style="max-width: 100%; height: auto;">
+            <img src="Picture2.jpg" alt="DEOSAN Logo">
         </div>
         <h1>Dairy Shed Hygiene Checklist</h1>
         
@@ -265,6 +269,10 @@
 
         function generatePDF() {
             const pdf = new jsPDF();
+            const logo = new Image();
+            logo.src = 'Picture2.jpg';
+            pdf.addImage(logo, 'JPEG', 80, 10, 50, 25);
+
             const supplyNumber = document.getElementById('dairy-number').value;
             const dairyCompany = document.getElementById('dairy-company').value;
             const customerName = document.getElementById('customer-name').value;
@@ -273,15 +281,15 @@
             const inspectionCompletedBy = document.getElementById('inspection-completed-by').value;
 
             pdf.setFontSize(16);
-            pdf.text("Dairy Shed Hygiene Checklist", 105, 20, { align: "center" });
+            pdf.text("Dairy Shed Hygiene Checklist", 105, 50, { align: "center" });
 
             pdf.setFontSize(12);
-            pdf.text(`Dairy Number: ${supplyNumber}`, 10, 30);
-            pdf.text(`Dairy Company: ${dairyCompany}`, 10, 40);
-            pdf.text(`Customer Name: ${customerName}`, 10, 50);
-            pdf.text(`Address: ${address}`, 10, 60);
-            pdf.text(`Visit Date: ${visitDate}`, 10, 70);
-            pdf.text(`Inspection Completed By: ${inspectionCompletedBy}`, 10, 80);
+            pdf.text(`Dairy Number: ${supplyNumber}`, 10, 60);
+            pdf.text(`Dairy Company: ${dairyCompany}`, 10, 70);
+            pdf.text(`Customer Name: ${customerName}`, 10, 80);
+            pdf.text(`Address: ${address}`, 10, 90);
+            pdf.text(`Visit Date: ${visitDate}`, 10, 100);
+            pdf.text(`Inspection Completed By: ${inspectionCompletedBy}`, 10, 110);
 
             const checklistData = [];
             document.querySelectorAll('.checklist-item').forEach((item, index) => {
@@ -294,7 +302,7 @@
             pdf.autoTable({
                 head: [['Checklist Item', 'Status', 'Comments']],
                 body: checklistData,
-                startY: 90
+                startY: 120
             });
 
             pdf.save("DairyShedChecklist.pdf");
