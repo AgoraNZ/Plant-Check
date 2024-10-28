@@ -258,22 +258,27 @@
 
             let pdf = new jsPDF('p', 'pt', 'a4');
 
-            // Add logo using Firebase URL
+            // Firebase logo image URL
             const logoImgUrl = 'https://firebasestorage.googleapis.com/v0/b/dairy-farm-record-system.appspot.com/o/Picture2.jpg?alt=media&token=d867f2d8-6a3f-43b1-b1cb-8426ed67dfaf';
 
-            const logo = new Image();
-            logo.crossOrigin = 'Anonymous';
-            logo.onload = function () {
-                pdf.addImage(logo, 'JPEG', 40, 20, 100, 50);
-                addContentToPDF();
-                pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-            };
-            logo.onerror = function () {
-                console.error('Failed to load logo image');
+            try {
+                const response = await fetch(logoImgUrl);
+                const blob = await response.blob();
+                const reader = new FileReader();
+
+                reader.onloadend = function () {
+                    const base64data = reader.result;
+                    pdf.addImage(base64data, 'JPEG', 40, 20, 100, 50);
+                    addContentToPDF();
+                    pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
+                };
+                
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error('Failed to load logo image:', error);
                 addContentToPDF(); // Generate PDF even if logo fails to load
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
-            };
-            logo.src = logoImgUrl;
+            }
 
             function addContentToPDF() {
                 pdf.setFontSize(22);
