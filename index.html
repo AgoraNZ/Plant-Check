@@ -57,6 +57,10 @@
             color: #FFFFFF;
             font-size: 12px;
         }
+        #records-container {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -173,6 +177,7 @@
             <button type="button" onclick="generatePDF()">Generate PDF</button>
             <button type="button" onclick="viewRecords()">View Records</button>
         </form>
+        <div id="records-container"></div>
         <div class="version">Version 4.8</div>
     </div>
 
@@ -257,11 +262,29 @@
             const dairyCompany = document.getElementById('dairy-company').value;
             const customerName = document.getElementById('customer-name').value;
             const address = document.getElementById('address').value;
+            const visitDate = document.getElementById('visit-date').value;
+            const inspectionCompletedBy = document.getElementById('inspection-completed-by').value;
 
             pdf.text(`Dairy Number: ${supplyNumber}`, 10, 10);
             pdf.text(`Dairy Company: ${dairyCompany}`, 10, 20);
             pdf.text(`Customer Name: ${customerName}`, 10, 30);
             pdf.text(`Address: ${address}`, 10, 40);
+            pdf.text(`Visit Date: ${visitDate}`, 10, 50);
+            pdf.text(`Inspection Completed By: ${inspectionCompletedBy}`, 10, 60);
+
+            const checklistData = [];
+            document.querySelectorAll('.checklist-item').forEach((item, index) => {
+                const itemName = checklistItems[index];
+                const status = item.querySelector('select').value;
+                const comments = item.querySelector('input[type="text"]').value;
+                checklistData.push([itemName, status, comments]);
+            });
+
+            pdf.autoTable({
+                head: [['Checklist Item', 'Status', 'Comments']],
+                body: checklistData,
+                startY: 70
+            });
 
             pdf.save("DairyShedChecklist.pdf");
         }
