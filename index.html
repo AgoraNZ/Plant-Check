@@ -60,9 +60,9 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
 <body>
     <div class="container">
@@ -173,7 +173,7 @@
             <button type="button" onclick="generatePDF()">Generate PDF</button>
             <button type="button" onclick="viewRecords()">View Records</button>
         </form>
-        <div class="version">Version 4.7</div>
+        <div class="version">Version 4.8</div>
     </div>
 
     <script>
@@ -240,4 +240,53 @@
                 itemContainer.appendChild(imageUpload);
 
                 statusSelect.addEventListener('change', () => {
-                    if
+                    if (statusSelect.value === 'attention-required') {
+                        imageUpload.style.display = 'block';
+                    } else {
+                        imageUpload.style.display = 'none';
+                    }
+                });
+
+                checklistContainer.appendChild(itemContainer);
+            });
+        });
+
+        function generatePDF() {
+            const pdf = new jsPDF();
+            const supplyNumber = document.getElementById('dairy-number').value;
+            const dairyCompany = document.getElementById('dairy-company').value;
+            const customerName = document.getElementById('customer-name').value;
+            const address = document.getElementById('address').value;
+
+            pdf.text(`Dairy Number: ${supplyNumber}`, 10, 10);
+            pdf.text(`Dairy Company: ${dairyCompany}`, 10, 20);
+            pdf.text(`Customer Name: ${customerName}`, 10, 30);
+            pdf.text(`Address: ${address}`, 10, 40);
+
+            pdf.save("DairyShedChecklist.pdf");
+        }
+
+        function viewRecords() {
+            const supplyNumber = document.getElementById('dairy-number').value;
+            const storageRef = storage.ref(`customers/${supplyNumber}/`);
+
+            storageRef.listAll().then((result) => {
+                const recordsContainer = document.getElementById('records-container');
+                recordsContainer.innerHTML = ""; // Clear previous results
+                result.items.forEach((itemRef) => {
+                    itemRef.getDownloadURL().then((url) => {
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.target = '_blank';
+                        link.textContent = `Download ${itemRef.name}`;
+                        recordsContainer.appendChild(link);
+                        recordsContainer.appendChild(document.createElement('br'));
+                    });
+                });
+            }).catch((error) => {
+                console.error('Error fetching records:', error);
+            });
+        }
+    </script>
+</body>
+</html>
