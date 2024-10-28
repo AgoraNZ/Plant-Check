@@ -169,7 +169,7 @@
 
             <button type="button" onclick="generatePDF()">Generate PDF</button>
         </form>
-        <div class="version">Version 4.4</div>
+        <div class="version">Version 4.5</div>
     </div>
 
     <script>
@@ -189,7 +189,7 @@
             document.getElementById('visit-date').value = today;
 
             const checklistContainer = document.getElementById('checklist-items');
-            checklistContainer.innerHTML = ''; // Ensure the container is empty before adding items
+            checklistContainer.innerHTML = '';
 
             checklistItems.forEach(item => {
                 const itemContainer = document.createElement('div');
@@ -241,7 +241,7 @@
             });
         });
 
-        function generatePDF() {
+        async function generatePDF() {
             try {
                 const form = document.getElementById('hygiene-checklist-form');
                 let formData = new FormData(form);
@@ -274,13 +274,25 @@
                 const checklistItemsDiv = document.getElementById('checklist-items').children;
 
                 const checklistTable = [];
+                const images = [];
+
                 for (let item of checklistItemsDiv) {
                     const itemName = item.querySelector('label').textContent;
                     const status = item.querySelector('select').value;
                     const comments = item.querySelector('input[type="text"]').value;
+                    const imageFile = item.querySelector('input[type="file"]').files[0];
 
                     const row = [itemName, status, comments];
                     checklistTable.push(row);
+
+                    if (imageFile) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            images.push({ image: event.target.result, itemName: itemName });
+                        };
+                        reader.readAsDataURL(imageFile);
+                        await new Promise((resolve) => reader.onloadend = resolve);
+                    }
                 }
 
                 // Generate checklist items table
@@ -297,6 +309,48 @@
                         textColor: '#FFFFFF'
                     }
                 });
+
+                // Add temperature data
+                let currentY = pdf.lastAutoTable.finalY + 20;
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Temperature Measurements:', 40, currentY);
+                currentY += 20;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Hot Water Temp: ${formData.get('hot-water-temp')}°C`, 40, currentY);
+                currentY += 15;
+                pdf.text(`Time Taken: ${formData.get('hot-water-time')}`, 40, currentY);
+                currentY += 20;
+
+                pdf.text(`Milk Temp: ${formData.get('milk-temp')}°C`, 40, currentY);
+                currentY += 15;
+                pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, currentY);
+                currentY += 20;
+
+                // Add images below the table with proper alignment
+                if (images.length > 0) {
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.text('Photos:', 40, currentY);
+                    currentY += 20;
+
+                    images.forEach((imgDetail, index) => {
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.text(`Item: ${imgDetail.itemName}`, 40, currentY);
+                        currentY += 10;
+
+                        const pageHeight = pdf.internal.pageSize.height;
+
+                        // Check if adding the image exceeds the page height
+                        if (currentY + 160 > pageHeight) {
+                            pdf.addPage();
+                            currentY = 50; // Reset Y position for new page
+                        }
+
+                        pdf.addImage(imgDetail.image, 'JPEG', 40, currentY, 150, 150);
+                        currentY += 160; // Spacing for the next image
+                    });
+                }
 
                 pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
             } catch (error) {
