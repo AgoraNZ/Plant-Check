@@ -408,6 +408,27 @@
                 console.error('Error uploading PDF:', error);
             }
 
+            // Save farm details to Firebase Storage for auto-population next time
+            const farmDetails = {
+                dairyCompany: formData.get('dairy-company'),
+                address: formData.get('address'),
+                customerName: formData.get('customer-name'),
+                region: formData.get('region'),
+                farmName: formData.get('farm-name'),
+                island: formData.get('island')
+            };
+
+            const farmDetailsBlob = new Blob([JSON.stringify(farmDetails)], { type: "application/json" });
+            const farmDetailsRef = storage.ref(`farm_details/${dairyNumber}.json`);
+
+            try {
+                await farmDetailsRef.put(farmDetailsBlob);
+                console.log('Farm details saved successfully');
+            } catch (error) {
+                console.error('Error saving farm details:', error);
+            }
+
+            // Save PDF locally
             pdf.save('Dairy_Shed_Hygiene_Checklist.pdf');
         }
     </script>
