@@ -462,14 +462,18 @@
                         tempY += 20;
 
                         pdf.setFont('helvetica', 'normal');
-                        pdf.text(`Hot Water Temp: ${formData.get('hot-water-temp')} °C`, 40, tempY);
-                        tempY += 15;
-                        pdf.text(`Time Taken: ${formData.get('hot-water-time')}`, 40, tempY);
-                        tempY += 20;
+                        const hotWaterTemp = document.getElementById('hot-water-temp').value;
+const hotWaterTime = document.getElementById('hot-water-time').value;
+pdf.text(`Hot Water Temp: ${hotWaterTemp} °C`, 40, tempY);
+tempY += 15;
+pdf.text(`Time Taken: ${hotWaterTime}`, 40, tempY);
+tempY += 20;
 
-                        pdf.text(`Milk Temp: ${formData.get('milk-temp')} °C`, 40, tempY);
-                        tempY += 15;
-                        pdf.text(`Time Taken: ${formData.get('milk-time')}`, 40, tempY);
+const milkTemp = document.getElementById('milk-temp').value;
+const milkTime = document.getElementById('milk-time').value;
+pdf.text(`Milk Temp: ${milkTemp} °C`, 40, tempY);
+tempY += 15;
+pdf.text(`Time Taken: ${milkTime}`, 40, tempY);
                         tempY += 20;
 
                         // Add photos after the checklist
