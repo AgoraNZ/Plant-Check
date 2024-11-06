@@ -454,16 +454,19 @@
                             }
                         });
 
-                        // Add temperature data
-                        let tempY = pdf.lastAutoTable.finalY + 20;
+// Add temperature data
+// Adjust tempY to account for any additional spacing needed
+let tempY = pdf.autoTable.previous.finalY ? pdf.autoTable.previous.finalY + 20 : pdf.lastAutoTable.finalY + 20;
 
-                        pdf.setFont('helvetica', 'bold');
-                        pdf.text('Temperature Measurements:', 40, tempY);
-                        tempY += 20;
+pdf.setFont('helvetica', 'bold');
+pdf.text('Temperature Measurements:', 40, tempY);
+tempY += 20;
 
-                        pdf.setFont('helvetica', 'normal');
-                        const hotWaterTemp = document.getElementById('hot-water-temp').value;
+pdf.setFont('helvetica', 'normal');
+
+const hotWaterTemp = document.getElementById('hot-water-temp').value;
 const hotWaterTime = document.getElementById('hot-water-time').value;
+
 pdf.text(`Hot Water Temp: ${hotWaterTemp} °C`, 40, tempY);
 tempY += 15;
 pdf.text(`Time Taken: ${hotWaterTime}`, 40, tempY);
@@ -471,10 +474,11 @@ tempY += 20;
 
 const milkTemp = document.getElementById('milk-temp').value;
 const milkTime = document.getElementById('milk-time').value;
+
 pdf.text(`Milk Temp: ${milkTemp} °C`, 40, tempY);
 tempY += 15;
 pdf.text(`Time Taken: ${milkTime}`, 40, tempY);
-                        tempY += 20;
+tempY += 20;
 
                         // Add photos after the checklist
                         let photoY = pdf.lastAutoTable.finalY + 120; // Start placing photos after the last auto table
