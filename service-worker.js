@@ -1,5 +1,5 @@
 // Bump the cache name version each time you release a new update:
-const CACHE_NAME = 'dairy-shed-cache-v15';  // <--- increment here for new releases
+const CACHE_NAME = 'dairy-shed-cache-v52';  // <--- increment for new version
 
 const urlsToCache = [
     '/',
@@ -13,7 +13,7 @@ const urlsToCache = [
     'https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js',
     'https://cdnjs.cloudflare.com/ajax/libs/dexie/3.0.3/dexie.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js'
     // And any other assets
 ];
 
@@ -28,6 +28,8 @@ self.addEventListener('install', function (event) {
                 console.error('Failed to cache resources:', error);
             })
     );
+    // Force the waiting service worker to become the active service worker.
+    self.skipWaiting();
 });
 
 self.addEventListener('fetch', function (event) {
@@ -54,17 +56,20 @@ self.addEventListener('fetch', function (event) {
 });
 
 self.addEventListener('activate', function (event) {
-    // Remove old caches if they don't match our current version
+    // Claim any clients immediately, so that the new service worker takes control.
     event.waitUntil(
-        caches.keys().then(function (cacheNames) {
-            return Promise.all(
-                cacheNames.map(function (cacheName) {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
+        Promise.all([
+            caches.keys().then(function (cacheNames) {
+                return Promise.all(
+                    cacheNames.map(function (cacheName) {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('Deleting old cache:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            }),
+            self.clients.claim()
+        ])
     );
 });
